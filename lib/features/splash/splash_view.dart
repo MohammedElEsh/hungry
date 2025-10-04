@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hungry/core/constants/app_colors.dart';
+import 'package:hungry/core/utils/app_colors.dart';
 import 'package:hungry/core/utils/app_router.dart';
 import 'package:hungry/core/utils/assets.dart';
 import 'package:hungry/core/utils/styles.dart';
@@ -55,11 +55,11 @@ class _SplashViewState extends State<SplashView> {
               child: !playOutAnimation
                   ? FadeSlideText(
                 text: "HUNGRY?",
-                style: Styles.heading,
+                style: AppTextStyles.displayLarge,
               )
                   : FadeSlideOutText(
                 text: "HUNGRY?",
-                style: Styles.heading,
+                style: AppTextStyles.displayLarge,
                 onAnimationEnd: () {
                   context.go(AppRouter.kLoginView);
                 },

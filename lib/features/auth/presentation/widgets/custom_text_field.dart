@@ -1,55 +1,80 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/validators.dart';
 
-class custom_text_field extends StatefulWidget {
-  const custom_text_field({super.key,
+class CustomTextField extends StatefulWidget {
+  const CustomTextField({
+    super.key,
     required this.hintText,
     required this.isPassword,
-    required this.controller,});
-
+    this.controller,
+    this.validator,
+  });
 
   final String hintText;
   final bool isPassword;
   final TextEditingController? controller;
+  final String? Function(String?)? validator;
 
   @override
-  State<custom_text_field> createState() => _custom_text_fieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-class _custom_text_fieldState extends State<custom_text_field> {
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool _obscureText = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.isPassword;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: TextEditingController(),
-        cursorColor: AppColors.primary,
-        cursorHeight: 20,
-        // validator: (value) {},
-        obscureText: widget.isPassword,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                  color: AppColors.primary
-              )
-          ),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                  color: AppColors.primary
-              )
-          ),
-          // suffixIcon: isPassword ? FaIcon(FontAwesomeIcons.eye,) : null,
-          suffixIcon: widget.isPassword ?
-          Icon(
-            CupertinoIcons.eye,
-            color: AppColors.primary,
-          ) : null,
+      controller: widget.controller,
+      cursorColor: AppColors.primary,
+      cursorHeight: 20,
 
-          hintText: widget.hintText,
-          fillColor: Colors.white,
-          filled: true,
-        )
+      validator:
+          widget.validator ??
+          (widget.isPassword ? Validators.password : Validators.email),
+
+      obscureText: _obscureText,
+
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: AppColors.primary),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: AppColors.primary),
+        ),
+
+        suffixIcon: widget.isPassword
+            ? IconButton(
+                icon: Icon(
+                  _obscureText ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
+
+                  color: AppColors.primary,
+                ),
+
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
+            : null,
+
+        hintText: widget.hintText,
+
+        errorStyle: const TextStyle(color: AppColors.white),
+        fillColor: Colors.white,
+        filled: true,
+      ),
     );
   }
 }
