@@ -9,21 +9,21 @@ import 'package:gap/gap.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+class SignupView extends StatelessWidget {
+  const SignupView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-
+    final TextEditingController confirmPasswordController = TextEditingController();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     final sizeConfig = SizeConfig(context);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: Center(
@@ -32,23 +32,35 @@ class LoginView extends StatelessWidget {
             child: Form(
               key: formKey,
 
+
+
               child: Column(
                 children: [
                   Gap(sizeConfig.height * 0.1),
-                  Text("HUNGRY?", style: AppTextStyles.displayLarge),
                   Text(
-                    "Welcome Back, Discover The Fast Food",
+                    "HUNGRY?",
+                    style: AppTextStyles.displayLarge,
+                  ),
+                  Text(
+                    "Join us and explore delicious fast food!",
                     style: AppTextStyles.titleMedium,
                   ),
 
-                  Gap(sizeConfig.height * 0.08),
+                  Gap(sizeConfig.height * 0.06),
+
+                  CustomTextField(
+                    controller: nameController,
+                    hintText: 'Full Name',
+                    isPassword: false,
+                  ),
+
+                  Gap(sizeConfig.height * 0.02),
 
                   CustomTextField(
                     controller: emailController,
                     hintText: 'Email Address',
                     isPassword: false,
                   ),
-
                   Gap(sizeConfig.height * 0.02),
 
                   CustomTextField(
@@ -56,18 +68,27 @@ class LoginView extends StatelessWidget {
                     hintText: 'Password',
                     isPassword: true,
                   ),
+                  Gap(sizeConfig.height * 0.02),
 
-                  Gap(sizeConfig.height * 0.10),
+                  CustomTextField(
+                    controller: confirmPasswordController,
+                    hintText: 'Confirm Password',
+                    isPassword: true,
+                  ),
+
+                  Gap(sizeConfig.height * 0.06),
 
                   CustomButton(
-                    text: 'Login',
+                    text: 'Sign Up',
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        showSuccessBanner(context, 'Form is valid');
-
-                        context.go(AppRouter.kHomeView);
+                        if (passwordController.text != confirmPasswordController.text) {
+                          showErrorBanner(context, 'Passwords do not match');
+                        } else {
+                          showSuccessBanner(context, 'Account created successfully!');
+                        }
                       } else {
-                        showErrorBanner(context, 'Form is invalid');
+                        showErrorBanner(context, 'Please fill all fields correctly');
                       }
                     },
                   ),
@@ -78,23 +99,25 @@ class LoginView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don’t have an account? ",
+                        "Already have an account? ",
                         style: AppTextStyles.titleMedium,
                       ),
                       GestureDetector(
                         onTap: () {
-                          context.go(AppRouter.kSignupView);
+                          context.go(AppRouter.kLoginView);
                         },
                         child: Text(
-                          "Sign Up",
+                          "Login",
                           style: AppTextStyles.titleMedium.copyWith(
                             color: AppColors.secondary,
+
+                            ),
                           ),
                         ),
 
-                      )
-                ],
-              ),
+                    ],
+                  ),
+                  Gap(sizeConfig.height * 0.05),
                 ],
               ),
             ),
