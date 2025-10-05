@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hungry/features/auth/presentation/views/login_view.dart';
 import 'package:hungry/features/splash/splash_view.dart';
 import '../../features/auth/presentation/views/signup_view.dart';
-import '../../features/home/presentation/views/home_view.dart';
+import '../components/custom_bottom_nav_bar.dart';
 
 abstract class AppRouter {
   static const kSplashView = '/';
@@ -31,7 +31,7 @@ abstract class AppRouter {
       GoRoute(
         path: kHomeView,
         builder: (context, state)
-        => const HomeView(),
+        => const CustomBottomNavBar(),
       ),
 
     ],
