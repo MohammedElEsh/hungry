@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/utils/app_colors.dart';
 import 'core/utils/app_router.dart';
 
 
@@ -14,6 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: AppColors.white,
+        useMaterial3: true,
+      ),
       routerConfig: AppRouter.router,
       title: 'Hungry',
 

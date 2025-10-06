@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import '../utils/size_config.dart';
@@ -111,19 +112,19 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
+                icon: Icon(Icons.home_sharp),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart_outlined),
+                icon: Icon(Icons.shopping_cart),
                 label: 'Cart',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.inventory_2_outlined),
+                icon: Icon(Icons.local_restaurant_sharp),
                 label: 'Orders',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
+                icon: Icon(CupertinoIcons.profile_circled),
                 label: 'Profile',
               ),
             ],
