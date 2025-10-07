@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -40,6 +41,11 @@ class HeaderSection extends StatelessWidget {
           child: CircleAvatar(
             radius: sizeConfig.height * 0.04,
             backgroundColor: AppColors.primary,
+            child: Icon(
+              CupertinoIcons.person,
+              color: AppColors.white,
+              size: sizeConfig.width * 0.07,
+            ),
           ),
         ),
       ],
