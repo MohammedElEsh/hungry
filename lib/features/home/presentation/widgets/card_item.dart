@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
-class CardItem extends StatelessWidget {
+class CardItem extends StatefulWidget {
   final String imagePath;
   final String title;
   final String price;
@@ -19,41 +20,45 @@ class CardItem extends StatelessWidget {
   });
 
   @override
+  State<CardItem> createState() => _CardItemState();
+}
+
+bool isFavorite = false;
+
+class _CardItemState extends State<CardItem> {
+  @override
   Widget build(BuildContext context) {
     final sizeConfig = SizeConfig(context);
 
     return Card(
       color: AppColors.white,
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: sizeConfig.width * 0.05,
-          vertical: sizeConfig.height * 0.02,
+          vertical: sizeConfig.height * 0.015,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              imagePath,
+              widget.imagePath,
               width: sizeConfig.width * 0.35,
-              height: sizeConfig.height * 0.15,
+              height: sizeConfig.height * 0.135,
+              fit: BoxFit.cover,
             ),
             Gap(sizeConfig.height * 0.001),
             Text(
-              title,
+              widget.title,
               style: AppTextStyles.titleMedium.copyWith(
                 color: AppColors.primary,
               ),
             ),
             Text(
-              price,
-              style: AppTextStyles.titleSmall.copyWith(
-                color: AppColors.grey,
-              ),
+              widget.price,
+              style: AppTextStyles.titleSmall.copyWith(color: AppColors.grey),
             ),
             Gap(sizeConfig.height * 0.005),
             Row(
@@ -63,13 +68,29 @@ class CardItem extends StatelessWidget {
                 Icon(
                   Icons.star,
                   color: Colors.amber,
-                  size: sizeConfig.width * 0.04,
+                  size: sizeConfig.width * 0.055,
                 ),
-                SizedBox(width: sizeConfig.width * 0.01),
+                Gap(sizeConfig.width * 0.01),
                 Text(
-                  rating.toString(),
+                  widget.rating.toString(),
                   style: AppTextStyles.titleSmall.copyWith(
                     color: AppColors.grey,
+                  ),
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isFavorite = !isFavorite;
+                    });
+                  },
+                  icon: Icon(
+                    isFavorite
+                        ? CupertinoIcons.heart_fill
+                        : CupertinoIcons.heart,
+
+                    color: AppColors.error,
+                    size: sizeConfig.width * 0.055,
                   ),
                 ),
               ],
