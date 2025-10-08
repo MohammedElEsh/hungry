@@ -59,7 +59,7 @@ abstract class AppTextStyles {
   // ================== Title ==================
   static final titleLarge = GoogleFonts.roboto(
     textStyle: const TextStyle(
-      fontSize: 22,
+      fontSize: 18,
       fontWeight: FontWeight.w600,
       color: AppColors.white,
     ),
@@ -134,8 +134,8 @@ abstract class AppTextStyles {
   // ================== Optional dark text (for light backgrounds) ==================
   static final bodyBlack = GoogleFonts.roboto(
     textStyle: const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.normal,
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
       color: AppColors.black,
     ),
   );

@@ -4,6 +4,7 @@ class AppColors {
   // Main theme colors
   static const Color primary = Color(0xff084310);
   static const Color secondary = Color(0xfff57c00);
+  static const Color third = Color(0xff3C2F2F);
 
   // Neutral colors
   static const Color white = Color(0xffffffff);
