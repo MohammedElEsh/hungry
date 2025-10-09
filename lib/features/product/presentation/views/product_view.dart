@@ -5,7 +5,7 @@ import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 import '../widgets/customized_text.dart';
 import '../widgets/spicy_slider.dart';
-import '../widgets/topping_card.dart';
+import '../widgets/topping_grid.dart';
 
 class ProductView extends StatefulWidget {
   const ProductView({super.key});
@@ -29,7 +29,7 @@ class _ProductViewState extends State<ProductView> {
       body: Padding(
         padding: EdgeInsets.only(
             top: sizeConfig.height * 0.12,
-            left: sizeConfig.width * 0.02,
+            left: sizeConfig.width * 0.05,
             right: sizeConfig.width * 0.05
         ),
         child: Column(
@@ -61,12 +61,12 @@ class _ProductViewState extends State<ProductView> {
               ],
             ),
             Gap(sizeConfig.height * 0.05),
-            Text("Tappings",style: AppTextStyles.bodyBlack),
+            Padding(
+              padding: EdgeInsets.only(left: sizeConfig.width * 0.05),
+              child: Text("Tappings",style: AppTextStyles.bodyBlack),
+            ),
             Gap(sizeConfig.height * 0.02),
-            ToppingCard(
-              imagePath: AssetsData.burger,
-              text: "Cheese",
-            )
+            const ToppingsList(),
 
 
           ],
