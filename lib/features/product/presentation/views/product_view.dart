@@ -5,7 +5,7 @@ import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 import '../widgets/customized_text.dart';
 import '../widgets/spicy_slider.dart';
-import '../widgets/topping_grid.dart';
+import '../widgets/toppings_list.dart';
 
 class ProductView extends StatefulWidget {
   const ProductView({super.key});
