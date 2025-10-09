@@ -6,8 +6,13 @@ import '../../../../core/utils/styles.dart';
 class ToppingCard extends StatelessWidget {
   final String text;
   final String imagePath;
+  final Color buttonColor;
 
-  const ToppingCard({super.key, required this.text, required this.imagePath});
+  const ToppingCard({super.key,
+    required this.text,
+    required this.imagePath,
+    this.buttonColor = AppColors.error,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +63,8 @@ class ToppingCard extends StatelessWidget {
                 Container(
                   width: size.width * 0.08,
                   height: size.height * 0.08,
-                  decoration: const BoxDecoration(
-                    color: AppColors.error,
+                  decoration: BoxDecoration(
+                    color: buttonColor,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

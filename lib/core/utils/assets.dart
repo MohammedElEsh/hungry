@@ -6,6 +6,10 @@ class AssetsData {
   static const onions = 'assets/images/onions.png';
   static const pickles = 'assets/images/pickles.png';
   static const bacons = 'assets/images/bacons.png';
+  static const fries = 'assets/images/fries.png';
+  static const coleslaw = 'assets/images/coleslaw.png';
+  static const salad = 'assets/images/salad.png';
+  static const onionrings = 'assets/images/onionrings.png';
 
 
 }

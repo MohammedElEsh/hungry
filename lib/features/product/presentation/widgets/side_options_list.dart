@@ -4,18 +4,18 @@ import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/assets.dart';
 import '../widgets/topping_card.dart';
 
-class ToppingsList extends StatelessWidget {
-  const ToppingsList({super.key});
+class SideOptionsList extends StatelessWidget {
+  const SideOptionsList({super.key});
 
   @override
   Widget build(BuildContext context) {
     final size = SizeConfig(context);
 
     final toppings = [
-      {'image': AssetsData.tomatos, 'text': 'Tomato'},
-      {'image': AssetsData.onions, 'text': 'Onions'},
-      {'image': AssetsData.bacons, 'text': 'Bacons'},
-      {'image': AssetsData.pickles, 'text': 'Pickles'},
+      {'image': AssetsData.fries, 'text': 'Fries'},
+      {'image': AssetsData.coleslaw, 'text': 'Coleslaw'},
+      {'image': AssetsData.salad, 'text': 'Salad'},
+      {'image': AssetsData.onionrings, 'text': 'Onion Rings'},
     ];
 
     return SingleChildScrollView(
@@ -28,7 +28,7 @@ class ToppingsList extends StatelessWidget {
             child: ToppingCard(
               imagePath: toppings[index]['image']!,
               text: toppings[index]['text']!,
-              buttonColor: AppColors.error,
+              buttonColor: AppColors.success,
             ),
           ),
         ),

@@ -25,9 +25,9 @@ abstract class AppTextStyles {
 
   static final displaySmall = GoogleFonts.luckiestGuy(
     textStyle: const TextStyle(
-      fontSize: 36,
-      fontWeight: FontWeight.w300,
-      color: AppColors.white,
+      fontSize: 32,
+      fontWeight: FontWeight.w400,
+      color: AppColors.black,
     ),
   );
 
@@ -139,4 +139,12 @@ abstract class AppTextStyles {
       color: AppColors.black,
     ),
   );
+  static final bodyBrown = GoogleFonts.roboto(
+    textStyle: const TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
+      color: AppColors.third,
+    ),
+  );
+
 }
