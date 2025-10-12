@@ -4,21 +4,25 @@ import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class CustomButton extends StatelessWidget {
-  final String text;
+  final String? text;
+  final IconData? icon;
   final VoidCallback onPressed;
   final Color? backgroundColor;
   final Color? textColor;
   final double? height;
   final double? width;
+  final double? borderRadius;
 
   const CustomButton({
     super.key,
-    required this.text,
+    this.text,
+    this.icon,
     required this.onPressed,
     this.backgroundColor,
     this.textColor,
     this.height,
     this.width,
+    this.borderRadius,
   });
 
   @override
@@ -33,14 +37,18 @@ class CustomButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor ?? AppColors.primary,
           borderRadius: BorderRadius.circular(
-            sizeConfig.width * 0.06,
+            borderRadius ?? sizeConfig.width * 0.06,
           ),
         ),
         alignment: Alignment.center,
-        child: Text(
-          text,
-          style: AppTextStyles.titleMedium
-        ),
+        child: icon != null
+            ? Icon(icon, color: textColor ?? AppColors.white)
+            : Text(
+                text ?? '',
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: textColor ?? AppColors.white,
+                ),
+              ),
       ),
     );
   }

@@ -15,7 +15,6 @@ class CustomizedText extends StatelessWidget {
           TextSpan(
             text: "Customize",
             style: AppTextStyles.titleLarge.copyWith(
-              color: AppColors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
