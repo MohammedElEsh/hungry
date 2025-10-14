@@ -95,7 +95,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           
           
             backgroundColor: Colors.transparent,
-            selectedItemColor: AppColors.secondary,
+            selectedItemColor: AppColors.white,
             unselectedItemColor: AppColors.grey,
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,

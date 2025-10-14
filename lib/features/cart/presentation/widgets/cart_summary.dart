@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
@@ -36,7 +38,9 @@ class CartSummary extends StatelessWidget {
           CustomButton(
             text: 'Checkout',
             backgroundColor: AppColors.secondary,
-            onPressed: () {},
+            onPressed: () {
+              context.push(AppRouter.kCheckoutView);
+            },
           ),
         ],
       ),
