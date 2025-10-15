@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class HeaderSection extends StatelessWidget {
@@ -10,23 +10,21 @@ class HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Gap(sizeConfig.height * 0.1),
+            Gap(60.h),
             Text(
               "HUNGRY?",
               style: AppTextStyles.displayLarge.copyWith(
                 color: AppColors.primary,
-                fontSize: 50,
+                fontSize: 50.sp,
               ),
             ),
-            Gap(sizeConfig.height * 0.0001),
+            Gap(2.h),
             Text(
               "Hello, Username",
               style: AppTextStyles.titleMedium.copyWith(
@@ -37,14 +35,14 @@ class HeaderSection extends StatelessWidget {
         ),
         const Spacer(),
         Padding(
-          padding: EdgeInsets.only(top: sizeConfig.height * 0.1),
+          padding: EdgeInsets.only(top: 60.h),
           child: CircleAvatar(
-            radius: sizeConfig.height * 0.04,
+            radius: 35.h,
             backgroundColor: AppColors.primary,
             child: Icon(
               CupertinoIcons.person,
               color: AppColors.white,
-              size: sizeConfig.width * 0.07,
+              size: 30.w,
             ),
           ),
         ),

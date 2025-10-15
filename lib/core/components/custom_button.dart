@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class CustomButton extends StatelessWidget {
@@ -27,28 +27,24 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: width ?? sizeConfig.width * 0.45,
-        height: height ?? sizeConfig.height * 0.08,
+        width: width ?? 170.w,
+        height: height ?? 60.h,
         decoration: BoxDecoration(
           color: backgroundColor ?? AppColors.primary,
-          borderRadius: BorderRadius.circular(
-            borderRadius ?? sizeConfig.width * 0.06,
-          ),
+          borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
         ),
         alignment: Alignment.center,
         child: icon != null
-            ? Icon(icon, color: textColor ?? AppColors.white)
+            ? Icon(icon, color: textColor ?? AppColors.white, size: 24.sp)
             : Text(
-                text ?? '',
-                style: AppTextStyles.titleMedium.copyWith(
-                  color: textColor ?? AppColors.white,
-                ),
-              ),
+          text ?? '',
+          style: AppTextStyles.titleMedium.copyWith(
+            color: textColor ?? AppColors.white,
+          ),
+        ),
       ),
     );
   }

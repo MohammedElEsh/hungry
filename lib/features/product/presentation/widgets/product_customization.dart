@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/utils/assets.dart';
-import '../../../../core/utils/size_config.dart';
 import '../widgets/customized_text.dart';
 import '../widgets/spicy_slider.dart';
 
@@ -17,19 +17,17 @@ class CustomizedSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = SizeConfig(context);
-
     return Row(
       children: [
         Image.asset(
           AssetsData.customizedBurger,
-          height: size.height * 0.31,
+          height: 250.h,
         ),
         const Spacer(),
         Column(
           children: [
             const CustomizedText(),
-            Gap(size.height * 0.02),
+            Gap(15.h),
             SpicySlider(
               initialValue: sliderValue,
               onChanged: onSliderChanged,

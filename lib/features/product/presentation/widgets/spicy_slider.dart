@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 
 class SpicySlider extends StatefulWidget {
   final double initialValue;
@@ -29,20 +28,17 @@ class _SpicySliderState extends State<SpicySlider> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return Column(
       children: [
         Slider(
           value: _value,
           onChanged: (value) {
             setState(() => _value = value);
-            if (widget.onChanged != null) widget.onChanged!(value);
+            widget.onChanged?.call(value);
           },
           min: 0,
           max: 1,
           activeColor: AppColors.primary,
-          // ignore: deprecated_member_use
           inactiveColor: AppColors.grey.withOpacity(0.5),
         ),
         Row(
@@ -50,16 +46,14 @@ class _SpicySliderState extends State<SpicySlider> {
           children: [
             Icon(
               CupertinoIcons.snow,
-              // ignore: deprecated_member_use
               color: _value < 0.5 ? Colors.blue : Colors.blue.withOpacity(0.4),
-              size: 28,
+              size: 28.sp,
             ),
-            Gap(sizeConfig.width * 0.22),
+            SizedBox(width: 85.w),
             Icon(
               CupertinoIcons.flame,
-              // ignore: deprecated_member_use
               color: _value > 0.5 ? Colors.red : Colors.red.withOpacity(0.4),
-              size: 28,
+              size: 28.sp,
             ),
           ],
         ),

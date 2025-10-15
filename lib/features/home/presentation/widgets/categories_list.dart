@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class CategoriesList extends StatelessWidget {
@@ -17,8 +17,6 @@ class CategoriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -28,17 +26,16 @@ class CategoriesList extends StatelessWidget {
             onTap: () => onCategoryTap(index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
-              margin: EdgeInsets.only(right: sizeConfig.width * 0.03),
+              margin: EdgeInsets.only(right: 12.w),
               padding: EdgeInsets.symmetric(
-                horizontal: sizeConfig.width * 0.09,
-                vertical: sizeConfig.height * 0.02,
+                horizontal: 36.w,
+                vertical: 12.h,
               ),
               decoration: BoxDecoration(
                 color: currentIndex == index
                     ? AppColors.primary
-                    // ignore: deprecated_member_use
                     : AppColors.grey.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(
                 categories[index],

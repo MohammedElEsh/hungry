@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/app_colors.dart';
 import 'header_section.dart';
 import 'search_bar.dart';
@@ -10,24 +10,22 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return SliverAppBar(
       elevation: 0,
       scrolledUnderElevation: 0,
       pinned: true,
-      toolbarHeight: sizeConfig.height * 0.27,
+      toolbarHeight: 220.h,
       backgroundColor: AppColors.white,
       automaticallyImplyLeading: false,
       flexibleSpace: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: sizeConfig.width * 0.03,
-          vertical: sizeConfig.height * 0.001,
+          horizontal: 12.w,
+          vertical: 2.h,
         ),
         child: Column(
           children: [
             const HeaderSection(),
-            Gap(sizeConfig.height * 0.02),
+            Gap(25.h),
             const SearchField(),
           ],
         ),

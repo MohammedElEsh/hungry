@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/utils/size_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SlideInImage extends StatefulWidget {
   final String imagePath;
@@ -34,15 +34,14 @@ class _SlideInImageState extends State<SlideInImage> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-    final imgHeight = sizeConfig.width * widget.aspectRatio;
+    final imgHeight = 1.sw * widget.aspectRatio;
 
     return AnimatedPositioned(
       duration: widget.duration,
       curve: Curves.fastOutSlowIn,
-      top: topPosition == 0 ? sizeConfig.height : topPosition,
+      top: topPosition == 0 ? 1.sh : widget.targetTop,
       child: SizedBox(
-        width: sizeConfig.width,
+        width: 1.sw,
         height: imgHeight,
         child: Image.asset(
           widget.imagePath,

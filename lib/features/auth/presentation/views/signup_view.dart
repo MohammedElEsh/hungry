@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 import 'package:gap/gap.dart';
 import '../widgets/custom_button.dart';
@@ -20,64 +20,47 @@ class SignupView extends StatelessWidget {
     final TextEditingController confirmPasswordController = TextEditingController();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    final sizeConfig = SizeConfig(context);
-
     return GestureDetector(
-      // onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: sizeConfig.width * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Form(
               key: formKey,
-
-
-
               child: Column(
                 children: [
-                  Gap(sizeConfig.height * 0.1),
-                  Text(
-                    "HUNGRY?",
-                    style: AppTextStyles.displayLarge,
-                  ),
+                  Gap(80.h),
+                  Text("HUNGRY?", style: AppTextStyles.displayLarge),
                   Text(
                     "Join us and explore delicious fast food!",
                     style: AppTextStyles.titleMedium,
                   ),
-
-                  Gap(sizeConfig.height * 0.06),
-
+                  Gap(50.h),
                   CustomTextField(
                     controller: nameController,
                     hintText: 'Full Name',
                     isPassword: false,
                   ),
-
-                  Gap(sizeConfig.height * 0.02),
-
+                  Gap(16.h),
                   CustomTextField(
                     controller: emailController,
                     hintText: 'Email Address',
                     isPassword: false,
                   ),
-                  Gap(sizeConfig.height * 0.02),
-
+                  Gap(16.h),
                   CustomTextField(
                     controller: passwordController,
                     hintText: 'Password',
                     isPassword: true,
                   ),
-                  Gap(sizeConfig.height * 0.02),
-
+                  Gap(16.h),
                   CustomTextField(
                     controller: confirmPasswordController,
                     hintText: 'Confirm Password',
                     isPassword: true,
                   ),
-
-                  Gap(sizeConfig.height * 0.06),
-
+                  Gap(50.h),
                   CustomButton(
                     text: 'Sign Up',
                     onPressed: () {
@@ -92,9 +75,7 @@ class SignupView extends StatelessWidget {
                       }
                     },
                   ),
-
-                  Gap(sizeConfig.height * 0.03),
-
+                  Gap(20.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -110,14 +91,12 @@ class SignupView extends StatelessWidget {
                           "Login",
                           style: AppTextStyles.titleMedium.copyWith(
                             color: AppColors.secondary,
-
-                            ),
                           ),
                         ),
-
+                      ),
                     ],
                   ),
-                  Gap(sizeConfig.height * 0.05),
+                  Gap(30.h),
                 ],
               ),
             ),

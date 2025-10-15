@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class CustomButton extends StatelessWidget {
@@ -19,16 +19,14 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: height ?? sizeConfig.height * 0.06,
-        width: width ?? sizeConfig.width * 0.4,
+        height: height ?? 48.h,
+        width: width ?? 160.w,
         decoration: BoxDecoration(
           color: AppColors.secondary,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Center(
           child: Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/validators.dart';
 
@@ -35,43 +36,35 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       controller: widget.controller,
       cursorColor: AppColors.primary,
-      cursorHeight: 20,
-
-      validator:
-          widget.validator ??
+      cursorHeight: 20.h,
+      validator: widget.validator ??
           (widget.isPassword ? Validators.password : Validators.email),
-
       obscureText: _obscureText,
-
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           borderSide: BorderSide(color: AppColors.primary),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           borderSide: BorderSide(color: AppColors.primary),
         ),
-
         suffixIcon: widget.isPassword
             ? IconButton(
-                icon: Icon(
-                  _obscureText ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-
-                  color: AppColors.primary,
-                ),
-
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-              )
+          icon: Icon(
+            _obscureText ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
+            color: AppColors.primary,
+            size: 20.w,
+          ),
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+        )
             : null,
-
         hintText: widget.hintText,
-
-        errorStyle: const TextStyle(color: AppColors.white),
+        errorStyle: TextStyle(color: AppColors.white, fontSize: 12.sp),
         fillColor: Colors.white,
         filled: true,
       ),

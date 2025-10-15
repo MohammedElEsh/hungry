@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../../core/utils/size_config.dart';
 import '../widgets/categories_list.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/grid_view_section.dart';
@@ -25,15 +25,12 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: sizeConfig.width * 0.05),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-
             const HomeAppBar(),
             SliverToBoxAdapter(
               child: Column(
@@ -46,12 +43,11 @@ class _HomeViewState extends State<HomeView> {
                       setState(() => currentIndex = index);
                     },
                   ),
-                  Gap(sizeConfig.height * 0.03),
+                  Gap(24.h),
                 ],
               ),
             ),
             const GridViewSection(),
-
           ],
         ),
       ),

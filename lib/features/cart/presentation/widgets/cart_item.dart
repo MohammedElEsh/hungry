@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class CartItem extends StatefulWidget {
@@ -27,35 +27,32 @@ class _CartItemState extends State<CartItem> {
 
   @override
   Widget build(BuildContext context) {
-    final size = SizeConfig(context);
-
     return Center(
       child: Card(
         color: AppColors.white,
         elevation: 3,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.r)),
         child: Container(
-          width: size.width * 0.9,
+          width: 0.9.sw,
           padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.05,
-            vertical: size.height * 0.02,
+            horizontal: 20.w,
+            vertical: 15.h,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
                     widget.imagePath,
-                    width: size.width * 0.2,
-                    height: size.height * 0.1,
+                    width: 80.w,
+                    height: 80.h,
                     fit: BoxFit.cover,
                   ),
-                  Gap(size.height * 0.005),
+                  Gap(5.h),
                   SizedBox(
-                    width: size.width * 0.3,
+                    width: 120.w,
                     child: Text(
                       widget.title,
                       style: AppTextStyles.titleMedium.copyWith(
@@ -71,7 +68,6 @@ class _CartItemState extends State<CartItem> {
                   ),
                 ],
               ),
-
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -85,18 +81,18 @@ class _CartItemState extends State<CartItem> {
                           });
                         },
                         icon: CupertinoIcons.minus,
-                        width: size.width * 0.12,
-                        height: size.height * 0.06,
+                        width: 45.w,
+                        height: 40.h,
                         borderRadius: 12,
                         backgroundColor: AppColors.primary,
                         textColor: AppColors.white,
                       ),
-                      Gap(size.height * 0.02),
+                      Gap(10.w),
                       Text(
                         "$quantity",
-                        style: AppTextStyles.titleLarge
+                        style: AppTextStyles.titleLarge,
                       ),
-                      Gap(size.height * 0.02),
+                      Gap(10.w),
                       CustomButton(
                         onPressed: () {
                           setState(() {
@@ -104,21 +100,20 @@ class _CartItemState extends State<CartItem> {
                           });
                         },
                         icon: CupertinoIcons.add,
-                        width: size.width * 0.12,
-                        height: size.height * 0.06,
+                        width: 45.w,
+                        height: 40.h,
                         borderRadius: 12,
                         backgroundColor: AppColors.primary,
                         textColor: AppColors.white,
                       ),
                     ],
                   ),
-                  Gap(size.height * 0.03),
+                  Gap(20.h),
                   CustomButton(
                     text: "Remove",
-                    onPressed: () {
-                    },
-                    width: size.width * 0.35,
-                    height: size.height * 0.05,
+                    onPressed: () {},
+                    width: 120.w,
+                    height: 40.h,
                     borderRadius: 20,
                     backgroundColor: AppColors.primary,
                     textColor: AppColors.white,

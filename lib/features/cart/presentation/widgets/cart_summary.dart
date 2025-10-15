@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class CartSummary extends StatelessWidget {
@@ -11,10 +11,8 @@ class CartSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: sizeConfig.width * 0.05),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         children: [
           RichText(
@@ -24,7 +22,7 @@ class CartSummary extends StatelessWidget {
                   text: '\$',
                   style: AppTextStyles.displaySmall.copyWith(
                     color: AppColors.primary,
-                    fontSize: 40,
+                    fontSize: 40.sp,
                   ),
                 ),
                 TextSpan(

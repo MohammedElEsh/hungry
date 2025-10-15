@@ -1,29 +1,26 @@
 import 'package:alert_banner/exports.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_colors.dart';
 import 'styles.dart';
-import 'size_config.dart';
 
-/// 🔔 Base method to build a custom banner (responsive with SizeConfig)
 void _showBanner(
     BuildContext context,
     String message,
     Color backgroundColor,
     ) {
-  final sizeConfig = SizeConfig(context);
-
   final child = Container(
     width: double.infinity,
     constraints: BoxConstraints(
-      maxWidth: sizeConfig.width * 0.9,
+      maxWidth: 0.9.sw,
     ),
     decoration: BoxDecoration(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(sizeConfig.width * 0.02),
+      borderRadius: BorderRadius.circular(8.r),
     ),
     padding: EdgeInsets.symmetric(
-      vertical: sizeConfig.height * 0.015,
-      horizontal: sizeConfig.width * 0.04,
+      vertical: 12.h,
+      horizontal: 16.w,
     ),
     child: Material(
       color: Colors.transparent,
@@ -32,7 +29,6 @@ void _showBanner(
         textAlign: TextAlign.center,
         style: AppTextStyles.labelLarge.copyWith(
           color: AppColors.white,
-          fontSize: sizeConfig.width * 0.04, // responsive font size
         ),
       ),
     ),
@@ -40,28 +36,24 @@ void _showBanner(
 
   showAlertBanner(
     context,
-        () {}, // optional onTap callback
+        () {},
     child,
     alertBannerLocation: AlertBannerLocation.top,
   );
 }
 
-/// ❌ Error banner (red)
 void showErrorBanner(BuildContext context, String message) {
   _showBanner(context, message, AppColors.error);
 }
 
-/// ✅ Success banner (green)
 void showSuccessBanner(BuildContext context, String message) {
   _showBanner(context, message, AppColors.success);
 }
 
-/// ⚠️ Warning banner (yellow)
 void showWarningBanner(BuildContext context, String message) {
   _showBanner(context, message, AppColors.warning);
 }
 
-/// ℹ️ Info banner (blue)
 void showInfoBanner(BuildContext context, String message) {
   _showBanner(context, message, AppColors.info);
 }

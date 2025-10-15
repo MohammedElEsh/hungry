@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/assets.dart';
 import '../widgets/cart_item.dart';
 
@@ -9,15 +9,12 @@ class CartItemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = SizeConfig(context);
-
     return Expanded(
       child: ListView.separated(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.only(top: size.height * 0.1),
+        padding: EdgeInsets.only(top: 80.h),
         itemCount: 7,
-        separatorBuilder: (context, index) => Gap(
-            size.height * 0.02),
+        separatorBuilder: (context, index) => Gap(15.h),
         itemBuilder: (context, index) {
           return CartItem(
             imagePath: AssetsData.burger,

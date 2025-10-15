@@ -3,9 +3,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 
 class CustomizedText extends StatelessWidget {
-  const CustomizedText({
-    super.key,
-  });
+  const CustomizedText({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +24,7 @@ class CustomizedText extends StatelessWidget {
           ),
         ],
       ),
+      textAlign: TextAlign.start,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 import '../widgets/checkout_summary.dart';
 import '../widgets/product_customization.dart';
@@ -19,13 +19,11 @@ class _ProductViewState extends State<ProductView> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.only(top: sizeConfig.height * 0.12),
+          padding: EdgeInsets.only(top: 100.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -35,31 +33,27 @@ class _ProductViewState extends State<ProductView> {
                   setState(() => _value = value);
                 },
               ),
-
-              Gap(sizeConfig.height * 0.05),
+              Gap(40.h),
               Padding(
-                padding: EdgeInsets.only(left: sizeConfig.width * 0.05),
+                padding: EdgeInsets.only(left: 20.w),
                 child: Text("Tappings", style: AppTextStyles.bodyBrown),
               ),
-              Gap(sizeConfig.height * 0.02),
+              Gap(15.h),
               const ToppingsList(),
-
-              Gap(sizeConfig.height * 0.04),
+              Gap(30.h),
               Padding(
-                padding: EdgeInsets.only(left: sizeConfig.width * 0.05),
+                padding: EdgeInsets.only(left: 20.w),
                 child: Text("Side Options", style: AppTextStyles.bodyBrown),
               ),
-              Gap(sizeConfig.height * 0.02),
+              Gap(15.h),
               const SideOptionsList(),
-              Gap(sizeConfig.height * 0.04),
-
+              Gap(30.h),
               Padding(
-                padding: EdgeInsets.only(left: sizeConfig.width * 0.05),
+                padding: EdgeInsets.only(left: 20.w),
                 child: Text("Total", style: AppTextStyles.bodyBrown),
               ),
-
               const CheckoutSummary(),
-              Gap(sizeConfig.height * 0.04),
+              Gap(30.h),
             ],
           ),
         ),

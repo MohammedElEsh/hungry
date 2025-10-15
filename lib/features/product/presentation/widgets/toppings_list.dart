@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/assets.dart';
 import '../widgets/topping_card.dart';
 
@@ -9,8 +9,6 @@ class ToppingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = SizeConfig(context);
-
     final toppings = [
       {'image': AssetsData.tomatos, 'text': 'Tomato'},
       {'image': AssetsData.onions, 'text': 'Onions'},
@@ -24,7 +22,7 @@ class ToppingsList extends StatelessWidget {
         children: List.generate(
           toppings.length,
               (index) => Padding(
-            padding: EdgeInsets.only(left: size.width * 0.04),
+            padding: EdgeInsets.only(left: 15.w),
             child: ToppingCard(
               imagePath: toppings[index]['image']!,
               text: toppings[index]['text']!,

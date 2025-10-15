@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hungry/core/utils/app_colors.dart';
 import 'package:hungry/core/utils/app_router.dart';
 import 'package:hungry/core/utils/assets.dart';
 import 'package:hungry/core/utils/styles.dart';
-import 'package:hungry/core/utils/size_config.dart';
 import 'package:hungry/features/splash/widgets/fade_slide_in_text.dart';
 import 'package:hungry/features/splash/widgets/slide_in_image.dart';
 import 'package:hungry/features/splash/widgets/fade_slide_out_text.dart';
@@ -22,8 +22,6 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: GestureDetector(
@@ -35,22 +33,19 @@ class _SplashViewState extends State<SplashView> {
         },
         child: Stack(
           children: [
-            // Image
             if (!playOutAnimation)
               SlideInImage(
                 imagePath: AssetsData.pngwing,
-                targetTop: sizeConfig.height * 0.665,
+                targetTop: 540.h,
               )
             else
               SlideOutImage(
                 imagePath: AssetsData.pngwing,
-                startTop: sizeConfig.height * 0.665,
+                startTop: 540.h,
                 onAnimationEnd: () {
                   context.go(AppRouter.kLoginView);
                 },
               ),
-
-            // Text
             Center(
               child: !playOutAnimation
                   ? FadeSlideText(

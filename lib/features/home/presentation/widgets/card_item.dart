@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/size_config.dart';
 import '../../../../core/utils/styles.dart';
 
 class CardItem extends StatefulWidget {
@@ -28,28 +28,23 @@ bool isFavorite = false;
 class _CardItemState extends State<CardItem> {
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-
     return Card(
       color: AppColors.white,
       elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: sizeConfig.width * 0.05,
-          vertical: sizeConfig.height * 0.015,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
               widget.imagePath,
-              width: sizeConfig.width * 0.35,
-              height: sizeConfig.height * 0.135,
+              width: 140.w,
+              height: 110.h,
               fit: BoxFit.cover,
             ),
-            Gap(sizeConfig.height * 0.001),
+            Gap(3.h),
             Text(
               widget.title,
               style: AppTextStyles.titleMedium.copyWith(
@@ -60,7 +55,7 @@ class _CardItemState extends State<CardItem> {
               widget.price,
               style: AppTextStyles.titleSmall.copyWith(color: AppColors.grey),
             ),
-            Gap(sizeConfig.height * 0.005),
+            Gap(6.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -68,16 +63,16 @@ class _CardItemState extends State<CardItem> {
                 Icon(
                   Icons.star,
                   color: Colors.amber,
-                  size: sizeConfig.width * 0.055,
+                  size: 20.sp,
                 ),
-                Gap(sizeConfig.width * 0.01),
+                Gap(4.w),
                 Text(
                   widget.rating.toString(),
                   style: AppTextStyles.titleSmall.copyWith(
                     color: AppColors.grey,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 IconButton(
                   onPressed: () {
                     setState(() {
@@ -88,9 +83,8 @@ class _CardItemState extends State<CardItem> {
                     isFavorite
                         ? CupertinoIcons.heart_fill
                         : CupertinoIcons.heart,
-
                     color: AppColors.error,
-                    size: sizeConfig.width * 0.055,
+                    size: 20.sp,
                   ),
                 ),
               ],

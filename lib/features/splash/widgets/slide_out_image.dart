@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/utils/size_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SlideOutImage extends StatefulWidget {
   final String imagePath;
@@ -31,7 +31,7 @@ class _SlideOutImageState extends State<SlideOutImage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        topPosition = MediaQuery.of(context).size.height;
+        topPosition = 1.sh;
       });
       Future.delayed(widget.duration, widget.onAnimationEnd);
     });
@@ -39,15 +39,14 @@ class _SlideOutImageState extends State<SlideOutImage> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeConfig = SizeConfig(context);
-    final height = sizeConfig.width * widget.aspectRatio;
+    final height = 1.sw * widget.aspectRatio;
 
     return AnimatedPositioned(
       duration: widget.duration,
       curve: Curves.easeIn,
       top: topPosition,
       child: SizedBox(
-        width: sizeConfig.width,
+        width: 1.sw,
         height: height,
         child: Image.asset(widget.imagePath, fit: BoxFit.contain),
       ),

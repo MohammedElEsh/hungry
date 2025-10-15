@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FadeSlideOutText extends StatefulWidget {
   final String text;
@@ -40,7 +41,7 @@ class _FadeSlideOutTextState extends State<FadeSlideOutText> {
       child: AnimatedSlide(
         duration: widget.duration,
         curve: Curves.easeIn,
-        offset: hide ? const Offset(0, -1) : Offset.zero,
+        offset: hide ? Offset(0, -1.h) : Offset.zero,
         child: Text(widget.text, style: widget.style),
       ),
     );
