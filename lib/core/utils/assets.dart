@@ -10,6 +10,9 @@ class AssetsData {
   static const coleslaw = 'assets/images/coleslaw.png';
   static const salad = 'assets/images/salad.png';
   static const onionrings = 'assets/images/onionrings.png';
+  static const dollar = 'assets/images/dollar.png';
+  static const visa = 'assets/images/visa.png';
+
 
 
 }

@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:hungry/features/checkout/presentation/widgets/payment_action_section.dart';
 import '../../../../core/utils/styles.dart';
-import '../widgets/order_checkout_details.dart';
+import '../widgets/order_summary_section.dart';
+import '../widgets/payment_methods_section.dart';
 
-class CheckoutView extends StatelessWidget {
+class CheckoutView extends StatefulWidget {
   const CheckoutView({super.key});
+
+  @override
+  State<CheckoutView> createState() => _CheckoutViewState();
+}
+
+class _CheckoutViewState extends State<CheckoutView> {
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -14,33 +24,20 @@ class CheckoutView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
             Gap(80.h),
             Text("Order Summary", style: AppTextStyles.bodyBrown),
-            Gap(15.h),
-            OrderCheckoutDetails(title: "Order", price: "18.8 \$"),
-            OrderCheckoutDetails(title: "Taxes", price: "18.8 \$"),
-            OrderCheckoutDetails(title: "Delivery fees", price: "18.8 \$"),
-            Divider(),
-            OrderCheckoutDetails(
-              title: "Total:",
-              price: "18.8 \$",
-              style: AppTextStyles.bodyBrown,),
-            OrderCheckoutDetails(
-                title: "Estimated delivery time:",
-                price: "15 - 30 mins",
-            ),
+            OrderSummary(),
             Gap(60.h),
             Text("Payment Methods", style: AppTextStyles.bodyBrown),
             Gap(20.h),
-
-
-
+            PaymentMethods(),
+            Gap(115.h),
+            PaymentActionSection()
           ],
         ),
       ),
+
     );
   }
 }
-

@@ -16,7 +16,7 @@ abstract class AppRouter {
 
 
   static final GoRouter router = GoRouter(
-    initialLocation: kCheckoutView,
+    initialLocation: kSplashView,
     routes: [
       GoRoute(
         path: kSplashView,
