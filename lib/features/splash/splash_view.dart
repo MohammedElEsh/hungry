@@ -35,12 +35,12 @@ class _SplashViewState extends State<SplashView> {
           children: [
             if (!playOutAnimation)
               SlideInImage(
-                imagePath: AssetsData.pngwing,
+                imagePath: AssetsData.splash,
                 targetTop: 540.h,
               )
             else
               SlideOutImage(
-                imagePath: AssetsData.pngwing,
+                imagePath: AssetsData.splash,
                 startTop: 540.h,
                 onAnimationEnd: () {
                   context.go(AppRouter.kLoginView);

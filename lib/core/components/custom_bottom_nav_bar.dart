@@ -18,10 +18,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   late PageController pageController;
   int currentIndex = 0;
 
-  final List<Widget> screens = const [
-    HomeView(),
-    CartView(),
-    OrdersView(),
+  final List<Widget> screens = [
+    const HomeView(),
+    const CartView(),
+    const OrdersView(),
     ProfileView(),
   ];
 

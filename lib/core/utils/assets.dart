@@ -1,5 +1,5 @@
 class AssetsData {
-  static const pngwing = 'assets/images/pngwing.png';
+  static const splash = 'assets/images/splash.png';
   static const burger = 'assets/images/burger.png';
   static const customizedBurger = 'assets/images/pngwing_ingredients.png';
   static const tomatos = 'assets/images/tomatos.png';
@@ -12,7 +12,5 @@ class AssetsData {
   static const onionrings = 'assets/images/onionrings.png';
   static const dollar = 'assets/images/dollar.png';
   static const visa = 'assets/images/visa.png';
-
-
-
+  static const user = 'assets/images/user.png';
 }

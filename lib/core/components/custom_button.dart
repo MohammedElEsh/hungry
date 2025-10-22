@@ -37,13 +37,23 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
         ),
         alignment: Alignment.center,
-        child: icon != null
-            ? Icon(icon, color: textColor ?? AppColors.white, size: 24.sp)
-            : Text(
-          text ?? '',
-          style: AppTextStyles.titleMedium.copyWith(
-            color: textColor ?? AppColors.white,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Add icon if it's provided
+            if (icon != null)
+              Icon(icon, color: textColor ?? AppColors.white, size: 24.sp),
+            // Add some space between the icon and the text
+            if (icon != null) SizedBox(width: 8.w),
+            // Display the text if it's provided
+            if (text != null)
+              Text(
+                text!,
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: textColor ?? AppColors.white,
+                ),
+              ),
+          ],
         ),
       ),
     );
