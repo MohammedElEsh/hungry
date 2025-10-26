@@ -14,7 +14,7 @@ class ProfileImage extends StatelessWidget {
         width: 120.w,
         decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(AssetsData.user)),
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(60.r),
           border: Border.all(color: AppColors.white, width: 3.w),
           color: AppColors.grey,
         ),

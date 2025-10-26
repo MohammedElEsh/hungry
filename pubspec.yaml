@@ -43,6 +43,11 @@ dependencies:
 
 
 
+  dio: ^5.9.0
+  shared_preferences: ^2.5.3
+
+
+
 
 
 dev_dependencies:
