@@ -2,52 +2,44 @@ import 'package:dio/dio.dart';
 import 'package:hungry/core/network/api_error.dart';
 
 class ApiExceptions {
-  // static ApiError handleError(DioError error, BuildContext context) {
-  static ApiError handleError(DioError error) {
+  static ApiError handleError(DioException error) {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
-        // showErrorBanner(context, "Connection timeout. Please try again later.");
-        return ApiError(message: "Connection timeout");
+        return ApiError(message: "Connection timeout. Please try again later.");
 
       case DioExceptionType.sendTimeout:
-        // showErrorBanner(context, "Request send timeout. Please try again later.");
-        return ApiError(message: "Request send timeout");
+        return ApiError(message: "Request send timeout. Please try again.");
 
       case DioExceptionType.receiveTimeout:
-        // showErrorBanner(context, "Response receive timeout. Please try again later.");
-        return ApiError(message: "Response receive timeout");
+        return ApiError(message: "Response receive timeout. Please try again.");
 
       case DioExceptionType.badCertificate:
-        // showErrorBanner(context, "Bad SSL certificate. Please check your connection.");
-        return ApiError(message: "Bad SSL certificate");
+        return ApiError(message: "Bad SSL certificate. Please check your network.");
 
       case DioExceptionType.badResponse:
-        if (error.response?.statusCode == 400) {
-          // showErrorBanner(context, "Bad request. Invalid parameters.");
-          return ApiError(message: "Bad request", statusCode: 400);
-        } else if (error.response?.statusCode == 404) {
-          // showErrorBanner(context, "Resource not found.");
-          return ApiError(message: "Resource not found", statusCode: 404);
-        } else if (error.response?.statusCode == 500) {
-          // showErrorBanner(context, "Internal server error.");
-          return ApiError(message: "Internal server error", statusCode: 500);
+        final statusCode = error.response?.statusCode;
+        final serverMessage = error.response?.data?['message'];
+
+        if (statusCode == 400) {
+          return ApiError(message: serverMessage ?? "Bad request", statusCode: 400);
+        } else if (statusCode == 401) {
+          return ApiError(message: serverMessage ?? "Unauthorized", statusCode: 401);
+        } else if (statusCode == 404) {
+          return ApiError(message: serverMessage ?? "Resource not found", statusCode: 404);
+        } else if (statusCode == 500) {
+          return ApiError(message: serverMessage ?? "Internal server error", statusCode: 500);
         } else {
-          // showErrorBanner(context, "Server error. Please try again later.");
-          return ApiError(message: "Server error");
+          return ApiError(message: serverMessage ?? "Unexpected server error", statusCode: statusCode);
         }
 
       case DioExceptionType.cancel:
-        // showWarningBanner(context, "Request was cancelled.");
-        return ApiError(message: "Request cancelled");
+        return ApiError(message: "Request was cancelled.");
 
       case DioExceptionType.connectionError:
-        // showErrorBanner(context, "Network connection error. Please check your internet connection.");
-        return ApiError(message: "Network connection error");
+        return ApiError(message: "Network connection error. Please check your internet.");
 
       case DioExceptionType.unknown:
-        // showErrorBanner(context, "An unknown error occurred. Please try again later.");
-        return ApiError(message: "Unknown error");
-
-      }
+      return ApiError(message: "An unknown error occurred. Please try again later.");
+    }
   }
 }

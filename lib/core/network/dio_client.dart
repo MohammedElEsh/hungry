@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:hungry/core/network/api_error.dart';
 import 'package:hungry/core/network/api_exceptions.dart';
 import 'package:hungry/core/utils/pref_helper.dart';
-import 'api_error.dart';
 
 class DioClient {
   final Dio _dio = Dio(
@@ -24,8 +23,9 @@ class DioClient {
           }
           return handler.next(options);
         },
-        onError: (DioError e, handler) {
+        onError: (DioException e, handler) async {
           if (e.response?.statusCode == 401) {
+            await PrefHelper.removeToken();
           }
           return handler.next(e);
         },
@@ -33,18 +33,16 @@ class DioClient {
     );
   }
 
-  Future<Response> getRequest(String endpoint, BuildContext context) async {
+  Future<Response> getRequest(String endpoint) async {
     try {
-      return await _dio.get(endpoint);
+      final response = await _dio.get(endpoint);
+      return response;
+    } on DioException catch (e) {
+      throw ApiExceptions.handleError(e);
     } catch (e) {
-      if (e is DioError) {
-        // ApiExceptions.handleError(e, context);
-        ApiExceptions.handleError(e);
-      }
-      throw ApiError(message: e.toString(), statusCode: 500);
+      throw ApiError(message: "Unexpected error: ${e.toString()}", statusCode: 500);
     }
   }
-
 
   Dio get dio => _dio;
 }
