@@ -4,12 +4,13 @@ import '../../../../core/network/api_error.dart';
 import '../../../../core/network/api_exceptions.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/user_model.dart';
+import 'dart:io';
 
 class AuthRepo {
   final ApiService apiService = ApiService();
 
   /// login
-  Future<dynamic> login(String email, String password) async {
+  Future<UserModel> login(String email, String password) async {
     try {
       final response = await apiService.post('/login', {
         'email': email,
@@ -17,11 +18,9 @@ class AuthRepo {
       });
 
       final data = response['data'];
-
       final user = UserModel.fromJson(data);
 
       await PrefHelper.saveToken(user.token);
-
       return user;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
@@ -31,14 +30,28 @@ class AuthRepo {
   }
 
   /// register
-  Future<dynamic> register(UserModel user) async {
+  Future<UserModel> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     try {
-      final response = await apiService.post('/register', user.toJson());
-      return response;
+      final response = await apiService.post('/register', {
+        'name': name,
+        'email': email,
+        'password': password,
+      });
+
+      final data = response['data'];
+
+      final user = UserModel.fromJson(data);
+      await PrefHelper.saveToken(user.token);
+
+      return user;
     } on DioException catch (e) {
-      return ApiExceptions.handleError(e);
-    } catch (_) {
-      return ApiError(message: "Unexpected error");
+      throw ApiExceptions.handleError(e);
+    } catch (e) {
+      throw ApiError(message: e.toString());
     }
   }
 
@@ -50,33 +63,45 @@ class AuthRepo {
         return UserModel.fromJson(response['data']);
       }
       return null;
-    } catch (_) {
+    } catch (e) {
       return null;
     }
   }
 
   /// update profile
-  Future<dynamic> updateProfileData(UserModel user) async {
+  Future<UserModel> updateProfileData({
+    required String name,
+    required String email,
+    String? phone,
+    String? address,
+    File? image,
+  }) async {
     try {
-      final response = await apiService.put('/profile/update', user.toJson());
-      return response;
+      final response = await apiService.post('/update-profile', {
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'address': address,
+      });
+      final data = response['data'];
+
+      return UserModel.fromJson(data);
     } on DioException catch (e) {
-      return ApiExceptions.handleError(e);
-    } catch (_) {
-      return ApiError(message: "Unexpected error");
+      throw ApiExceptions.handleError(e);
+    } catch (e) {
+      throw ApiError(message: e.toString());
     }
   }
 
   /// logout
-  Future<dynamic> logout() async {
+  Future<void> logout() async {
     try {
-      final response = await apiService.post('/logout', {});
-      await PrefHelper.removeToken(); // ✅ امسح التوكن بعد اللوج أوت
-      return response;
+      await apiService.post('/logout', {});
+      await PrefHelper.removeToken();
     } on DioException catch (e) {
-      return ApiExceptions.handleError(e);
-    } catch (_) {
-      return ApiError(message: "Unexpected error");
+      throw ApiExceptions.handleError(e);
+    } catch (e) {
+      throw ApiError(message: e.toString());
     }
   }
 }

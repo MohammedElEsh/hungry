@@ -1,7 +1,10 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../../../core/utils/app_router.dart';
 
 class ProfileBottomSheet extends StatelessWidget {
   const ProfileBottomSheet({super.key});
@@ -28,7 +31,9 @@ class ProfileBottomSheet extends StatelessWidget {
               backgroundColor: AppColors.third,
               text: 'Log out',
               icon: CupertinoIcons.square_arrow_right_fill,
-              onPressed: () {},
+              onPressed: () {
+                context.go(AppRouter.kLoginView);
+              },
             ),
           ],
         ),

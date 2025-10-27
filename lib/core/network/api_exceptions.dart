@@ -1,8 +1,34 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hungry/core/network/api_error.dart';
 
 class ApiExceptions {
   static ApiError handleError(DioException error) {
+
+    final data = error.response?.data;
+    final statusCode = error.response?.statusCode;
+
+
+    if (statusCode != null) {
+      if (data is Map<String, dynamic> && data['message'] != null) {
+        return ApiError(message: data['message'], statusCode: statusCode);
+      }
+    }
+
+    if (statusCode == 302) {
+      throw ApiError(message: "this Email already exist");
+    }
+
+
+    if (kDebugMode) {
+      print(statusCode);
+    }
+    if (kDebugMode) {
+      print(data);
+    }
+
+
+
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         return ApiError(message: "Connection timeout. Please try again later.");
