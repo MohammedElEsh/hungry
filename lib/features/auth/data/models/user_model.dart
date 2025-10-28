@@ -1,10 +1,10 @@
 class UserModel {
-  String name;
-  String email;
-  String? image;
-  String? address;
-  String? visa;
-  String token;
+  final String name;
+  final String email;
+  final String? image;
+  final String? address;
+  final String? visa;
+  final String? token;
 
   UserModel({
     required this.name,
@@ -12,17 +12,19 @@ class UserModel {
     this.image,
     this.address,
     this.visa,
-    required this.token,
+    this.token,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    name: json['name'] as String,
-    email: json['email'] as String,
-    image: json['image'] as String?,
-    address: json['address'] as String?,
-    visa: json['Visa'] as String?,
-    token: json['token'] as String,
-  );
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      name: json['name']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      image: json['image']?.toString(),
+      address: json['address']?.toString(),
+      visa: json['Visa']?.toString(),
+      token: json['token']?.toString(),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'name': name,

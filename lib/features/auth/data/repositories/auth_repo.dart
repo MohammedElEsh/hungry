@@ -20,7 +20,7 @@ class AuthRepo {
       final data = response['data'];
       final user = UserModel.fromJson(data);
 
-      await PrefHelper.saveToken(user.token);
+      await PrefHelper.saveToken(user.token!);
       return user;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
@@ -45,7 +45,7 @@ class AuthRepo {
       final data = response['data'];
 
       final user = UserModel.fromJson(data);
-      await PrefHelper.saveToken(user.token);
+      await PrefHelper.saveToken(user.token!);
 
       return user;
     } on DioException catch (e) {
@@ -59,13 +59,17 @@ class AuthRepo {
   Future<UserModel?> getProfileData() async {
     try {
       final response = await apiService.get('/profile');
+
       if (response != null && response['data'] != null) {
         return UserModel.fromJson(response['data']);
       }
-      return null;
+
+    } on DioException catch (e) {
+      throw ApiExceptions.handleError(e);
     } catch (e) {
-      return null;
+      throw ApiError(message: e.toString());
     }
+    return null;
   }
 
   /// update profile

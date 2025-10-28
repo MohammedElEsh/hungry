@@ -35,6 +35,14 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    emailController.text = 'sksk@gmail.com';
+    passwordController.text = '123456789';
+    super.initState();
+  }
+
+
   // Login function with state management for loading
   Future<void> login() async {
     if (formKey.currentState!.validate()) {

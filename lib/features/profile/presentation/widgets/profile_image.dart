@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hungry/core/utils/assets.dart';
-import '../../../../core/utils/app_colors.dart';
+import 'package:hungry/core/utils/app_colors.dart';
 
 class ProfileImage extends StatelessWidget {
-  const ProfileImage({super.key});
+  final String? imageUrl;
+  const ProfileImage({super.key, this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +13,18 @@ class ProfileImage extends StatelessWidget {
         height: 120.h,
         width: 120.w,
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(AssetsData.user)),
-          borderRadius: BorderRadius.circular(60.r),
+          shape: BoxShape.circle,
           border: Border.all(color: AppColors.white, width: 3.w),
-          color: AppColors.grey,
+          image: imageUrl != null && imageUrl!.isNotEmpty
+              ? DecorationImage(
+            image: NetworkImage(imageUrl!),
+            fit: BoxFit.cover,
+          )
+              : null,
         ),
+        child: (imageUrl == null || imageUrl!.isEmpty)
+            ? Icon(Icons.person, size: 60.sp, color: AppColors.white)
+            : null,
       ),
     );
   }

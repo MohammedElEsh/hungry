@@ -7,11 +7,14 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.labelText,
-    bool? obscureText,
+    this.obscureText = false,
+    this.readOnly = false,
   });
 
   final TextEditingController controller;
   final String labelText;
+  final bool obscureText;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +23,8 @@ class CustomTextField extends StatelessWidget {
       cursorColor: AppColors.white,
       cursorHeight: 20.h,
       style: TextStyle(color: AppColors.white),
+      obscureText: obscureText,
+      readOnly: readOnly,
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(color: AppColors.white),
