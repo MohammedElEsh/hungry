@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/app_colors.dart';
 import '../../features/home/presentation/views/home_view.dart';
 import '../../features/cart/presentation/views/cart_view.dart';
 import '../../features/orders/presentation/views/orders_view.dart';
 import '../../features/profile/presentation/views/profile_view.dart';
+import '../../core/utils/app_colors.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({super.key});
@@ -17,13 +17,6 @@ class CustomBottomNavBar extends StatefulWidget {
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   late PageController pageController;
   int currentIndex = 0;
-
-  final List<Widget> screens = [
-    const HomeView(),
-    const CartView(),
-    const OrdersView(),
-    ProfileView(),
-  ];
 
   @override
   void initState() {
@@ -37,22 +30,37 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     super.dispose();
   }
 
+  void goToPage(int index) {
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    setState(() => currentIndex = index);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      HomeView(
+        // onCartTap: () => goToPage(1),
+        // onOrdersTap: () => goToPage(2),
+        onProfileTap: () => goToPage(3),
+      ),
+      const CartView(),
+      const OrdersView(),
+      const ProfileView(),
+    ];
+
     return Scaffold(
       body: PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() => currentIndex = index);
-        },
+        onPageChanged: (index) => setState(() => currentIndex = index),
         children: screens,
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 20.w,
-          vertical: 12.h,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: AppColors.primary,
           borderRadius: BorderRadius.circular(25.r),
@@ -65,14 +73,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           child: BottomNavigationBar(
             elevation: 0,
             currentIndex: currentIndex,
-            onTap: (index) {
-              setState(() => currentIndex = index);
-              pageController.animateToPage(
-                index,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            },
+            onTap: (index) => goToPage(index),
             backgroundColor: Colors.transparent,
             selectedItemColor: AppColors.white,
             unselectedItemColor: AppColors.grey,

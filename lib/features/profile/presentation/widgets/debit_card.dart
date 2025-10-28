@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hungry/core/utils/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/assets.dart';
+import '../../../auth/data/models/user_model.dart';
 import '../../../checkout/presentation/widgets/custom_list_tile.dart';
 
 class DebitCard extends StatelessWidget {
-  const DebitCard({super.key});
+  final UserModel? userModel;
+  const DebitCard({super.key, this.userModel});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class DebitCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: CustomListTile(
         title: "Debit Card",
-        subtitle: "**** **** **** 9142",
+        subtitle: userModel?.visa.toString() ?? "**** **** **** 9142",
         imageAsset: AssetsData.visa,
         value: "Debit",
         groupValue: "Debit",

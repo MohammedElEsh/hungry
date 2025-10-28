@@ -33,7 +33,7 @@ class CategoriesList extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: currentIndex == index
-                    ? AppColors.primary
+                    ? AppColors.secondary
                     : AppColors.grey.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20.r),
               ),

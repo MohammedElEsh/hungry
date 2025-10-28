@@ -23,12 +23,13 @@ class ProfileBottomSheet extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomButton(
+              backgroundColor: AppColors.primary,
               text: 'Edit Profile',
               icon: CupertinoIcons.pen,
               onPressed: () {},
             ),
             CustomButton(
-              backgroundColor: AppColors.third,
+              backgroundColor: AppColors.black,
               text: 'Log out',
               icon: CupertinoIcons.square_arrow_right_fill,
               onPressed: () {

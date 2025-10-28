@@ -4,9 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
+import '../../../profile/presentation/widgets/profile_image.dart';
 
 class HeaderSection extends StatelessWidget {
-  const HeaderSection({super.key});
+  final String? imageUrl;
+  final String? userName;
+  final VoidCallback? onProfileTap;
+
+  const HeaderSection({
+    super.key,
+    required this.imageUrl,
+    this.onProfileTap,
+    this.userName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,7 @@ class HeaderSection extends StatelessWidget {
             ),
             Gap(2.h),
             Text(
-              "Hello, Username",
+              "Hello, ${userName ?? 'Username'}",
               style: AppTextStyles.titleMedium.copyWith(
                 color: AppColors.primary,
               ),
@@ -36,13 +46,12 @@ class HeaderSection extends StatelessWidget {
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(top: 60.h),
-          child: CircleAvatar(
-            radius: 35.h,
-            backgroundColor: AppColors.primary,
-            child: Icon(
-              CupertinoIcons.person,
-              color: AppColors.white,
-              size: 30.w,
+          child: GestureDetector(
+            onTap: onProfileTap,
+            child: ProfileImage(
+              imageUrl: imageUrl ?? '',
+              width: 60.w,
+              height: 60.h,
             ),
           ),
         ),

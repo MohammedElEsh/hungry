@@ -1,3 +1,4 @@
+// home_app_bar.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -6,7 +7,11 @@ import 'header_section.dart';
 import 'search_bar.dart';
 
 class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({super.key});
+  final String? imageUrl;
+  final String? userName;
+  final VoidCallback? onProfileTap;
+
+  const HomeAppBar({super.key, this.onProfileTap, this.imageUrl, this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +23,14 @@ class HomeAppBar extends StatelessWidget {
       backgroundColor: AppColors.white,
       automaticallyImplyLeading: false,
       flexibleSpace: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 12.w,
-          vertical: 2.h,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 2.h),
         child: Column(
           children: [
-            const HeaderSection(),
+            HeaderSection(
+              imageUrl: imageUrl,
+              userName: userName,
+              onProfileTap: onProfileTap,
+            ),
             Gap(25.h),
             const SearchField(),
           ],

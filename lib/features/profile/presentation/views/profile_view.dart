@@ -79,7 +79,7 @@ class _ProfileViewState extends State<ProfileView> {
                   emailController: emailController,
                   addressController: addressController,
                 ),
-                DebitCard(),
+                DebitCard(userModel: userModel),
               ],
             ),
           ),
