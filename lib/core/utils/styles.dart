@@ -11,7 +11,7 @@ abstract class AppTextStyles {
     textStyle: const TextStyle(
       fontSize: 60,
       fontWeight: FontWeight.w500,
-      color: AppColors.white,
+      color: AppColors.forth,
     ),
   );
 

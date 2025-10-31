@@ -34,6 +34,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+
       controller: widget.controller,
       cursorColor: AppColors.primary,
       cursorHeight: 20.h,
@@ -43,7 +44,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.r),
-          borderSide: BorderSide(color: AppColors.primary),
+          borderSide: BorderSide(color: AppColors.forth),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.r),
@@ -53,7 +54,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ? IconButton(
           icon: Icon(
             _obscureText ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-            color: AppColors.primary,
+            color: AppColors.fifth,
             size: 20.w,
           ),
           onPressed: () {
@@ -65,7 +66,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : null,
         hintText: widget.hintText,
         errorStyle: TextStyle(color: AppColors.white, fontSize: 12.sp),
-        fillColor: Colors.white,
+        fillColor: AppColors.forth,
         filled: true,
       ),
     );

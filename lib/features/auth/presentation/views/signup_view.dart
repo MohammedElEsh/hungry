@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,9 +7,7 @@ import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
-import 'package:gap/gap.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
+import '../widgets/signup_form.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -76,87 +73,43 @@ class _SignupViewState extends State<SignupView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.primary,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Gap(80.h),
-                Text("HUNGRY?", style: AppTextStyles.displayLarge),
-                Text(
-                  "Join us and explore delicious fast food!",
-                  style: AppTextStyles.titleMedium,
-                ),
-                Gap(50.h),
-                CustomTextField(
-                  controller: nameController,
-                  hintText: 'Full Name',
-                  isPassword: false,
-                  validator: (value) => value!.isEmpty ? 'Please enter your name' : null,
-                ),
-                Gap(16.h),
-                CustomTextField(
-                  controller: emailController,
-                  hintText: 'Email Address',
-                  isPassword: false,
-                  validator: (value) => value!.isEmpty ? 'Please enter your email' : null,
-                ),
-                Gap(16.h),
-                CustomTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  isPassword: true,
-                  validator: (value) => value!.isEmpty ? 'Please enter a password' : null,
-                ),
-                Gap(16.h),
-                CustomTextField(
-                  controller: confirmPasswordController,
-                  hintText: 'Confirm Password',
-                  isPassword: true,
-                  validator: (value) => value!.isEmpty ? 'Please confirm your password' : null,
-                ),
-                Gap(50.h),
-                isLoading
-                    ? const CupertinoActivityIndicator(
-                    color: AppColors.white,
-                )
-                    : CustomButton(
-                  text: isLoading ? 'Loading...' : 'Signup',
-                  onPressed: signUp,
-                ),
-                Gap(20.h),
-                // CustomButton(
-                //   text: 'Sign Up',
-                //   onPressed: signUp,
-                // ),
-                Gap(20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 60.h),
+                child: Column(
                   children: [
+                    Text("sign up", style: AppTextStyles.displayLarge),
                     Text(
-                      "Already have an account? ",
+                      "please sign up to get started",
                       style: AppTextStyles.titleMedium,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        context.go(AppRouter.kLoginView);
-                      },
-                      child: Text(
-                        "Login",
-                        style: AppTextStyles.titleMedium.copyWith(
-                          color: AppColors.secondary,
-                        ),
-                      ),
                     ),
                   ],
                 ),
-                Gap(30.h),
-              ],
+              ),
             ),
-          ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SingleChildScrollView(
+                child: SignupForm(
+                  nameController: nameController,
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  confirmPasswordController: confirmPasswordController,
+                  formKey: formKey,
+                  isLoading: isLoading,
+                  signUp: signUp,
+                ),
+              ),
+            ),
+
+          ],
         ),
       ),
     );

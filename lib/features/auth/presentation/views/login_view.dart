@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,9 +7,7 @@ import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
-import 'package:gap/gap.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
+import '../widgets/login_form.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -27,7 +24,6 @@ class _LoginViewState extends State<LoginView> {
   final AuthRepo authRepo = AuthRepo();
   bool isLoading = false;
 
-
   @override
   void dispose() {
     emailController.dispose();
@@ -41,7 +37,6 @@ class _LoginViewState extends State<LoginView> {
     passwordController.text = '123456789';
     super.initState();
   }
-
 
   // Login function with state management for loading
   Future<void> login() async {
@@ -78,70 +73,45 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.primary,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Gap(80.h),
-                Text("HUNGRY?", style: AppTextStyles.displayLarge),
-                Text(
-                  "Welcome Back, Discover The Fast Food",
-                  style: AppTextStyles.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-                Gap(60.h),
-                CustomTextField(
-                  controller: emailController,
-                  hintText: 'Email Address',
-                  isPassword: false,
-                  validator: (value) => value!.isEmpty ? 'Email is required' : null,
-                ),
-                Gap(16.h),
-                CustomTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  isPassword: true,
-                  validator: (value) => value!.isEmpty ? 'Password is required' : null,
-                ),
-                Gap(80.h),
-                isLoading
-                    ? const CupertinoActivityIndicator(
-                    color: AppColors.white
-
-                )
-                    : CustomButton(
-                  text: isLoading ? 'Loading...' : 'Login',
-                  onPressed: login,
-                ),
-                Gap(20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 60.h),
+                child: Column(
                   children: [
+                    Text("Log in", style: AppTextStyles.displayLarge),
                     Text(
-                      "Don’t have an account? ",
+                      "please sign in to your existing account",
                       style: AppTextStyles.titleMedium,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        context.go(AppRouter.kSignupView);
-                      },
-                      child: Text(
-                        "Sign Up",
-                        style: AppTextStyles.titleMedium.copyWith(
-                          color: AppColors.secondary,
-                        ),
-                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    LoginForm(
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      formKey: formKey,
+                      isLoading: isLoading,
+                      login: login,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -54,6 +54,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.primary,
       body: RefreshIndicator(
         color: AppColors.white,
