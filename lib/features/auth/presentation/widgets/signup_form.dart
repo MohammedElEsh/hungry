@@ -116,6 +116,7 @@ class SignupForm extends StatelessWidget {
                 color: AppColors.primary,
               )
                   : CustomButton(
+                width: 0.9.sw,
                 text: isLoading ? 'Loading...' : 'Sign Up',
                 onPressed: () => signUp(),
               ),

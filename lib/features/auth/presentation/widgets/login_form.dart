@@ -96,6 +96,7 @@ class LoginForm extends StatelessWidget {
             isLoading
                 ? const CupertinoActivityIndicator(color: AppColors.primary)
                 : CustomButton(
+              width: 0.9.sw,
               text: isLoading ? 'Loading...' : 'Login',
               onPressed: () => login(),
             ),
