@@ -20,14 +20,14 @@ class SearchField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'Search for restaurants...',
           hintStyle: AppTextStyles.titleMedium.copyWith(
-            color: AppColors.grey,
+            color: AppColors.white,
             fontSize: 14.sp,
           ),
-          fillColor: AppColors.white,
+          fillColor: AppColors.fifth,
           filled: true,
           prefixIcon: Icon(
             CupertinoIcons.search,
-            color: AppColors.grey,
+            color: AppColors.primary,
             size: 22.sp,
           ),
           border: OutlineInputBorder(

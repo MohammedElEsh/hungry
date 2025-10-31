@@ -11,7 +11,12 @@ class HomeAppBar extends StatelessWidget {
   final String? userName;
   final VoidCallback? onProfileTap;
 
-  const HomeAppBar({super.key, this.onProfileTap, this.imageUrl, this.userName});
+  const HomeAppBar({
+    super.key,
+    this.onProfileTap,
+    this.imageUrl,
+    this.userName,
+  });
 
   @override
   Widget build(BuildContext context) {

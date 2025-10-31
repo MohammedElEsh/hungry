@@ -19,6 +19,24 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView> {
   bool playOutAnimation = false;
+  bool animationTriggered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 5), () {
+      if (!animationTriggered) {
+        startOutAnimation();
+      }
+    });
+  }
+
+  void startOutAnimation() {
+    setState(() {
+      playOutAnimation = true;
+      animationTriggered = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +45,9 @@ class _SplashViewState extends State<SplashView> {
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          setState(() {
-            playOutAnimation = true;
-          });
+          if (!animationTriggered) {
+            startOutAnimation();
+          }
         },
         child: Stack(
           children: [
@@ -49,11 +67,11 @@ class _SplashViewState extends State<SplashView> {
             Center(
               child: !playOutAnimation
                   ? FadeSlideText(
-                text: "HUNGRY?",
+                text: "FOOD",
                 style: AppTextStyles.displayLarge,
               )
                   : FadeSlideOutText(
-                text: "HUNGRY?",
+                text: "FOOD",
                 style: AppTextStyles.displayLarge,
                 onAnimationEnd: () {
                   context.go(AppRouter.kLoginView);

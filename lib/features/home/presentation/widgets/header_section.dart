@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 import '../../../profile/presentation/widgets/profile_image.dart';
+import 'bouncing_text.dart';
 
 class HeaderSection extends StatelessWidget {
   final String? imageUrl;
@@ -27,12 +28,10 @@ class HeaderSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(60.h),
-            Text(
-              "HUNGRY?",
-              style: AppTextStyles.displayLarge.copyWith(
-                color: AppColors.primary,
-                fontSize: 50.sp,
-              ),
+            BouncingText(
+              letters: ['F', 'OO', 'D'],
+              colors: [AppColors.primary, AppColors.secondary, AppColors.primary],
+              fontSize: 50,
             ),
             Gap(2.h),
             Text(
