@@ -67,11 +67,11 @@ class _SplashViewState extends State<SplashView> {
             Center(
               child: !playOutAnimation
                   ? FadeSlideText(
-                text: "FOOD",
+                text: "HUNGRY?",
                 style: AppTextStyles.displayLarge,
               )
                   : FadeSlideOutText(
-                text: "FOOD",
+                text: "HUNGRY?",
                 style: AppTextStyles.displayLarge,
                 onAnimationEnd: () {
                   context.go(AppRouter.kLoginView);

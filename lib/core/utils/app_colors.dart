@@ -7,8 +7,7 @@ class AppColors {
   static const Color third = Color(0xff3C2F2F);
   static const Color forth = Color(0xffeef3f8);
   static const Color fifth = Color(0xffb3b8c9);
-  static const Color sixth = Color(0xff342403);
-  static const Color seventh = Color(0xfff7ebc4);
+  static const Color sixth = Color(0xffe5eff8);
 
   // Neutral colors
   static const Color white = Color(0xffffffff);
