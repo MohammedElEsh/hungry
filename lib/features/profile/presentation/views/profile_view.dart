@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -6,6 +8,7 @@ import 'package:hungry/features/auth/data/repositories/auth_repo.dart';
 import 'package:hungry/features/profile/presentation/widgets/profile_actions.dart';
 import 'package:hungry/features/profile/presentation/widgets/profile_fields.dart';
 import 'package:hungry/features/profile/presentation/widgets/debit_card.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/utils/alerts.dart';
@@ -30,6 +33,8 @@ class _ProfileViewState extends State<ProfileView> {
   final AuthRepo authRepo = AuthRepo();
   bool isLoading = true;
 
+  File? pickedImage;
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +57,53 @@ class _ProfileViewState extends State<ProfileView> {
       setState(() => isLoading = false);
     }
   }
+
+  Future<void> pickImage() async {
+    if (kDebugMode) {
+      print("Button pressed");
+    }
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (image != null) {
+      setState(() {
+        pickedImage = File(image.path);
+      });
+    }
+  }
+
+  Future<UserModel?> updateProfileData() async {
+    setState(() => isLoading = true);
+
+    try {
+      final user = await authRepo.updateProfileData(
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        address: addressController.text.trim(),
+        visa: cardController.text.trim(),
+        image: pickedImage,
+      );
+
+      if (!mounted) return null;
+
+      setState(() {
+        userModel = user;
+        isLoading = false;
+      });
+
+      return user;
+    } catch (e) {
+      final errorMessage = e is ApiError ? e.message : e.toString();
+
+      if (mounted) {
+        showErrorBanner(context, errorMessage);
+        setState(() => isLoading = false);
+      }
+      return null;
+    }
+  }
+
 
   bool get hasCard {
     return userModel?.visa != null && userModel!.visa!.isNotEmpty;
@@ -86,7 +138,12 @@ class _ProfileViewState extends State<ProfileView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ProfileImage(imageUrl: userModel?.image ?? ''),
+                  ProfileImage(
+                    showUploadButton: true,
+                    imageUrl: userModel?.image ?? '',
+                    imageFile: pickedImage,
+                    onUpload: pickImage,
+                  ),
                   Gap(50.h),
                   ProfileFields(
                     nameController: nameController,
@@ -95,20 +152,22 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   Gap(20.h),
 
-
-
                   if (hasCard)
                     DebitCard(userModel: userModel)
                   else
                     AddCardButton(
                       cardController: cardController,
-                      onPressed: () {},
+                      onPressed: () async {
+                        await updateProfileData();
+                      },
                     ),
 
-
-
                   Gap(60.h),
-                  const ProfileActions(),
+                  ProfileActions(
+                    onEditProfile: () async {
+                      await updateProfileData();
+                    },
+                  ),
                   Gap(20.h),
                 ],
               ),

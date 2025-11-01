@@ -48,6 +48,7 @@ class HeaderSection extends StatelessWidget {
           child: GestureDetector(
             onTap: onProfileTap,
             child: ProfileImage(
+              showUploadButton: false,
               imageUrl: imageUrl ?? '',
               width: 60.w,
               height: 60.h,

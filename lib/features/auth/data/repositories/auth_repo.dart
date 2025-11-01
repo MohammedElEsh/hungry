@@ -63,7 +63,6 @@ class AuthRepo {
       if (response != null && response['data'] != null) {
         return UserModel.fromJson(response['data']);
       }
-
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     } catch (e) {
@@ -78,17 +77,29 @@ class AuthRepo {
     required String email,
     String? phone,
     String? address,
+    String? visa,
     File? image,
   }) async {
     try {
-      final response = await apiService.post('/update-profile', {
+      final formData = FormData.fromMap({
         'name': name,
         'email': email,
         'phone': phone,
         'address': address,
+        if (visa != null && visa.isNotEmpty) 'Visa': visa,
+        if (image != null)
+          'image': await MultipartFile.fromFile(
+            image.path,
+            filename: image.path.split('/').last,
+          ),
       });
-      final data = response['data'];
 
+      final response = await apiService.post(
+        '/update-profile',
+        formData,
+      );
+
+      final data = response['data'];
       return UserModel.fromJson(data);
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
@@ -96,6 +107,8 @@ class AuthRepo {
       throw ApiError(message: e.toString());
     }
   }
+
+
 
   /// logout
   Future<void> logout() async {

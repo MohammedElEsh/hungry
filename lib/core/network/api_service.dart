@@ -17,7 +17,7 @@ class ApiService {
     }
   }
 
-  Future<dynamic> post(String endPoint, Map<String, dynamic> body) async {
+  Future<dynamic> post(String endPoint, dynamic body) async {
     try {
       final response = await _dioClient.dio.post(
         endPoint,

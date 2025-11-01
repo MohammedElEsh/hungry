@@ -27,7 +27,7 @@ class ProfileFields extends StatelessWidget {
           CustomTextField(
             controller: nameController,
             labelText: 'Name',
-            readOnly: true,
+            // readOnly: true,
           ),
           Gap(20.h),
           // Email TextField
@@ -41,7 +41,7 @@ class ProfileFields extends StatelessWidget {
           CustomTextField(
             controller: addressController,
             labelText: 'Address',
-            readOnly: true,
+            // readOnly: true,
           ),
           Gap(50.h),
           // Password TextField

@@ -7,7 +7,8 @@ import 'package:flutter/cupertino.dart';
 import '../../../../core/utils/app_router.dart';
 
 class ProfileActions extends StatelessWidget {
-  const ProfileActions({super.key});
+  final VoidCallback? onEditProfile;
+  const ProfileActions({super.key, this.onEditProfile});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class ProfileActions extends StatelessWidget {
             backgroundColor: AppColors.secondary,
             text: 'Edit Profile',
             icon: CupertinoIcons.pen,
-            onPressed: () {},
+            onPressed: onEditProfile,
           ),
           CustomButton(
             backgroundColor: AppColors.white,
