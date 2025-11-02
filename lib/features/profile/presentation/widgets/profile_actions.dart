@@ -1,14 +1,19 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../../../core/utils/app_router.dart';
-
 class ProfileActions extends StatelessWidget {
   final VoidCallback? onEditProfile;
-  const ProfileActions({super.key, this.onEditProfile});
+  final VoidCallback? onLogOut;
+  final bool isLoggingOut;
+
+  const ProfileActions({
+    super.key,
+    this.onEditProfile,
+    this.onLogOut,
+    this.isLoggingOut = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +28,23 @@ class ProfileActions extends StatelessWidget {
             icon: CupertinoIcons.pen,
             onPressed: onEditProfile,
           ),
-          CustomButton(
+          isLoggingOut
+              ? SizedBox(
+            width: 170.w,
+            height: 60.h,
+            child: Center(
+              child: CupertinoActivityIndicator(
+                color: AppColors.primary,
+              ),
+            ),
+          )
+              : CustomButton(
             backgroundColor: AppColors.white,
             text: 'Log out',
             textColor: AppColors.primary,
             border: Border.all(color: AppColors.primary),
             icon: CupertinoIcons.square_arrow_right_fill,
-            onPressed: () {
-              context.go(AppRouter.kLoginView);
-            },
+            onPressed: onLogOut,
           ),
         ],
       ),

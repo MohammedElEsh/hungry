@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hungry/core/utils/app_colors.dart';
 import 'package:hungry/features/auth/data/repositories/auth_repo.dart';
 import 'package:hungry/features/profile/presentation/widgets/profile_actions.dart';
@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/utils/alerts.dart';
+import '../../../../core/utils/app_router.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../widgets/add_card_button.dart';
 import '../widgets/profile_image.dart';
@@ -32,6 +33,8 @@ class _ProfileViewState extends State<ProfileView> {
   UserModel? userModel;
   final AuthRepo authRepo = AuthRepo();
   bool isLoading = true;
+  bool isLoggingOut = false;
+
 
   File? pickedImage;
 
@@ -59,9 +62,6 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Future<void> pickImage() async {
-    if (kDebugMode) {
-      print("Button pressed");
-    }
     final image = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 80,
@@ -104,6 +104,21 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
+  Future<void> logout() async {
+    setState(() => isLoggingOut = true);
+
+    try {
+      await authRepo.logout();
+      if (!mounted) return;
+
+
+      context.go(AppRouter.kLoginView);
+    } catch (e) {
+      final errorMessage = e is ApiError ? e.message : e.toString();
+      if (mounted) showErrorBanner(context, errorMessage);
+      setState(() => isLoggingOut = false);
+    }
+  }
 
   bool get hasCard {
     return userModel?.visa != null && userModel!.visa!.isNotEmpty;
@@ -167,6 +182,10 @@ class _ProfileViewState extends State<ProfileView> {
                     onEditProfile: () async {
                       await updateProfileData();
                     },
+                    onLogOut: () async {
+                      await logout();
+                    },
+                    isLoggingOut: isLoggingOut,
                   ),
                   Gap(20.h),
                 ],
