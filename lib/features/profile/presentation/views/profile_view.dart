@@ -8,6 +8,9 @@ import 'package:hungry/features/auth/data/repositories/auth_repo.dart';
 import 'package:hungry/features/profile/presentation/widgets/profile_actions.dart';
 import 'package:hungry/features/profile/presentation/widgets/profile_fields.dart';
 import 'package:hungry/features/profile/presentation/widgets/debit_card.dart';
+import 'package:hungry/features/profile/presentation/widgets/guest_profile_fields.dart';
+import 'package:hungry/features/profile/presentation/widgets/guest_profile_actions.dart';
+import 'package:hungry/features/profile/presentation/widgets/guest_profile_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/network/api_error.dart';
@@ -45,18 +48,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   Future<void> getProfileData() async {
     try {
-      // If user is guest, skip profile data fetch
-      if (authRepo.isGuest) {
-        setState(() {
-          userModel = null;
-          nameController.text = 'Guest User';
-          emailController.text = 'guest@hungry.app';
-          addressController.text = '';
-          isLoading = false;
-        });
-        return;
-      }
-
       final userProfile = await authRepo.getProfileData();
       setState(() {
         userModel = userProfile;
@@ -173,40 +164,64 @@ class _ProfileViewState extends State<ProfileView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ProfileImage(
-                    showUploadButton: true,
-                    imageUrl: userModel?.image ?? '',
-                    imageFile: pickedImage,
-                    onUpload: pickImage,
-                  ),
-                  Gap(50.h),
-                  ProfileFields(
-                    nameController: nameController,
-                    emailController: emailController,
-                    addressController: addressController,
-                  ),
-                  Gap(20.h),
-
-                  if (hasCard)
-                    DebitCard(userModel: userModel)
+                  // Conditional profile image based on guest mode
+                  if (authRepo.isGuest)
+                    const GuestProfileImage()
                   else
-                    AddCardButton(
-                      cardController: cardController,
-                      onPressed: () async {
-                        await updateProfileData();
-                      },
+                    ProfileImage(
+                      showUploadButton: !authRepo.isGuest,
+                      imageUrl: userModel?.image ?? '',
+                      imageFile: pickedImage,
+                      onUpload: authRepo.isGuest ? null : pickImage,
+                    ),
+                  Gap(50.h),
+
+                  // Conditional rendering based on guest mode
+                  if (authRepo.isGuest)
+                    const GuestProfileFields()
+                  else
+                    ProfileFields(
+                      nameController: nameController,
+                      emailController: emailController,
+                      addressController: addressController,
                     ),
 
+                  if (!authRepo.isGuest) ...[
+                    Gap(20.h),
+                    if (hasCard)
+                      DebitCard(userModel: userModel)
+                    else
+                      AddCardButton(
+                        cardController: cardController,
+                        onPressed: () async {
+                          await updateProfileData();
+                        },
+                      ),
+                  ],
+
                   Gap(60.h),
-                  ProfileActions(
-                    onEditProfile: () async {
-                      await updateProfileData();
-                    },
-                    onLogOut: () async {
-                      await logout();
-                    },
-                    isLoggingOut: isLoggingOut,
-                  ),
+
+                  // Conditional actions based on guest mode
+                  if (authRepo.isGuest)
+                    GuestProfileActions(
+                      onSignUp: () {
+                        context.go(AppRouter.kSignupView);
+                      },
+                      onLogOut: () async {
+                        await logout();
+                      },
+                      isLoggingOut: isLoggingOut,
+                    )
+                  else
+                    ProfileActions(
+                      onEditProfile: () async {
+                        await updateProfileData();
+                      },
+                      onLogOut: () async {
+                        await logout();
+                      },
+                      isLoggingOut: isLoggingOut,
+                    ),
                   Gap(20.h),
                 ],
               ),
