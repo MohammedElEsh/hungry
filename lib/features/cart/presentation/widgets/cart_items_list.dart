@@ -12,7 +12,7 @@ class CartItemsList extends StatelessWidget {
     return Expanded(
       child: ListView.separated(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.only(top: 80.h),
+        padding: EdgeInsets.only(top: 40.h),
         itemCount: 7,
         separatorBuilder: (context, index) => Gap(15.h),
         itemBuilder: (context, index) {

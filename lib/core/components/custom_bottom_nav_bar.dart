@@ -43,12 +43,12 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       HomeView(
-        // onCartTap: () => goToPage(1),
-        // onOrdersTap: () => goToPage(2),
         onProfileTap: () => goToPage(3),
       ),
       const CartView(),
-      const OrdersView(),
+      OrdersView(
+        onHomeTap: () => goToPage(0),
+      ),
       const ProfileView(),
     ];
 
