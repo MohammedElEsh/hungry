@@ -23,18 +23,12 @@ class CheckoutSummary extends StatelessWidget {
                     fontSize: 40.sp,
                   ),
                 ),
-                TextSpan(
-                  text: '18.19',
-                  style: AppTextStyles.displaySmall,
-                ),
+                TextSpan(text: '18.19', style: AppTextStyles.displaySmall),
               ],
             ),
           ),
           const Spacer(),
-          CustomButton(
-            text: 'Add to Cart',
-            onPressed: () {},
-          ),
+          CustomButton(text: 'Add to Cart', onPressed: () {}),
         ],
       ),
     );

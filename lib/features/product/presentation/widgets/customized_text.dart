@@ -18,9 +18,7 @@ class CustomizedText extends StatelessWidget {
           ),
           TextSpan(
             text: " Your Burger\n to Your Tastes.\n Ultimate Experience",
-            style: AppTextStyles.titleMedium.copyWith(
-              color: AppColors.black,
-            ),
+            style: AppTextStyles.titleMedium.copyWith(color: AppColors.black),
           ),
         ],
       ),

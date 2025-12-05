@@ -10,14 +10,11 @@ import '../widgets/save_card_checkbox.dart';
 class PaymentMethods extends StatefulWidget {
   const PaymentMethods({super.key});
 
-
-
   @override
   State<PaymentMethods> createState() => _PaymentMethodsState();
 }
 
 class _PaymentMethodsState extends State<PaymentMethods> {
-
   String? selectedMethod = "Cash";
 
   void onChanged(String? value) {

@@ -60,30 +60,29 @@ class ProfileImage extends StatelessWidget {
           ),
 
           if (showUploadButton)
-
             Positioned(
-            bottom: -5.h,
-            right: -5.w,
-            child: GestureDetector(
-              onTap: onUpload,
-              child: Container(
-                height: 25.h,
-                width: 25.w,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.white, width: 2.w),
-                ),
-                child: Center(
-                  child: Icon(
-                    CupertinoIcons.add,
-                    color: AppColors.white,
-                    size: 16.sp,
+              bottom: -5.h,
+              right: -5.w,
+              child: GestureDetector(
+                onTap: onUpload,
+                child: Container(
+                  height: 25.h,
+                  width: 25.w,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.white, width: 2.w),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      CupertinoIcons.add,
+                      color: AppColors.white,
+                      size: 16.sp,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

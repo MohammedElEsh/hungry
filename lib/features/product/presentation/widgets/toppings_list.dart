@@ -21,7 +21,7 @@ class ToppingsList extends StatelessWidget {
       child: Row(
         children: List.generate(
           toppings.length,
-              (index) => Padding(
+          (index) => Padding(
             padding: EdgeInsets.only(left: 15.w),
             child: ToppingCard(
               imagePath: toppings[index]['image']!,

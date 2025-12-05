@@ -25,10 +25,7 @@ class CartSummary extends StatelessWidget {
                     fontSize: 40.sp,
                   ),
                 ),
-                TextSpan(
-                  text: '18.19',
-                  style: AppTextStyles.displaySmall,
-                ),
+                TextSpan(text: '18.19', style: AppTextStyles.displaySmall),
               ],
             ),
           ),

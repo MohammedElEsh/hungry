@@ -45,81 +45,83 @@ class SignupForm extends StatelessWidget {
             children: [
               Gap(40.h),
               Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Full Name",
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.grey,
-                    ),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Full Name",
+                  style: AppTextStyles.titleMedium.copyWith(
+                    color: AppColors.grey,
                   ),
                 ),
+              ),
               CustomTextField(
                 controller: nameController,
                 hintText: 'Full Name',
                 isPassword: false,
-                validator: (value) => value!.isEmpty ? 'Please enter your name' : null,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter your name' : null,
               ),
               Gap(16.h),
 
               Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Email Address",
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.grey,
-                    ),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Email Address",
+                  style: AppTextStyles.titleMedium.copyWith(
+                    color: AppColors.grey,
                   ),
                 ),
+              ),
               CustomTextField(
-                  controller: emailController,
-                  hintText: 'Email Address',
-                  isPassword: false,
-                  validator: (value) => value!.isEmpty ? 'Please enter your email' : null,
-                ),
+                controller: emailController,
+                hintText: 'Email Address',
+                isPassword: false,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter your email' : null,
+              ),
               Gap(16.h),
 
               Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Password",
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.grey,
-                    ),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Password",
+                  style: AppTextStyles.titleMedium.copyWith(
+                    color: AppColors.grey,
                   ),
                 ),
+              ),
               CustomTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  isPassword: true,
-                  validator: (value) => value!.isEmpty ? 'Please enter a password' : null,
-                ),
+                controller: passwordController,
+                hintText: 'Password',
+                isPassword: true,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter a password' : null,
+              ),
               Gap(16.h),
 
               Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Confirm Password",
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: AppColors.grey,
-                    ),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Confirm Password",
+                  style: AppTextStyles.titleMedium.copyWith(
+                    color: AppColors.grey,
                   ),
                 ),
+              ),
               CustomTextField(
                 controller: confirmPasswordController,
                 hintText: 'Confirm Password',
                 isPassword: true,
-                validator: (value) => value!.isEmpty ? 'Please confirm your password' : null,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please confirm your password' : null,
               ),
               Gap(50.h),
               isLoading
-                  ? const CupertinoActivityIndicator(
-                color: AppColors.primary,
-              )
+                  ? const CupertinoActivityIndicator(color: AppColors.primary)
                   : CustomButton(
-                width: 0.9.sw,
-                text: isLoading ? 'Loading...' : 'Sign Up',
-                onPressed: () => signUp(),
-              ),
+                      width: 0.9.sw,
+                      text: isLoading ? 'Loading...' : 'Sign Up',
+                      onPressed: () => signUp(),
+                    ),
               Gap(20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +134,9 @@ class SignupForm extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      context.go(AppRouter.kLoginView); // Navigate to login screen
+                      context.go(
+                        AppRouter.kLoginView,
+                      ); // Navigate to login screen
                     },
                     child: Text(
                       "Login",

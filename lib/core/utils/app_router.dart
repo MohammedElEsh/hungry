@@ -18,52 +18,35 @@ abstract class AppRouter {
   static const kCartView = '/cartView';
   static const kProfileView = '/profileView';
 
-
-
-
   static final GoRouter router = GoRouter(
     initialLocation: kSplashView,
     routes: [
       GoRoute(
         path: kSplashView,
-        builder: (context, state)
-        => const SplashView(),
+        builder: (context, state) => const SplashView(),
       ),
-      GoRoute(
-        path: kLoginView,
-        builder: (context, state)
-        => const LoginView(),
-      ),
+      GoRoute(path: kLoginView, builder: (context, state) => const LoginView()),
       GoRoute(
         path: kSignupView,
-        builder: (context, state)
-        => const SignupView(),
+        builder: (context, state) => const SignupView(),
       ),
       GoRoute(
         path: kHomeView,
-        builder: (context, state)
-        => const CustomBottomNavBar(),
+        builder: (context, state) => const CustomBottomNavBar(),
       ),
       GoRoute(
         path: kProductView,
-        builder: (context, state)
-        => const ProductView(),
+        builder: (context, state) => const ProductView(),
       ),
       GoRoute(
         path: kCheckoutView,
-        builder: (context, state)
-        => const CheckoutView(),
-      ),      GoRoute(
-        path: kCartView,
-        builder: (context, state)
-        => const CartView(),
+        builder: (context, state) => const CheckoutView(),
       ),
+      GoRoute(path: kCartView, builder: (context, state) => const CartView()),
       GoRoute(
         path: kProfileView,
-        builder: (context, state)
-        => const ProfileView(),
+        builder: (context, state) => const ProfileView(),
       ),
-
     ],
   );
 }

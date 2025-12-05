@@ -4,39 +4,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_colors.dart';
 import 'styles.dart';
 
-void _showBanner(
-    BuildContext context,
-    String message,
-    Color backgroundColor,
-    ) {
+void _showBanner(BuildContext context, String message, Color backgroundColor) {
   final child = Container(
     width: double.infinity,
-    constraints: BoxConstraints(
-      maxWidth: 0.9.sw,
-    ),
+    constraints: BoxConstraints(maxWidth: 0.9.sw),
     decoration: BoxDecoration(
       color: backgroundColor,
       borderRadius: BorderRadius.circular(8.r),
     ),
-    padding: EdgeInsets.symmetric(
-      vertical: 12.h,
-      horizontal: 16.w,
-    ),
+    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
     child: Material(
       color: Colors.transparent,
       child: Text(
         message,
         textAlign: TextAlign.center,
-        style: AppTextStyles.labelLarge.copyWith(
-          color: AppColors.white,
-        ),
+        style: AppTextStyles.labelLarge.copyWith(color: AppColors.white),
       ),
     ),
   );
 
   showAlertBanner(
     context,
-        () {},
+    () {},
     child,
     alertBannerLocation: AlertBannerLocation.top,
   );

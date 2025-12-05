@@ -28,12 +28,7 @@ class CustomButton extends StatelessWidget {
           color: AppColors.secondary,
           borderRadius: BorderRadius.circular(10.r),
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: AppTextStyles.titleMedium,
-          ),
-        ),
+        child: Center(child: Text(text, style: AppTextStyles.titleMedium)),
       ),
     );
   }

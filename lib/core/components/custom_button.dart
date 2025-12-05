@@ -79,7 +79,9 @@ class CustomButton extends StatelessWidget {
           height: height ?? 60.h,
           decoration: BoxDecoration(
             // If gradient is null, use solid color
-            color: gradient == null ? (backgroundColor ?? AppColors.primary) : null,
+            color: gradient == null
+                ? (backgroundColor ?? AppColors.primary)
+                : null,
             gradient: gradient,
             borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
             border: border,
@@ -93,32 +95,37 @@ class CustomButton extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: isLoading
-          // Show CircularProgressIndicator when loading
+              // Show CircularProgressIndicator when loading
               ? SizedBox(
-            width: 24.w,
-            height: 24.w,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.5,
-              color: textColor ?? AppColors.white,
-            ),
-          )
-          // Show Row with Icon + Text
+                  width: 24.w,
+                  height: 24.w,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: textColor ?? AppColors.white,
+                  ),
+                )
+              // Show Row with Icon + Text
               : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (icon != null)
-                Icon(icon, color: textColor ?? AppColors.white, size: iconSize ?? 24.sp),
-              if (icon != null && text != null) SizedBox(width: 8.w),
-              if (text != null)
-                Text(
-                  text!,
-                  style: textStyle ??
-                      AppTextStyles.titleMedium.copyWith(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (icon != null)
+                      Icon(
+                        icon,
                         color: textColor ?? AppColors.white,
+                        size: iconSize ?? 24.sp,
                       ),
+                    if (icon != null && text != null) SizedBox(width: 8.w),
+                    if (text != null)
+                      Text(
+                        text!,
+                        style:
+                            textStyle ??
+                            AppTextStyles.titleMedium.copyWith(
+                              color: textColor ?? AppColors.white,
+                            ),
+                      ),
+                  ],
                 ),
-            ],
-          ),
         ),
       ),
     );

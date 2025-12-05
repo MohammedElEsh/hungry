@@ -14,9 +14,6 @@ class CheckoutView extends StatefulWidget {
 }
 
 class _CheckoutViewState extends State<CheckoutView> {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +30,10 @@ class _CheckoutViewState extends State<CheckoutView> {
             Gap(20.h),
             PaymentMethods(),
             Gap(115.h),
-            PaymentActionSection()
+            PaymentActionSection(),
           ],
         ),
       ),
-
     );
   }
 }

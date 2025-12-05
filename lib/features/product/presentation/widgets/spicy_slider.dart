@@ -7,11 +7,7 @@ class SpicySlider extends StatefulWidget {
   final double initialValue;
   final ValueChanged<double>? onChanged;
 
-  const SpicySlider({
-    super.key,
-    this.initialValue = 0.5,
-    this.onChanged,
-  });
+  const SpicySlider({super.key, this.initialValue = 0.5, this.onChanged});
 
   @override
   State<SpicySlider> createState() => _SpicySliderState();

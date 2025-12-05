@@ -43,10 +43,7 @@ class _SlideInImageState extends State<SlideInImage> {
       child: SizedBox(
         width: 1.sw,
         height: imgHeight,
-        child: Image.asset(
-          widget.imagePath,
-          fit: BoxFit.contain,
-        ),
+        child: Image.asset(widget.imagePath, fit: BoxFit.contain),
       ),
     );
   }

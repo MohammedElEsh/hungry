@@ -47,11 +47,7 @@ class ToppingCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(
-              top: 8.h,
-              left: 6.w,
-              right: 6.w,
-            ),
+            padding: EdgeInsets.only(top: 8.h, left: 6.w, right: 6.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -63,11 +59,7 @@ class ToppingCard extends StatelessWidget {
                     color: buttonColor,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    Icons.add,
-                    color: AppColors.white,
-                    size: 18.sp,
-                  ),
+                  child: Icon(Icons.add, color: AppColors.white, size: 18.sp),
                 ),
               ],
             ),

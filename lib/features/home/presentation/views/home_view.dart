@@ -6,13 +6,14 @@ import '../../../../core/network/api_error.dart';
 import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../auth/data/repositories/auth_repo.dart';
+import '../../../product/data/models/product_model.dart';
+import '../../../product/data/repositories/product_repo.dart';
 import '../widgets/categories_list.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/grid_view_section.dart';
 import '../../../auth/data/models/user_model.dart';
 
 class HomeView extends StatefulWidget {
-
   final VoidCallback? onProfileTap;
   const HomeView({super.key, this.onProfileTap});
 
@@ -33,11 +34,19 @@ class _HomeViewState extends State<HomeView> {
   UserModel? userModel;
   bool isLoading = true;
 
+  ProductRepo productRepo = ProductRepo();
+  List<ProductModel>? products = [];
+
+  Future<void> getProducts() async {
+    final products = await productRepo.getProducts();
+    setState(() => this.products = products);
+  }
 
   @override
   void initState() {
     super.initState();
     loadUserData();
+    getProducts();
   }
 
   Future<void> loadUserData() async {
@@ -74,7 +83,8 @@ class _HomeViewState extends State<HomeView> {
                 imageUrl: userModel?.image,
                 userName: userModel?.name,
                 onProfileTap: widget.onProfileTap,
-              ),            SliverToBoxAdapter(
+              ),
+              SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -89,7 +99,9 @@ class _HomeViewState extends State<HomeView> {
                   ],
                 ),
               ),
-              const GridViewSection(),
+              GridViewSection(
+                  products: products ?? []
+              ),
             ],
           ),
         ),

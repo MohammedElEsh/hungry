@@ -27,7 +27,7 @@ class SaveCardCheckboxState extends State<SaveCardCheckbox> {
         ),
         Text(
           "Save this card for future payments",
-          style: AppTextStyles.bodyGrey
+          style: AppTextStyles.bodyGrey,
         ),
       ],
     );

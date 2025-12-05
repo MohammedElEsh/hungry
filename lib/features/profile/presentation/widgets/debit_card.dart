@@ -22,9 +22,7 @@ class DebitCard extends StatelessWidget {
         groupValue: "Debit",
         onChanged: (value) {},
         tileColor: AppColors.info.withOpacity(0.15),
-        titleStyle: AppTextStyles.titleMedium.copyWith(
-          color: AppColors.black,
-        ),
+        titleStyle: AppTextStyles.titleMedium.copyWith(color: AppColors.black),
         subtitleStyle: AppTextStyles.bodyGrey,
         imageWidth: 60.w,
         activeColor: AppColors.info,

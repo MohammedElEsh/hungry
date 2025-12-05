@@ -31,13 +31,12 @@ class _CartItemState extends State<CartItem> {
       child: Card(
         color: AppColors.white,
         elevation: 3,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.r),
+        ),
         child: Container(
           width: 0.9.sw,
-          padding: EdgeInsets.symmetric(
-            horizontal: 20.w,
-            vertical: 15.h,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -88,10 +87,7 @@ class _CartItemState extends State<CartItem> {
                         textColor: AppColors.white,
                       ),
                       Gap(10.w),
-                      Text(
-                        "$quantity",
-                        style: AppTextStyles.titleLarge,
-                      ),
+                      Text("$quantity", style: AppTextStyles.titleLarge),
                       Gap(10.w),
                       CustomButton(
                         onPressed: () {

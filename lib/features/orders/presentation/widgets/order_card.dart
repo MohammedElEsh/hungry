@@ -65,10 +65,7 @@ class OrderCard extends StatelessWidget {
             ),
             Gap(12.h),
 
-            OrderInfoRow(
-              icon: Icons.calendar_today,
-              text: date,
-            ),
+            OrderInfoRow(icon: Icons.calendar_today, text: date),
             Gap(8.h),
 
             OrderInfoRow(
@@ -80,10 +77,7 @@ class OrderCard extends StatelessWidget {
             Divider(color: AppColors.grey.withOpacity(0.3)),
             Gap(12.h),
 
-            OrderAmountSection(
-              totalAmount: totalAmount,
-              onTap: onTap,
-            ),
+            OrderAmountSection(totalAmount: totalAmount, onTap: onTap),
           ],
         ),
       ),

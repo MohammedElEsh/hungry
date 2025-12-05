@@ -19,19 +19,13 @@ class CustomizedSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Image.asset(
-          AssetsData.customizedBurger,
-          height: 250.h,
-        ),
+        Image.asset(AssetsData.customizedBurger, height: 250.h),
         const Spacer(),
         Column(
           children: [
             const CustomizedText(),
             Gap(15.h),
-            SpicySlider(
-              initialValue: sliderValue,
-              onChanged: onSliderChanged,
-            ),
+            SpicySlider(initialValue: sliderValue, onChanged: onSliderChanged),
           ],
         ),
       ],

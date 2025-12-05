@@ -39,10 +39,7 @@ class _FadeSlideTextState extends State<FadeSlideText> {
         duration: widget.duration,
         curve: Curves.easeOut,
         offset: show ? Offset.zero : Offset(0, 1.h),
-        child: Text(
-          widget.text,
-          style: widget.style,
-        ),
+        child: Text(widget.text, style: widget.style),
       ),
     );
   }

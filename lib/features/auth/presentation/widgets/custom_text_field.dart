@@ -34,11 +34,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
       controller: widget.controller,
       cursorColor: AppColors.primary,
       cursorHeight: 20.h,
-      validator: widget.validator ??
+      validator:
+          widget.validator ??
           (widget.isPassword ? Validators.password : Validators.email),
       obscureText: _obscureText,
       decoration: InputDecoration(
@@ -52,17 +52,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         suffixIcon: widget.isPassword
             ? IconButton(
-          icon: Icon(
-            _obscureText ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-            color: AppColors.fifth,
-            size: 20.w,
-          ),
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-        )
+                icon: Icon(
+                  _obscureText ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
+                  color: AppColors.fifth,
+                  size: 20.w,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
             : null,
         hintText: widget.hintText,
         errorStyle: TextStyle(color: AppColors.white, fontSize: 12.sp),

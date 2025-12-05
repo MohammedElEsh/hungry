@@ -22,15 +22,12 @@ class CategoriesList extends StatelessWidget {
       child: Row(
         children: List.generate(
           categories.length,
-              (index) => GestureDetector(
+          (index) => GestureDetector(
             onTap: () => onCategoryTap(index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               margin: EdgeInsets.only(right: 12.w),
-              padding: EdgeInsets.symmetric(
-                horizontal: 36.w,
-                vertical: 12.h,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 12.h),
               decoration: BoxDecoration(
                 color: currentIndex == index
                     ? AppColors.secondary

@@ -1,6 +1,9 @@
 class Validators {
   /// ✅ Check if valid email format
-  static String? email(String? value, {String message = 'Enter a valid email'}) {
+  static String? email(
+    String? value, {
+    String message = 'Enter a valid email',
+  }) {
     if (value == null || value.trim().isEmpty) {
       return 'Email is required';
     }

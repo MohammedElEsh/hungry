@@ -147,13 +147,11 @@ abstract class AppTextStyles {
     ),
   );
 
-    static final bodyGrey = GoogleFonts.roboto(
+  static final bodyGrey = GoogleFonts.roboto(
     textStyle: const TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
       color: AppColors.grey,
     ),
   );
-
-
 }

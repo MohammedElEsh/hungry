@@ -29,18 +29,12 @@ class PaymentActionSection extends StatelessWidget {
                     fontSize: 40.sp,
                   ),
                 ),
-                TextSpan(
-                  text: '92.41',
-                  style: AppTextStyles.displaySmall,
-                ),
+                TextSpan(text: '92.41', style: AppTextStyles.displaySmall),
               ],
             ),
           ),
           const Spacer(),
-          CustomButton(
-            text: 'Pay Now',
-            onPressed: () {},
-          ),
+          CustomButton(text: 'Pay Now', onPressed: () {}),
         ],
       ),
     );

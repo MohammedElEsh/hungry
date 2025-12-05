@@ -30,22 +30,20 @@ class ProfileActions extends StatelessWidget {
           ),
           isLoggingOut
               ? SizedBox(
-            width: 170.w,
-            height: 60.h,
-            child: Center(
-              child: CupertinoActivityIndicator(
-                color: AppColors.primary,
-              ),
-            ),
-          )
+                  width: 170.w,
+                  height: 60.h,
+                  child: Center(
+                    child: CupertinoActivityIndicator(color: AppColors.primary),
+                  ),
+                )
               : CustomButton(
-            backgroundColor: AppColors.white,
-            text: 'Log out',
-            textColor: AppColors.primary,
-            border: Border.all(color: AppColors.primary),
-            icon: CupertinoIcons.square_arrow_right_fill,
-            onPressed: onLogOut,
-          ),
+                  backgroundColor: AppColors.white,
+                  text: 'Log out',
+                  textColor: AppColors.primary,
+                  border: Border.all(color: AppColors.primary),
+                  icon: CupertinoIcons.square_arrow_right_fill,
+                  onPressed: onLogOut,
+                ),
         ],
       ),
     );

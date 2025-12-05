@@ -12,10 +12,7 @@ class ApiError {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'message': message,
-      'statusCode': statusCode,
-    };
+    return {'message': message, 'statusCode': statusCode};
   }
 
   @override

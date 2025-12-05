@@ -15,7 +15,6 @@ class CustomListTile extends StatelessWidget {
   final BorderRadiusGeometry borderRadius;
   final VoidCallback? onTap;
 
-
   const CustomListTile({
     super.key,
     required this.title,
@@ -36,22 +35,11 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      shape: RoundedRectangleBorder(
-        borderRadius: borderRadius,
-      ),
-      leading: Image.asset(
-        imageAsset,
-        width: imageWidth,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      leading: Image.asset(imageAsset, width: imageWidth),
       tileColor: tileColor,
-      title: Text(
-        title,
-        style: titleStyle,
-      ),
-      subtitle: Text(
-        subtitle,
-        style: subtitleStyle,
-      ),
+      title: Text(title, style: titleStyle),
+      subtitle: Text(subtitle, style: subtitleStyle),
       trailing: Radio<String>(
         activeColor: activeColor,
         value: value,

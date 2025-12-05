@@ -7,9 +7,7 @@ class DioClient {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: 'https://sonic-zdi0.onrender.com/api',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
     ),
   );
 
@@ -40,7 +38,10 @@ class DioClient {
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     } catch (e) {
-      throw ApiError(message: "Unexpected error: ${e.toString()}", statusCode: 500);
+      throw ApiError(
+        message: "Unexpected error: ${e.toString()}",
+        statusCode: 500,
+      );
     }
   }
 

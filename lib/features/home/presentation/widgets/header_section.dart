@@ -30,7 +30,11 @@ class HeaderSection extends StatelessWidget {
             Gap(60.h),
             BouncingText(
               letters: ['F', 'OO', 'D'],
-              colors: [AppColors.primary, AppColors.secondary, AppColors.primary],
+              colors: [
+                AppColors.primary,
+                AppColors.secondary,
+                AppColors.primary,
+              ],
               fontSize: 50,
             ),
             Gap(2.h),
