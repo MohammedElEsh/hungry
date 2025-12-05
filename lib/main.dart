@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
 
-      builder: (context, child) {
+      builder: (context, _) {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'Hungry',

@@ -5,6 +5,7 @@ import 'package:hungry/core/utils/app_colors.dart';
 import 'package:hungry/core/utils/app_router.dart';
 import 'package:hungry/core/utils/assets.dart';
 import 'package:hungry/core/utils/styles.dart';
+import 'package:hungry/features/auth/data/repositories/auth_repo.dart';
 import 'package:hungry/features/splash/widgets/fade_slide_in_text.dart';
 import 'package:hungry/features/splash/widgets/slide_in_image.dart';
 import 'package:hungry/features/splash/widgets/fade_slide_out_text.dart';
@@ -20,6 +21,22 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   bool playOutAnimation = false;
   bool animationTriggered = false;
+
+  AuthRepo authRepo = AuthRepo();
+
+  Future<void> checkAutoLogin() async {
+    await authRepo.autoLogin();
+
+    if (!mounted) return;
+
+    if (authRepo.isLoggedIn) {
+      context.go(AppRouter.kHomeView);
+    } else if (authRepo.isGuest) {
+      context.go(AppRouter.kHomeView);
+    } else {
+      context.go(AppRouter.kLoginView);
+    }
+  }
 
   @override
   void initState() {
@@ -52,31 +69,28 @@ class _SplashViewState extends State<SplashView> {
         child: Stack(
           children: [
             if (!playOutAnimation)
-              SlideInImage(
-                imagePath: AssetsData.splash,
-                targetTop: 540.h,
-              )
+              SlideInImage(imagePath: AssetsData.splash, targetTop: 540.h)
             else
               SlideOutImage(
                 imagePath: AssetsData.splash,
                 startTop: 540.h,
                 onAnimationEnd: () {
-                  context.go(AppRouter.kLoginView);
+                  checkAutoLogin();
                 },
               ),
             Center(
               child: !playOutAnimation
                   ? FadeSlideText(
-                text: "HUNGRY?",
-                style: AppTextStyles.displayLarge,
-              )
+                      text: "HUNGRY?",
+                      style: AppTextStyles.displayLarge,
+                    )
                   : FadeSlideOutText(
-                text: "HUNGRY?",
-                style: AppTextStyles.displayLarge,
-                onAnimationEnd: () {
-                  context.go(AppRouter.kLoginView);
-                },
-              ),
+                      text: "HUNGRY?",
+                      style: AppTextStyles.displayLarge,
+                      onAnimationEnd: () {
+                        checkAutoLogin();
+                      },
+                    ),
             ),
           ],
         ),

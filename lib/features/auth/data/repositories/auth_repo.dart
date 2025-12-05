@@ -7,7 +7,14 @@ import '../models/user_model.dart';
 import 'dart:io';
 
 class AuthRepo {
+  // Singleton pattern
+  static final AuthRepo _instance = AuthRepo._internal();
+  factory AuthRepo() => _instance;
+  AuthRepo._internal();
+
   final ApiService apiService = ApiService();
+  bool _isGuest = false;
+  UserModel? currentUser;
 
   /// login
   Future<UserModel> login(String email, String password) async {
@@ -21,6 +28,11 @@ class AuthRepo {
       final user = UserModel.fromJson(data);
 
       await PrefHelper.saveToken(user.token!);
+      await PrefHelper.setGuestMode(false);
+
+      _isGuest = false;
+      currentUser = user;
+
       return user;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
@@ -46,6 +58,10 @@ class AuthRepo {
 
       final user = UserModel.fromJson(data);
       await PrefHelper.saveToken(user.token!);
+      await PrefHelper.setGuestMode(false);
+
+      _isGuest = false;
+      currentUser = user;
 
       return user;
     } on DioException catch (e) {
@@ -58,17 +74,23 @@ class AuthRepo {
   /// get profile data
   Future<UserModel?> getProfileData() async {
     try {
+      final token = await PrefHelper.getToken();
+      if (token == null) return null;
+
       final response = await apiService.get('/profile');
 
       if (response != null && response['data'] != null) {
-        return UserModel.fromJson(response['data']);
+        final user = UserModel.fromJson(response['data']);
+        currentUser = user;
+        return user;
       }
+
+      return null;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     } catch (e) {
       throw ApiError(message: e.toString());
     }
-    return null;
   }
 
   /// update profile
@@ -94,31 +116,91 @@ class AuthRepo {
           ),
       });
 
-      final response = await apiService.post(
-        '/update-profile',
-        formData,
-      );
+      final response = await apiService.post('/update-profile', formData);
 
       final data = response['data'];
-      return UserModel.fromJson(data);
+      final updatedUser = UserModel.fromJson(data);
+
+      currentUser = updatedUser;
+
+      return updatedUser;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     } catch (e) {
       throw ApiError(message: e.toString());
     }
   }
-
-
 
   /// logout
   Future<void> logout() async {
     try {
+      // If user is guest, just clear local state
+      if (_isGuest) {
+        await PrefHelper.removeToken();
+        await PrefHelper.setGuestMode(false);
+
+        _isGuest = false;
+        currentUser = null;
+        return;
+      }
+
+      // If user is logged in, call API then clear state
       await apiService.post('/logout', {});
       await PrefHelper.removeToken();
+      await PrefHelper.setGuestMode(false);
+
+      _isGuest = false;
+      currentUser = null;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     } catch (e) {
       throw ApiError(message: e.toString());
     }
   }
+
+  /// AUTO LOGIN
+  Future<UserModel?> autoLogin() async {
+    try {
+      // Check if user is in guest mode
+      final isGuestMode = await PrefHelper.isGuestMode();
+      if (isGuestMode) {
+        _isGuest = true;
+        currentUser = null;
+        return null;
+      }
+
+      // Try to get token
+      final token = await PrefHelper.getToken();
+
+      if (token == null) {
+        return null;
+      }
+
+      // Try to get user profile
+      final user = await getProfileData();
+
+      if (user != null) {
+        currentUser = user;
+        _isGuest = false;
+      }
+
+      return user;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// CONTINUE AS GUEST
+  Future<void> continueAsGuest() async {
+    await PrefHelper.removeToken();
+    await PrefHelper.setGuestMode(true);
+
+    _isGuest = true;
+    currentUser = null;
+  }
+
+  // UserModel? get currentUserModel => currentUser;
+  // bool get isGuestUser => _isGuest && currentUser == null;
+  bool get isLoggedIn => !_isGuest && currentUser != null;
+  bool get isGuest => _isGuest;
 }

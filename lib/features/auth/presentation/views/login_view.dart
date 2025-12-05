@@ -33,7 +33,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void initState() {
-    emailController.text = 'sksk@gmail.com';
+    emailController.text = 'md36@gmail.com';
     passwordController.text = '123456789';
     super.initState();
   }
@@ -67,6 +67,22 @@ class _LoginViewState extends State<LoginView> {
     } else {
       // Show error banner if form validation fails
       showErrorBanner(context, 'Please fill in all fields correctly');
+    }
+  }
+
+  // Continue as guest function
+  Future<void> continueAsGuest() async {
+    try {
+      await authRepo.continueAsGuest();
+
+      if (!mounted) return;
+
+      context.go(AppRouter.kHomeView);
+      showSuccessBanner(context, 'Browsing as Guest');
+    } catch (e) {
+      final errorMessage = e is ApiError ? e.message : e.toString();
+      // ignore: use_build_context_synchronously
+      showErrorBanner(context, errorMessage);
     }
   }
 
@@ -106,6 +122,7 @@ class _LoginViewState extends State<LoginView> {
                       formKey: formKey,
                       isLoading: isLoading,
                       login: login,
+                      onGuestMode: continueAsGuest,
                     ),
                   ],
                 ),

@@ -35,7 +35,6 @@ class _ProfileViewState extends State<ProfileView> {
   bool isLoading = true;
   bool isLoggingOut = false;
 
-
   File? pickedImage;
 
   @override
@@ -46,6 +45,18 @@ class _ProfileViewState extends State<ProfileView> {
 
   Future<void> getProfileData() async {
     try {
+      // If user is guest, skip profile data fetch
+      if (authRepo.isGuest) {
+        setState(() {
+          userModel = null;
+          nameController.text = 'Guest User';
+          emailController.text = 'guest@hungry.app';
+          addressController.text = '';
+          isLoading = false;
+        });
+        return;
+      }
+
       final userProfile = await authRepo.getProfileData();
       setState(() {
         userModel = userProfile;
@@ -108,11 +119,20 @@ class _ProfileViewState extends State<ProfileView> {
     setState(() => isLoggingOut = true);
 
     try {
+      // Check if user is guest before logout
+      final isGuest = authRepo.isGuest;
+
       await authRepo.logout();
       if (!mounted) return;
 
-
       context.go(AppRouter.kLoginView);
+
+      // Show appropriate message
+      if (isGuest) {
+        showSuccessBanner(context, 'Guest session ended');
+      } else {
+        showSuccessBanner(context, 'Logged out successfully');
+      }
     } catch (e) {
       final errorMessage = e is ApiError ? e.message : e.toString();
       if (mounted) showErrorBanner(context, errorMessage);
