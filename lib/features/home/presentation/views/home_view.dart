@@ -42,13 +42,6 @@ class _HomeViewState extends State<HomeView> {
     setState(() => this.products = products);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    loadUserData();
-    getProducts();
-  }
-
   Future<void> loadUserData() async {
     try {
       final user = await AuthRepo().getProfileData();
@@ -61,6 +54,13 @@ class _HomeViewState extends State<HomeView> {
       if (mounted) showErrorBanner(context, errorMessage);
       setState(() => isLoading = false);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+    getProducts();
   }
 
   @override
@@ -100,7 +100,17 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               GridViewSection(
-                  products: products ?? []
+                products: isLoading
+                    ? List.generate(
+                  6,
+                      (index) => ProductModel(
+                    name: "Loading Name",
+                    price: "00",
+                    rating: "0.0",
+                    image: "",
+                  ),
+                )
+                    : (products ?? []),
               ),
             ],
           ),
