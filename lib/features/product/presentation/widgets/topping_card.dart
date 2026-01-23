@@ -5,13 +5,13 @@ import '../../../../core/utils/styles.dart';
 
 class ToppingCard extends StatelessWidget {
   final String text;
-  final String imagePath;
+  final String imageUrl;
   final Color buttonColor;
 
   const ToppingCard({
     super.key,
     required this.text,
-    required this.imagePath,
+    required this.imageUrl,
     this.buttonColor = AppColors.error,
   });
 
@@ -39,8 +39,8 @@ class ToppingCard extends StatelessWidget {
                 ),
               ],
             ),
-            child: Image.asset(
-              imagePath,
+            child: Image.network(
+              imageUrl,
               fit: BoxFit.contain,
               height: 65.h,
               width: 130.w,
@@ -51,7 +51,15 @@ class ToppingCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(text, style: AppTextStyles.titleMedium),
+                Flexible(
+                  child: Text(
+                    text,
+                    style: AppTextStyles.titleMedium,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+                SizedBox(width: 4.w),
                 Container(
                   width: 30.w,
                   height: 30.w,

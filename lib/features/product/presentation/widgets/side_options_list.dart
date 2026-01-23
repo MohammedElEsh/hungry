@@ -1,35 +1,43 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/assets.dart';
+import '../../data/models/side_options_model.dart';
 import '../widgets/topping_card.dart';
 
 class SideOptionsList extends StatelessWidget {
-  const SideOptionsList({super.key});
+  final List<SideOptionsModel> items;
+
+  const SideOptionsList({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
-    final toppings = [
-      {'image': AssetsData.fries, 'text': 'Fries'},
-      {'image': AssetsData.coleslaw, 'text': 'Coleslaw'},
-      {'image': AssetsData.salad, 'text': 'Salad'},
-      {'image': AssetsData.onionrings, 'text': 'Onion Rings'},
-    ];
+    if (items.isEmpty) {
+      return SizedBox(
+        height: 50.h,
+        child: const Center(
+          child: CupertinoActivityIndicator(),
+        ),
+      );
+    }
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: List.generate(
-          toppings.length,
-          (index) => Padding(
-            padding: EdgeInsets.only(left: 15.w),
-            child: ToppingCard(
-              imagePath: toppings[index]['image']!,
-              text: toppings[index]['text']!,
-              buttonColor: AppColors.success,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ...List.generate(
+            items.length,
+            (index) => Padding(
+              padding: EdgeInsets.only(left: 15.w),
+              child: ToppingCard(
+                text: items[index].name,
+                imageUrl: items[index].image,
+                buttonColor: AppColors.success,
+              ),
             ),
           ),
-        ),
+          SizedBox(width: 15.w),
+        ],
       ),
     );
   }

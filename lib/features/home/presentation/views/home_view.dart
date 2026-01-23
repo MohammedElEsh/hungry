@@ -102,14 +102,14 @@ class _HomeViewState extends State<HomeView> {
               GridViewSection(
                 products: isLoading
                     ? List.generate(
-                  6,
-                      (index) => ProductModel(
-                    name: "Loading Name",
-                    price: "00",
-                    rating: "0.0",
-                    image: "",
-                  ),
-                )
+                        6,
+                        (index) => ProductModel(
+                          name: "Loading Name",
+                          price: "00",
+                          rating: "0.0",
+                          image: "",
+                        ),
+                      )
                     : (products ?? []),
               ),
             ],

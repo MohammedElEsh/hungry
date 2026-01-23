@@ -28,7 +28,13 @@ class CheckoutSummary extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          CustomButton(text: 'Add to Cart', onPressed: () {}),
+          CustomButton(
+              text: 'Add to Cart',
+              onPressed: () {},
+              backgroundColor: AppColors.primary,
+              textColor: AppColors.white,
+              borderRadius: 20.r,
+          ),
         ],
       ),
     );

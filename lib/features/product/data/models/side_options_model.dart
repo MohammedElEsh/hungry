@@ -1,16 +1,16 @@
-class ToppingModel {
+class SideOptionsModel {
   final int id;
   final String name;
   final String image;
 
-  ToppingModel({
+  SideOptionsModel({
     required this.id,
     required this.name,
     required this.image,
   });
 
-  factory ToppingModel.fromJson(Map<String, dynamic> json) {
-    return ToppingModel(
+  factory SideOptionsModel.fromJson(Map<String, dynamic> json) {
+    return SideOptionsModel(
       id: json['id'],
       name: json['name'],
       image: json['image'],
