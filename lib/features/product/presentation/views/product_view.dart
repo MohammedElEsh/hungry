@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
+import '../../../cart/data/models/cart_model.dart';
+import '../../../cart/data/repositories/cart_repo.dart';
+import '../../data/models/product_model.dart';
 import '../../data/models/side_options_model.dart';
 import '../../data/models/topping_model.dart';
 import '../../data/repositories/product_repo.dart';
@@ -12,7 +16,9 @@ import '../widgets/side_options_list.dart';
 import '../widgets/toppings_list.dart';
 
 class ProductView extends StatefulWidget {
-  const ProductView({super.key});
+  final ProductModel? product;
+
+  const ProductView({super.key, this.product});
 
   @override
   State<ProductView> createState() => _ProductViewState();
@@ -20,8 +26,10 @@ class ProductView extends StatefulWidget {
 
 class _ProductViewState extends State<ProductView> {
   double _value = 0.6;
+  bool _isAddingToCart = false;
 
   final ProductRepo _repo = ProductRepo();
+  final CartRepo _cartRepo = CartRepo();
   List<ToppingModel> toppings = [];
   List<SideOptionsModel> sideOptions = [];
   final Set<int> _selectedToppingIds = {};
@@ -41,6 +49,40 @@ class _ProductViewState extends State<ProductView> {
     setState(() {
       sideOptions = res;
     });
+  }
+
+  Future<void> _addToCart() async {
+    final product = widget.product;
+    if (product?.id == null) return;
+
+    setState(() => _isAddingToCart = true);
+    try {
+      final item = CartItem(
+        productId: product!.id!,
+        quantity: 1,
+        spicy: _value,
+        toppings: _selectedToppingIds.toList(),
+        sideOptions: _selectedSideOptionIds.toList(),
+      );
+      await _cartRepo.addToCart([item]);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Added to cart'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed: $e'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isAddingToCart = false);
+    }
   }
 
   @override
@@ -111,7 +153,11 @@ class _ProductViewState extends State<ProductView> {
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text("Total", style: AppTextStyles.bodyBrown),
               ),
-              const CheckoutSummary(),
+              CheckoutSummary(
+                price: widget.product?.price ?? '0',
+                onAddToCart: _addToCart,
+                isLoading: _isAddingToCart,
+              ),
               // Gap(50.h),
             ],
           ),

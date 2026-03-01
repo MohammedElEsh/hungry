@@ -4,6 +4,7 @@ import 'package:hungry/features/cart/presentation/views/cart_view.dart';
 import 'package:hungry/features/splash/splash_view.dart';
 import '../../features/auth/presentation/views/signup_view.dart';
 import '../../features/checkout/presentation/views/checkout_view.dart';
+import '../../features/product/data/models/product_model.dart';
 import '../../features/product/presentation/views/product_view.dart';
 import '../../features/profile/presentation/views/profile_view.dart';
 import '../components/custom_bottom_nav_bar.dart';
@@ -36,7 +37,9 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kProductView,
-        builder: (context, state) => const ProductView(),
+        builder: (context, state) => ProductView(
+          product: state.extra as ProductModel?,
+        ),
       ),
       GoRoute(
         path: kCheckoutView,

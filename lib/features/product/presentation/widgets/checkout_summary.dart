@@ -5,7 +5,16 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 
 class CheckoutSummary extends StatelessWidget {
-  const CheckoutSummary({super.key});
+  final String price;
+  final VoidCallback onAddToCart;
+  final bool isLoading;
+
+  const CheckoutSummary({
+    super.key,
+    required this.price,
+    required this.onAddToCart,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +32,18 @@ class CheckoutSummary extends StatelessWidget {
                     fontSize: 40.sp,
                   ),
                 ),
-                TextSpan(text: '18.19', style: AppTextStyles.displaySmall),
+                TextSpan(text: price, style: AppTextStyles.displaySmall),
               ],
             ),
           ),
           const Spacer(),
           CustomButton(
-              text: 'Add to Cart',
-              onPressed: () {},
-              backgroundColor: AppColors.primary,
-              textColor: AppColors.white,
-              borderRadius: 20.r,
+            text: 'Add to Cart',
+            onPressed: onAddToCart,
+            isLoading: isLoading,
+            backgroundColor: AppColors.primary,
+            textColor: AppColors.white,
+            borderRadius: 20.r,
           ),
         ],
       ),
