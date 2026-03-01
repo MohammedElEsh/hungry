@@ -87,7 +87,6 @@ class _OrdersViewState extends State<OrdersView> {
                 itemCount: order['itemCount'],
                 onTap: () {
                   // Navigate to order details
-                  // TODO: Implement order details view
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Order #${order['orderId']} details'),

@@ -6,8 +6,15 @@ import '../widgets/topping_card.dart';
 
 class SideOptionsList extends StatelessWidget {
   final List<SideOptionsModel> items;
+  final Set<int> selectedIds;
+  final ValueChanged<int> onSideOptionTapped;
 
-  const SideOptionsList({super.key, required this.items});
+  const SideOptionsList({
+    super.key,
+    required this.items,
+    required this.selectedIds,
+    required this.onSideOptionTapped,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +40,8 @@ class SideOptionsList extends StatelessWidget {
                 text: items[index].name,
                 imageUrl: items[index].image,
                 buttonColor: AppColors.success,
+                isSelected: selectedIds.contains(items[index].id),
+                onTap: () => onSideOptionTapped(items[index].id),
               ),
             ),
           ),

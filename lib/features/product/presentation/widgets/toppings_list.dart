@@ -6,8 +6,15 @@ import '../widgets/topping_card.dart';
 
 class ToppingsList extends StatelessWidget {
   final List<ToppingModel> toppings;
+  final Set<int> selectedIds;
+  final ValueChanged<int> onToppingTapped;
 
-  const ToppingsList({super.key, required this.toppings});
+  const ToppingsList({
+    super.key,
+    required this.toppings,
+    required this.selectedIds,
+    required this.onToppingTapped,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +40,8 @@ class ToppingsList extends StatelessWidget {
                 text: toppings[index].name,
                 imageUrl: toppings[index].image,
                 buttonColor: AppColors.error,
+                isSelected: selectedIds.contains(toppings[index].id),
+                onTap: () => onToppingTapped(toppings[index].id),
               ),
             ),
           ),

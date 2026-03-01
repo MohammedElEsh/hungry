@@ -24,6 +24,8 @@ class _ProductViewState extends State<ProductView> {
   final ProductRepo _repo = ProductRepo();
   List<ToppingModel> toppings = [];
   List<SideOptionsModel> sideOptions = [];
+  final Set<int> _selectedToppingIds = {};
+  final Set<int> _selectedSideOptionIds = {};
 
   Future<void> getToppings() async {
     final res = await _repo.getToppings();
@@ -54,7 +56,7 @@ class _ProductViewState extends State<ProductView> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.only(top: 100.h),
+          padding: EdgeInsets.only(top: 50.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -63,14 +65,26 @@ class _ProductViewState extends State<ProductView> {
                 onSliderChanged: (value) => setState(() => _value = value),
               ),
 
-              Gap(40.h),
+              Gap(20.h),
 
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text("Toppings", style: AppTextStyles.bodyBrown),
               ),
               Gap(15.h),
-              ToppingsList(toppings: toppings),
+              ToppingsList(
+                toppings: toppings,
+                selectedIds: _selectedToppingIds,
+                onToppingTapped: (id) {
+                  setState(() {
+                    if (_selectedToppingIds.contains(id)) {
+                      _selectedToppingIds.remove(id);
+                    } else {
+                      _selectedToppingIds.add(id);
+                    }
+                  });
+                },
+              ),
               Gap(30.h),
 
               Padding(
@@ -78,15 +92,27 @@ class _ProductViewState extends State<ProductView> {
                 child: Text("Side Options", style: AppTextStyles.bodyBrown),
               ),
               Gap(15.h),
-              SideOptionsList(items: sideOptions),
-              Gap(30.h),
+              SideOptionsList(
+                items: sideOptions,
+                selectedIds: _selectedSideOptionIds,
+                onSideOptionTapped: (id) {
+                  setState(() {
+                    if (_selectedSideOptionIds.contains(id)) {
+                      _selectedSideOptionIds.remove(id);
+                    } else {
+                      _selectedSideOptionIds.add(id);
+                    }
+                  });
+                },
+              ),
+              Gap(40.h),
 
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text("Total", style: AppTextStyles.bodyBrown),
               ),
               const CheckoutSummary(),
-              Gap(30.h),
+              // Gap(50.h),
             ],
           ),
         ),
