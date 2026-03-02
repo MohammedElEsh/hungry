@@ -5,18 +5,15 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 
 class PaymentActionSection extends StatelessWidget {
-  const PaymentActionSection({super.key});
+  final String totalPrice;
+
+  const PaymentActionSection({super.key, required this.totalPrice});
 
   @override
   Widget build(BuildContext context) {
+    final total = _parseAndComputeTotal(totalPrice);
     return SizedBox(
       height: 120.h,
-      // decoration: BoxDecoration(
-      //   color: AppColors.white,
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(20.r),
-      //   ),
-      // ),
       child: Row(
         children: [
           RichText(
@@ -29,7 +26,10 @@ class PaymentActionSection extends StatelessWidget {
                     fontSize: 40.sp,
                   ),
                 ),
-                TextSpan(text: '92.41', style: AppTextStyles.displaySmall),
+                TextSpan(
+                  text: _formatPrice(total),
+                  style: AppTextStyles.displaySmall,
+                ),
               ],
             ),
           ),
@@ -38,5 +38,17 @@ class PaymentActionSection extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static double _parseAndComputeTotal(String cartTotalPrice) {
+    final orderSubtotal =
+        double.tryParse(cartTotalPrice.replaceAll(RegExp(r'[^\d.]'), '')) ?? 0.0;
+    const taxRate = 0.10;
+    const deliveryFee = 2.99;
+    return orderSubtotal + (orderSubtotal * taxRate) + deliveryFee;
+  }
+
+  static String _formatPrice(double value) {
+    return value.toStringAsFixed(2);
   }
 }

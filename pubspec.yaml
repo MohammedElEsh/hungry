@@ -1,7 +1,5 @@
 name: hungry
-description: "A new Flutter project."
-
-# Prevent accidental publishing to pub.dev
+description: A modern Flutter application for food ordering.
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -9,33 +7,44 @@ version: 1.0.0+1
 environment:
   sdk: ^3.9.2
 
+# --------------------------------------------------
+# Dependencies
+# --------------------------------------------------
 dependencies:
   flutter:
     sdk: flutter
 
-  # Icons & Fonts
+  # ----------------------------
+  # UI & Design
+  # ----------------------------
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.3.3
+  google_fonts: ^8.0.2
   font_awesome_flutter: ^10.12.0
-
-  # UI Utils
   gap: ^3.0.1
   flutter_screenutil: ^5.9.3
-  skeletonizer: ^2.1.2
+  skeletonizer: ^2.1.3
   alert_banner: ^1.0.1
 
-  # Routing
-  go_router: ^17.0.1
+  # ----------------------------
+  # Navigation & Routing
+  # ----------------------------
+  go_router: ^17.1.0
 
-  # Storage & Network
-  dio: ^5.9.0
+  # ----------------------------
+  # Networking & Local Storage
+  # ----------------------------
+  dio: ^5.9.2
   shared_preferences: ^2.5.4
 
-  # Media
+  # ----------------------------
+  # Media & Images
+  # ----------------------------
   image_picker: ^1.2.1
   cached_network_image: ^3.4.1
 
-
+# --------------------------------------------------
+# Dev Dependencies
+# --------------------------------------------------
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -43,11 +52,17 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
 
+# --------------------------------------------------
+# App Icons
+# --------------------------------------------------
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: assets/icon/app_icon.png
 
+# --------------------------------------------------
+# Flutter Config
+# --------------------------------------------------
 flutter:
   uses-material-design: true
 
