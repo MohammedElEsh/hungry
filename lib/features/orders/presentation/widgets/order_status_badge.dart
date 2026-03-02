@@ -10,6 +10,7 @@ class OrderStatusBadge extends StatelessWidget {
   Color _getStatusColor() {
     switch (status.toLowerCase()) {
       case 'delivered':
+      case 'confirmed':
         return AppColors.success;
       case 'pending':
         return AppColors.warning;
@@ -25,6 +26,7 @@ class OrderStatusBadge extends StatelessWidget {
   IconData _getStatusIcon() {
     switch (status.toLowerCase()) {
       case 'delivered':
+      case 'confirmed':
         return Icons.check_circle;
       case 'pending':
         return Icons.access_time;

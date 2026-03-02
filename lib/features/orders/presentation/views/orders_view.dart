@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../auth/data/repositories/auth_repo.dart';
-import '../widgets/guest_orders_view.dart';
+import '../../data/models/order_model.dart';
+import '../../data/repositories/order_repo.dart';
 import '../widgets/empty_orders_view.dart';
+import '../widgets/guest_orders_view.dart';
 import '../widgets/order_card.dart';
 
 class OrdersView extends StatefulWidget {
@@ -16,57 +19,85 @@ class OrdersView extends StatefulWidget {
 }
 
 class _OrdersViewState extends State<OrdersView> {
-  final AuthRepo authRepo = AuthRepo();
-  bool isLoading = false;
+  final AuthRepo _authRepo = AuthRepo();
+  final OrderRepo _orderRepo = OrderRepo();
+  List<OrderModel> _orders = [];
+  bool _isLoading = true;
+  String? _error;
 
-  // Mock orders data - Replace with actual API call
-  List<Map<String, dynamic>> orders = [
-    {
-      'orderId': '12345',
-      'date': 'Dec 4, 2025',
-      'status': 'Delivered',
-      'totalAmount': 45.99,
-      'itemCount': 3,
-    },
-    {
-      'orderId': '12344',
-      'date': 'Dec 3, 2025',
-      'status': 'Processing',
-      'totalAmount': 32.50,
-      'itemCount': 2,
-    },
-    {
-      'orderId': '12343',
-      'date': 'Dec 1, 2025',
-      'status': 'Pending',
-      'totalAmount': 28.75,
-      'itemCount': 1,
-    },
-  ];
+  Future<void> _loadOrders() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+    try {
+      final orders = await _orderRepo.getOrders();
+      if (mounted) {
+        setState(() {
+          _orders = orders;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   Future<void> _refreshOrders() async {
-    setState(() => isLoading = true);
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() => isLoading = false);
+    await _loadOrders();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOrders();
   }
 
   @override
   Widget build(BuildContext context) {
     // If user is guest, show guest orders view
-    if (authRepo.isGuest) {
+    if (_authRepo.isGuest) {
       return const GuestOrdersView();
     }
 
     // If user is authenticated but has no orders
-    if (orders.isEmpty) {
+    if (_isLoading && _orders.isEmpty) {
+      return const Scaffold(
+        backgroundColor: AppColors.white,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_error != null && _orders.isEmpty) {
+      return Scaffold(
+        backgroundColor: AppColors.white,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_error!, textAlign: TextAlign.center),
+              Gap(16.h),
+              TextButton(
+                onPressed: _loadOrders,
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_orders.isEmpty) {
       return Scaffold(
         backgroundColor: AppColors.white,
         body: EmptyOrdersView(onHomeTap: widget.onHomeTap),
       );
     }
-
-    // If user is authenticated and has orders
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.white,
@@ -76,20 +107,15 @@ class _OrdersViewState extends State<OrdersView> {
           onRefresh: _refreshOrders,
           child: ListView.builder(
             padding: EdgeInsets.all(20.w),
-            itemCount: orders.length,
+            itemCount: _orders.length,
             itemBuilder: (context, index) {
-              final order = orders[index];
+              final order = _orders[index];
               return OrderCard(
-                orderId: order['orderId'],
-                date: order['date'],
-                status: order['status'],
-                totalAmount: order['totalAmount'],
-                itemCount: order['itemCount'],
+                order: order,
                 onTap: () {
-                  // Navigate to order details
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Order #${order['orderId']} details'),
+                      content: Text('Order #${order.id} details'),
                       backgroundColor: AppColors.primary,
                     ),
                   );

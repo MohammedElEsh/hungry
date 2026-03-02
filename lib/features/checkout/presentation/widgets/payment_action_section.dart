@@ -6,8 +6,15 @@ import '../../../../core/utils/styles.dart';
 
 class PaymentActionSection extends StatelessWidget {
   final String totalPrice;
+  final VoidCallback? onPayNow;
+  final bool isLoading;
 
-  const PaymentActionSection({super.key, required this.totalPrice});
+  const PaymentActionSection({
+    super.key,
+    required this.totalPrice,
+    this.onPayNow,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +41,12 @@ class PaymentActionSection extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          CustomButton(text: 'Pay Now', onPressed: () {}),
+          CustomButton(
+            backgroundColor: AppColors.secondary,
+            text: 'Place Order',
+            onPressed: onPayNow ?? () {},
+            isLoading: isLoading,
+          ),
         ],
       ),
     );

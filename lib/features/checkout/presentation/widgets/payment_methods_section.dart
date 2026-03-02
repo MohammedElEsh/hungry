@@ -8,7 +8,10 @@ import '../widgets/custom_list_tile.dart';
 import '../widgets/save_card_checkbox.dart';
 
 class PaymentMethods extends StatefulWidget {
-  const PaymentMethods({super.key});
+  /// Saved card from profile (e.g. masked number)
+  final String? savedCardDisplay;
+
+  const PaymentMethods({super.key, this.savedCardDisplay});
 
   @override
   State<PaymentMethods> createState() => _PaymentMethodsState();
@@ -48,10 +51,12 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         ),
         Gap(20.h),
 
-        // Debit card option
+        // Debit card option (uses saved card from profile when available)
         CustomListTile(
           title: "Debit Card",
-          subtitle: "**** **** **** 1234",
+          subtitle: widget.savedCardDisplay?.isNotEmpty == true
+              ? widget.savedCardDisplay!
+              : "No card saved",
           imageAsset: AssetsData.visa,
           value: "Debit",
           groupValue: selectedMethod,

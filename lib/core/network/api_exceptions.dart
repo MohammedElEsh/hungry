@@ -7,9 +7,10 @@ class ApiExceptions {
     final data = error.response?.data;
     final statusCode = error.response?.statusCode;
 
-    if (statusCode != null) {
-      if (data is Map<String, dynamic> && data['message'] != null) {
-        return ApiError(message: data['message'], statusCode: statusCode);
+    if (statusCode != null && data is Map<String, dynamic>) {
+      final msg = _getMessage(data);
+      if (msg != null) {
+        return ApiError(message: msg, statusCode: statusCode);
       }
     }
 
@@ -41,7 +42,9 @@ class ApiExceptions {
 
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
-        final serverMessage = error.response?.data?['message'];
+        final data = error.response?.data;
+        final serverMessage =
+            data is Map<String, dynamic> ? _getMessage(data) : null;
 
         if (statusCode == 400) {
           return ApiError(
@@ -83,5 +86,21 @@ class ApiExceptions {
           message: "An unknown error occurred. Please try again later.",
         );
     }
+  }
+
+  static String? _getMessage(Map<String, dynamic> data) {
+    if (data['message'] != null) return data['message'].toString();
+    if (data['error'] != null) return data['error'].toString();
+    if (data['detail'] != null) return data['detail'].toString();
+    if (data['errors'] != null && data['errors'] is Map) {
+      final errors = data['errors'] as Map;
+      if (errors.isNotEmpty) {
+        final first = errors.values.first;
+        return first is List && first.isNotEmpty
+            ? first.first.toString()
+            : first.toString();
+      }
+    }
+    return null;
   }
 }

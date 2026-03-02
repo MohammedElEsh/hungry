@@ -2,83 +2,226 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/utils/app_colors.dart';
-import 'order_status_badge.dart';
-import 'order_info_row.dart';
-import 'order_amount_section.dart';
+import '../../data/models/order_model.dart';
 
+/// --- Main Redesigned Order Card ---
 class OrderCard extends StatelessWidget {
-  final String orderId;
-  final String date;
-  final String status;
-  final double totalAmount;
-  final int itemCount;
+  final OrderModel order;
   final VoidCallback? onTap;
 
   const OrderCard({
     super.key,
-    required this.orderId,
-    required this.date,
-    required this.status,
-    required this.totalAmount,
-    required this.itemCount,
+    required this.order,
     this.onTap,
   });
 
+  double get _totalAmount =>
+      double.tryParse(order.totalPrice.replaceAll(RegExp(r'[^\d.]'), '')) ?? 0.0;
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 16.h),
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: AppColors.primary.withOpacity(0.2),
-            width: 1.5,
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24.r), // Softer, modern corners
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24.r),
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
               children: [
-                Text(
-                  'Order #$orderId',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.black,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Image Container
+                    _buildImageThumbnail(),
+                    Gap(16.w),
+                    
+                    // Order Information
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Order #${order.id}',
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                              _StatusBadge(status: order.status),
+                            ],
+                          ),
+                          Gap(4.h),
+                          Row(
+                            children: [
+                              Icon(Icons.calendar_today_outlined, 
+                                   size: 12.sp, color: Colors.grey),
+                              Gap(4.w),
+                              Text(
+                                order.createdAt,
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  child: Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                    thickness: 1,
+                    height: 1,
                   ),
                 ),
-                OrderStatusBadge(status: status),
+
+                // Bottom Section: Total and Action
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Total Amount",
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "\$${_totalAmount.toStringAsFixed(2)}",
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    _buildViewButton(),
+                  ],
+                ),
               ],
             ),
-            Gap(12.h),
+          ),
+        ),
+      ),
+    );
+  }
 
-            OrderInfoRow(icon: Icons.calendar_today, text: date),
-            Gap(8.h),
+  Widget _buildImageThumbnail() {
+    return Container(
+      width: 64.h,
+      height: 64.h,
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16.r),
+        child: (order.productImage != null && order.productImage!.isNotEmpty)
+            ? Image.network(
+                order.productImage!,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => _buildPlaceholderIcon(),
+              )
+            : _buildPlaceholderIcon(),
+      ),
+    );
+  }
 
-            OrderInfoRow(
-              icon: Icons.shopping_bag_outlined,
-              text: '$itemCount ${itemCount == 1 ? 'item' : 'items'}',
+  Widget _buildPlaceholderIcon() {
+    return Icon(Icons.shopping_bag_outlined, 
+                color: AppColors.primary.withOpacity(0.5), size: 28.sp);
+  }
+
+  Widget _buildViewButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Row(
+        children: [
+          Text(
+            "Details",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.bold,
             ),
-            Gap(12.h),
+          ),
+          Gap(4.w),
+          Icon(Icons.arrow_forward_ios, size: 10.sp, color: Colors.white),
+        ],
+      ),
+    );
+  }
+}
 
-            Divider(color: AppColors.grey.withOpacity(0.3)),
-            Gap(12.h),
+/// --- Custom Status Badge with Dynamic Colors ---
+class _StatusBadge extends StatelessWidget {
+  final String status;
+  const _StatusBadge({required this.status});
 
-            OrderAmountSection(totalAmount: totalAmount, onTap: onTap),
-          ],
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'delivered':
+        color = Colors.green;
+        break;
+      case 'pending':
+      case 'processing':
+        color = Colors.orange;
+        break;
+      case 'cancelled':
+        color = Colors.red;
+        break;
+      default:
+        color = AppColors.primary;
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Text(
+        status.toUpperCase(),
+        style: TextStyle(
+          color: color,
+          fontSize: 10.sp,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.5,
         ),
       ),
     );
