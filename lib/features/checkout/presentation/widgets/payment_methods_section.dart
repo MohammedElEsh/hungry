@@ -39,7 +39,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
           value: "Cash",
           groupValue: selectedMethod,
           onChanged: onChanged,
-          tileColor: AppColors.third,
+          tileColor: AppColors.primary,
           titleStyle: AppTextStyles.titleMedium,
           subtitleStyle: AppTextStyles.bodyGrey,
           imageWidth: 60.w,

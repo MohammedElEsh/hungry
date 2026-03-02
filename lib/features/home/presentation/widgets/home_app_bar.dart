@@ -10,12 +10,20 @@ class HomeAppBar extends StatelessWidget {
   final String? imageUrl;
   final String? userName;
   final VoidCallback? onProfileTap;
+  final int favoriteCount;
+  final int cartItemCount;
+  final VoidCallback? onFavoritesTap;
+  final VoidCallback? onCartTap;
 
   const HomeAppBar({
     super.key,
     this.onProfileTap,
     this.imageUrl,
     this.userName,
+    this.favoriteCount = 0,
+    this.cartItemCount = 0,
+    this.onFavoritesTap,
+    this.onCartTap,
   });
 
   @override
@@ -35,6 +43,10 @@ class HomeAppBar extends StatelessWidget {
               imageUrl: imageUrl,
               userName: userName,
               onProfileTap: onProfileTap,
+              favoriteCount: favoriteCount,
+              cartItemCount: cartItemCount,
+              onFavoritesTap: onFavoritesTap,
+              onCartTap: onCartTap,
             ),
             Gap(25.h),
             const SearchField(),

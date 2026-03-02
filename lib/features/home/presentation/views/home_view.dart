@@ -6,40 +6,105 @@ import '../../../../core/network/api_error.dart';
 import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../auth/data/repositories/auth_repo.dart';
+import '../../../cart/data/repositories/cart_repo.dart';
 import '../../../product/data/models/product_model.dart';
 import '../../../product/data/repositories/product_repo.dart';
+import '../../data/models/category_model.dart';
+import '../../data/repositories/category_repo.dart';
+import '../../data/repositories/favorite_repo.dart';
 import '../widgets/categories_list.dart';
-import '../widgets/home_app_bar.dart';
 import '../widgets/grid_view_section.dart';
+import '../widgets/home_app_bar.dart';
 import '../../../auth/data/models/user_model.dart';
 
 class HomeView extends StatefulWidget {
   final VoidCallback? onProfileTap;
-  const HomeView({super.key, this.onProfileTap});
+  final VoidCallback? onCartTap;
+
+  const HomeView({super.key, this.onProfileTap, this.onCartTap});
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  final List<String> categories = [
-    'All',
-    'Fast Food',
-    'Pizza',
-    'Burgers',
-    'Sushi',
-  ];
-
   int currentIndex = 0;
   UserModel? userModel;
   bool isLoading = true;
 
-  ProductRepo productRepo = ProductRepo();
+  final ProductRepo _productRepo = ProductRepo();
+  final CategoryRepo _categoryRepo = CategoryRepo();
+  final FavoriteRepo _favoriteRepo = FavoriteRepo();
+  final CartRepo _cartRepo = CartRepo();
+  final AuthRepo _authRepo = AuthRepo();
   List<ProductModel>? products = [];
+  List<CategoryModel> categories = [];
+  Set<int> _favoriteIds = {};
+  int _cartItemCount = 0;
 
-  Future<void> getProducts() async {
-    final products = await productRepo.getProducts();
-    setState(() => this.products = products);
+  Future<void> _loadCategories() async {
+    try {
+      final list = await _categoryRepo.getCategories();
+      if (mounted) {
+        setState(() => categories = list);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => categories = []);
+      }
+    }
+  }
+
+  Future<void> _loadProducts() async {
+    final list = await _productRepo.getProducts();
+    if (mounted) setState(() => products = list);
+  }
+
+  Future<void> _loadCartCount() async {
+    try {
+      final cart = await _cartRepo.getCart();
+      if (mounted) {
+        setState(() => _cartItemCount = cart.items.length);
+      }
+    } catch (_) {
+      if (mounted) setState(() => _cartItemCount = 0);
+    }
+  }
+
+  Future<void> _loadFavorites() async {
+    if (_authRepo.isGuest) return;
+    try {
+      final ids = await _favoriteRepo.getFavorites();
+      if (mounted) setState(() => _favoriteIds = ids.toSet());
+    } catch (_) {
+      if (mounted) setState(() => _favoriteIds = {});
+    }
+  }
+
+  Future<void> _toggleFavorite(int productId) async {
+    if (_authRepo.isGuest) return;
+    final wasFavorite = _favoriteIds.contains(productId);
+    setState(() {
+      if (wasFavorite) {
+        _favoriteIds = {..._favoriteIds}..remove(productId);
+      } else {
+        _favoriteIds = {..._favoriteIds, productId};
+      }
+    });
+    try {
+      await _favoriteRepo.toggleFavorite(productId);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          if (wasFavorite) {
+            _favoriteIds = {..._favoriteIds, productId};
+          } else {
+            _favoriteIds = {..._favoriteIds}..remove(productId);
+          }
+        });
+        showErrorBanner(context, e is ApiError ? e.message : e.toString());
+      }
+    }
   }
 
   Future<void> loadUserData() async {
@@ -60,7 +125,10 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     loadUserData();
-    getProducts();
+    _loadCategories();
+    _loadProducts();
+    _loadFavorites();
+    _loadCartCount();
   }
 
   @override
@@ -83,13 +151,17 @@ class _HomeViewState extends State<HomeView> {
                 imageUrl: userModel?.image,
                 userName: userModel?.name,
                 onProfileTap: widget.onProfileTap,
+                favoriteCount: _favoriteIds.length,
+                cartItemCount: _cartItemCount,
+                onCartTap: widget.onCartTap,
+                onFavoritesTap: null,
               ),
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CategoriesList(
-                      categories: categories,
+                      categories: ['All', ...categories.map((c) => c.name)],
                       currentIndex: currentIndex,
                       onCategoryTap: (index) {
                         setState(() => currentIndex = index);
@@ -111,6 +183,8 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       )
                     : (products ?? []),
+                favoriteIds: _favoriteIds,
+                onFavoriteTap: _authRepo.isGuest ? null : _toggleFavorite,
               ),
             ],
           ),

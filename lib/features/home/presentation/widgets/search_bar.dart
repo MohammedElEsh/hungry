@@ -23,7 +23,7 @@ class SearchField extends StatelessWidget {
             color: AppColors.white,
             fontSize: 14.sp,
           ),
-          fillColor: AppColors.fifth,
+          fillColor: AppColors.grey.withOpacity(0.35),
           filled: true,
           prefixIcon: Icon(
             CupertinoIcons.search,

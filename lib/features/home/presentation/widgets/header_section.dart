@@ -11,13 +11,64 @@ class HeaderSection extends StatelessWidget {
   final String? imageUrl;
   final String? userName;
   final VoidCallback? onProfileTap;
+  final int favoriteCount;
+  final int cartItemCount;
+  final VoidCallback? onFavoritesTap;
+  final VoidCallback? onCartTap;
 
   const HeaderSection({
     super.key,
-    required this.imageUrl,
+    this.imageUrl,
     this.onProfileTap,
     this.userName,
+    this.favoriteCount = 0,
+    this.cartItemCount = 0,
+    this.onFavoritesTap,
+    this.onCartTap,
   });
+
+  Widget _iconWithBadge({
+    required IconData icon,
+    required int count,
+    required VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            padding: EdgeInsets.all(8.r),
+            decoration: BoxDecoration(
+              color: AppColors.grey.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 22.sp, color: AppColors.primary),
+          ),
+          if (count > 0)
+            Positioned(
+              top: -4.h,
+              right: -4.w,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                decoration: const BoxDecoration(
+                  color: AppColors.secondary,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  count > 99 ? '99+' : count.toString(),
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +100,31 @@ class HeaderSection extends StatelessWidget {
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(top: 60.h),
-          child: GestureDetector(
-            onTap: onProfileTap,
-            child: ProfileImage(
-              showUploadButton: false,
-              imageUrl: imageUrl ?? '',
-              width: 60.w,
-              height: 60.h,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _iconWithBadge(
+                icon: CupertinoIcons.heart_fill,
+                count: favoriteCount,
+                onTap: onFavoritesTap,
+              ),
+              Gap(12.w),
+              _iconWithBadge(
+                icon: Icons.shopping_cart_outlined,
+                count: cartItemCount,
+                onTap: onCartTap,
+              ),
+              Gap(12.w),
+              GestureDetector(
+                onTap: onProfileTap,
+                child: ProfileImage(
+                  showUploadButton: false,
+                  imageUrl: imageUrl ?? '',
+                  width: 60.w,
+                  height: 60.h,
+                ),
+              ),
+            ],
           ),
         ),
       ],

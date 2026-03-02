@@ -6,11 +6,14 @@ import 'package:hungry/core/utils/assets.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 
-class CardItem extends StatefulWidget {
+class CardItem extends StatelessWidget {
   final String imagePath;
   final String title;
   final String price;
   final double rating;
+  final int? productId;
+  final bool isFavorite;
+  final VoidCallback? onFavoriteTap;
 
   const CardItem({
     super.key,
@@ -18,14 +21,19 @@ class CardItem extends StatefulWidget {
     required this.title,
     required this.price,
     required this.rating,
+    this.productId,
+    this.isFavorite = false,
+    this.onFavoriteTap,
   });
 
   @override
-  State<CardItem> createState() => _CardItemState();
+  Widget build(BuildContext context) => _CardItemContent(this);
 }
 
-class _CardItemState extends State<CardItem> {
-  bool isFavorite = false;
+class _CardItemContent extends StatelessWidget {
+  final CardItem widget;
+
+  const _CardItemContent(this.widget);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +61,7 @@ class _CardItemState extends State<CardItem> {
                 child: SizedBox(
                   height: 120.h,
                   width: double.infinity,
-                  child: Image.network(
+                    child: Image.network(
                     widget.imagePath,
                     fit: BoxFit.cover,
                     // loadingBuilder: (context, child, loadingProgress) {
@@ -79,11 +87,7 @@ class _CardItemState extends State<CardItem> {
                 top: 10.h,
                 right: 10.w,
                 child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isFavorite = !isFavorite;
-                    });
-                  },
+                  onTap: widget.onFavoriteTap,
                   child: Container(
                     padding: EdgeInsets.all(6.r),
                     decoration: BoxDecoration(
@@ -97,10 +101,10 @@ class _CardItemState extends State<CardItem> {
                       ],
                     ),
                     child: Icon(
-                      isFavorite
+                      widget.isFavorite
                           ? CupertinoIcons.heart_fill
                           : CupertinoIcons.heart,
-                      color: isFavorite ? AppColors.error : AppColors.primary,
+                      color: widget.isFavorite ? AppColors.error : AppColors.primary,
                       size: 18.sp,
                     ),
                   ),

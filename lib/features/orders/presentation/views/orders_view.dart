@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../auth/data/repositories/auth_repo.dart';
 import '../../data/models/order_model.dart';
@@ -65,11 +66,32 @@ class _OrdersViewState extends State<OrdersView> {
       return const GuestOrdersView();
     }
 
-    // If user is authenticated but has no orders
     if (_isLoading && _orders.isEmpty) {
-      return const Scaffold(
+      final placeholders = [
+        for (int i = 0; i < 3; i++)
+          OrderModel(
+            id: 0,
+            status: 'loading',
+            totalPrice: '0',
+            createdAt: '',
+            productImage: null,
+          ),
+      ];
+      return Scaffold(
         backgroundColor: AppColors.white,
-        body: Center(child: CircularProgressIndicator()),
+        body: Skeletonizer(
+          enabled: true,
+          effect: ShimmerEffect(
+            baseColor: Colors.grey.shade300.withOpacity(0.3),
+            highlightColor: Colors.grey.shade100.withOpacity(0.1),
+            duration: const Duration(milliseconds: 1200),
+          ),
+          child: ListView.builder(
+            padding: EdgeInsets.all(20.w),
+            itemCount: 3,
+            itemBuilder: (_, i) => OrderCard(order: placeholders[i]),
+          ),
+        ),
       );
     }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:hungry/features/auth/data/models/user_model.dart';
 import 'package:hungry/features/auth/data/repositories/auth_repo.dart';
 import 'package:hungry/features/cart/data/models/cart_model.dart';
@@ -114,12 +115,7 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-    if (_error != null) {
+    if (_error != null && !_isLoading) {
       return Scaffold(
         body: Center(
           child: Column(
@@ -133,26 +129,35 @@ class _CheckoutViewState extends State<CheckoutView> {
         ),
       );
     }
+    final cart = _cart ?? CartModel(totalPrice: '0', items: []);
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Gap(80.h),
-            Text("Order Summary", style: AppTextStyles.bodyBrown),
-            OrderSummary(cart: _cart!),
-            Gap(60.h),
-            Text("Payment Methods", style: AppTextStyles.bodyBrown),
-            Gap(20.h),
-            PaymentMethods(savedCardDisplay: _profile?.visa),
-            Gap(115.h),
-            PaymentActionSection(
-              totalPrice: _cart!.totalPrice,
-              onPayNow: _handlePayNow,
-              isLoading: _isPaying,
-            ),
-          ],
+      body: Skeletonizer(
+        enabled: _isLoading,
+        effect: ShimmerEffect(
+          baseColor: Colors.grey.shade300.withOpacity(0.3),
+          highlightColor: Colors.grey.shade100.withOpacity(0.1),
+          duration: const Duration(milliseconds: 1200),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gap(80.h),
+              Text("Order Summary", style: AppTextStyles.bodyBrown),
+              OrderSummary(cart: cart),
+              Gap(60.h),
+              Text("Payment Methods", style: AppTextStyles.bodyBrown),
+              Gap(20.h),
+              PaymentMethods(savedCardDisplay: _profile?.visa),
+              Gap(115.h),
+              PaymentActionSection(
+                totalPrice: cart.totalPrice,
+                onPayNow: _handlePayNow,
+                isLoading: _isPaying,
+              ),
+            ],
+          ),
         ),
       ),
     );

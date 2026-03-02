@@ -8,8 +8,15 @@ import 'card_item.dart';
 
 class GridViewSection extends StatefulWidget {
   final List<ProductModel> products;
+  final Set<int> favoriteIds;
+  final void Function(int productId)? onFavoriteTap;
 
-  const GridViewSection({super.key, required this.products});
+  const GridViewSection({
+    super.key,
+    required this.products,
+    this.favoriteIds = const {},
+    this.onFavoriteTap,
+  });
 
   @override
   State<GridViewSection> createState() => _GridViewSectionState();
@@ -21,6 +28,7 @@ class _GridViewSectionState extends State<GridViewSection> {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate((context, index) {
         final product = widget.products[index];
+        final productId = product.id ?? 0;
         return GestureDetector(
           onTap: () {
             context.push(AppRouter.kProductView, extra: product);
@@ -30,6 +38,11 @@ class _GridViewSectionState extends State<GridViewSection> {
             title: product.name ?? "Unknown",
             price: "${product.price ?? '0'} \$",
             rating: double.tryParse(product.rating ?? '0') ?? 0.0,
+            productId: productId,
+            isFavorite: widget.favoriteIds.contains(productId),
+            onFavoriteTap: widget.onFavoriteTap != null && productId > 0
+                ? () => widget.onFavoriteTap!(productId)
+                : null,
           ),
         );
       }, childCount: widget.products.length),
