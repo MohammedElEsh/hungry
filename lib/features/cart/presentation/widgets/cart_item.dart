@@ -1,32 +1,29 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+
 import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
+import '../../data/models/cart_model.dart';
 
-class CartItem extends StatefulWidget {
-  final String imagePath;
-  final String title;
-  final String price;
+class CartItemWidget extends StatelessWidget {
+  final CartDisplayItem item;
+  final VoidCallback onRemove;
 
-  const CartItem({
-    super.key,
-    required this.imagePath,
-    required this.title,
-    required this.price,
-  });
+  const CartItemWidget({super.key, required this.item, required this.onRemove});
 
-  @override
-  State<CartItem> createState() => _CartItemState();
-}
-
-class _CartItemState extends State<CartItem> {
-  int quantity = 1;
+  String _getItemTotal(CartDisplayItem item) {
+    final unitPrice = double.tryParse(item.price) ?? 0;
+    final total = unitPrice * item.quantity;
+    return total.toStringAsFixed(2);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final item = this.item;
+    final imageUrl = item.image ?? '';
+
     return Center(
       child: Card(
         color: AppColors.white,
@@ -43,24 +40,38 @@ class _CartItemState extends State<CartItem> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    widget.imagePath,
-                    width: 80.w,
-                    height: 80.h,
-                    fit: BoxFit.cover,
-                  ),
+                  if (imageUrl.isNotEmpty)
+                    Image.network(
+                      imageUrl,
+                      width: 80.w,
+                      height: 80.h,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 80.w,
+                        height: 80.h,
+                        color: AppColors.grey.withOpacity(0.3),
+                        child: Icon(Icons.fastfood, size: 40.sp),
+                      ),
+                    )
+                  else
+                    Container(
+                      width: 80.w,
+                      height: 80.h,
+                      color: AppColors.grey.withOpacity(0.3),
+                      child: Icon(Icons.fastfood, size: 40.sp),
+                    ),
                   Gap(5.h),
                   SizedBox(
                     width: 120.w,
                     child: Text(
-                      widget.title,
+                      item.name,
                       style: AppTextStyles.titleMedium.copyWith(
                         color: AppColors.black,
                       ),
                     ),
                   ),
                   Text(
-                    widget.price,
+                    '\$${_getItemTotal(item)}',
                     style: AppTextStyles.titleSmall.copyWith(
                       color: AppColors.grey,
                     ),
@@ -70,44 +81,14 @@ class _CartItemState extends State<CartItem> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomButton(
-                        onPressed: () {
-                          setState(() {
-                            if (quantity > 1) quantity--;
-                          });
-                        },
-                        icon: CupertinoIcons.minus,
-                        width: 45.w,
-                        height: 40.h,
-                        borderRadius: 12,
-                        backgroundColor: AppColors.primary,
-                        textColor: AppColors.white,
-                      ),
-                      Gap(10.w),
-                      Text("$quantity", style: AppTextStyles.titleLarge),
-                      Gap(10.w),
-                      CustomButton(
-                        onPressed: () {
-                          setState(() {
-                            quantity++;
-                          });
-                        },
-                        icon: CupertinoIcons.add,
-                        width: 45.w,
-                        height: 40.h,
-                        borderRadius: 12,
-                        backgroundColor: AppColors.primary,
-                        textColor: AppColors.white,
-                      ),
-                    ],
+                  Text(
+                    'Qty: ${item.quantity}',
+                    style: AppTextStyles.titleLarge,
                   ),
                   Gap(20.h),
                   CustomButton(
-                    text: "Remove",
-                    onPressed: () {},
+                    text: 'Remove',
+                    onPressed: onRemove,
                     width: 120.w,
                     height: 40.h,
                     borderRadius: 20,

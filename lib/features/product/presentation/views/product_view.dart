@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 import '../../../cart/data/models/cart_model.dart';
@@ -26,6 +28,7 @@ class ProductView extends StatefulWidget {
 
 class _ProductViewState extends State<ProductView> {
   double _value = 0.6;
+  int _quantity = 1;
   bool _isAddingToCart = false;
 
   final ProductRepo _repo = ProductRepo();
@@ -51,6 +54,12 @@ class _ProductViewState extends State<ProductView> {
     });
   }
 
+  String _getTotalPrice() {
+    final unitPrice = double.tryParse(widget.product?.price ?? '0') ?? 0;
+    final total = unitPrice * _quantity;
+    return total.toStringAsFixed(2);
+  }
+
   Future<void> _addToCart() async {
     final product = widget.product;
     if (product?.id == null) return;
@@ -59,7 +68,7 @@ class _ProductViewState extends State<ProductView> {
     try {
       final item = CartItem(
         productId: product!.id!,
-        quantity: 1,
+        quantity: _quantity,
         spicy: _value,
         toppings: _selectedToppingIds.toList(),
         sideOptions: _selectedSideOptionIds.toList(),
@@ -75,10 +84,7 @@ class _ProductViewState extends State<ProductView> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed: $e'),
-          backgroundColor: AppColors.error,
-        ),
+        SnackBar(content: Text('Failed: $e'), backgroundColor: AppColors.error),
       );
     } finally {
       if (mounted) setState(() => _isAddingToCart = false);
@@ -105,6 +111,13 @@ class _ProductViewState extends State<ProductView> {
               CustomizedSection(
                 sliderValue: _value,
                 onSliderChanged: (value) => setState(() => _value = value),
+                quantity: _quantity,
+                onIncrement: () => setState(() => _quantity++),
+                onDecrement: () {
+                  if (_quantity > 1) {
+                    setState(() => _quantity--);
+                  }
+                },
               ),
 
               Gap(20.h),
@@ -147,14 +160,14 @@ class _ProductViewState extends State<ProductView> {
                   });
                 },
               ),
-              Gap(40.h),
+              Gap(30.h),
 
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text("Total", style: AppTextStyles.bodyBrown),
               ),
               CheckoutSummary(
-                price: widget.product?.price ?? '0',
+                price: _getTotalPrice(),
                 onAddToCart: _addToCart,
                 isLoading: _isAddingToCart,
               ),

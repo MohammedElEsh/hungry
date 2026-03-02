@@ -7,7 +7,9 @@ import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
 
 class CartSummary extends StatelessWidget {
-  const CartSummary({super.key});
+  final String totalPrice;
+
+  const CartSummary({super.key, required this.totalPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class CartSummary extends StatelessWidget {
                     fontSize: 40.sp,
                   ),
                 ),
-                TextSpan(text: '18.19', style: AppTextStyles.displaySmall),
+                TextSpan(text: totalPrice, style: AppTextStyles.displaySmall),
               ],
             ),
           ),

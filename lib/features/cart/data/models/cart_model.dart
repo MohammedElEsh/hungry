@@ -1,30 +1,117 @@
+/// Display model for cart response (GET /cart)
 class CartModel {
-  final List<CartItem> items;
+  final int? id;
+  final String totalPrice;
+  final List<CartDisplayItem> items;
 
-  CartModel({required this.items});
+  CartModel({this.id, required this.totalPrice, required this.items});
 
   factory CartModel.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return CartModel(items: []);
+    if (json == null) return CartModel(totalPrice: '0', items: []);
     final itemsList = json['items'];
-    if (itemsList == null || itemsList is! List) return CartModel(items: []);
+    if (itemsList == null || itemsList is! List) {
+      return CartModel(
+        totalPrice: (json['total_price'] ?? '0').toString(),
+        items: [],
+      );
+    }
     return CartModel(
+      id: json['id'] as int?,
+      totalPrice: (json['total_price'] ?? '0').toString(),
       items: itemsList
-          .map<CartItem>(
-            (item) => CartItem.fromJson(item as Map<String, dynamic>),
+          .map<CartDisplayItem>(
+            (item) => CartDisplayItem.fromJson(item as Map<String, dynamic>),
           )
           .toList(),
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'items': items.map((item) => item.toJson()).toList(),
-    };
+/// Cart item from API response
+class CartDisplayItem {
+  final int itemId;
+  final int productId;
+  final String name;
+  final String? image;
+  final int quantity;
+  final String price;
+  final double spicy;
+  final List<ToppingDisplay> toppings;
+  final List<SideOptionDisplay> sideOptions;
+
+  CartDisplayItem({
+    required this.itemId,
+    required this.productId,
+    required this.name,
+    this.image,
+    required this.quantity,
+    required this.price,
+    required this.spicy,
+    required this.toppings,
+    required this.sideOptions,
+  });
+
+  factory CartDisplayItem.fromJson(Map<String, dynamic> json) {
+    return CartDisplayItem(
+      itemId: json['item_id'] as int,
+      productId: json['product_id'] as int,
+      name: (json['name'] ?? '') as String,
+      image: json['image'] as String?,
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+      price: (json['price'] ?? '0').toString(),
+      spicy: (json['spicy'] is num)
+          ? (json['spicy'] as num).toDouble()
+          : double.tryParse((json['spicy'] ?? '0').toString()) ?? 0.0,
+      toppings:
+          (json['toppings'] as List?)
+              ?.map((e) => ToppingDisplay.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      sideOptions:
+          (json['side_options'] as List?)
+              ?.map(
+                (e) => SideOptionDisplay.fromJson(e as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
+    );
   }
 }
 
+class ToppingDisplay {
+  final int id;
+  final String name;
+  final String? image;
+
+  ToppingDisplay({required this.id, required this.name, this.image});
+
+  factory ToppingDisplay.fromJson(Map<String, dynamic> json) {
+    return ToppingDisplay(
+      id: json['id'] as int,
+      name: (json['name'] ?? '') as String,
+      image: json['image'] as String?,
+    );
+  }
+}
+
+class SideOptionDisplay {
+  final int id;
+  final String name;
+  final String? image;
+
+  SideOptionDisplay({required this.id, required this.name, this.image});
+
+  factory SideOptionDisplay.fromJson(Map<String, dynamic> json) {
+    return SideOptionDisplay(
+      id: json['id'] as int,
+      name: (json['name'] ?? '') as String,
+      image: json['image'] as String?,
+    );
+  }
+}
+
+/// Request model for add to cart (POST /cart/add)
 class CartItem {
-  final int? id; // Backend-assigned ID, used for remove
   final int productId;
   final int quantity;
   final double spicy;
@@ -32,24 +119,12 @@ class CartItem {
   final List<int> sideOptions;
 
   CartItem({
-    this.id,
     required this.productId,
     required this.quantity,
     required this.spicy,
     required this.toppings,
     required this.sideOptions,
   });
-
-  factory CartItem.fromJson(Map<String, dynamic> json) {
-    return CartItem(
-      id: json['id'] as int?,
-      productId: json['product_id'],
-      quantity: json['quantity'],
-      spicy: (json['spicy'] as num).toDouble(),
-      toppings: List<int>.from(json['toppings'] ?? []),
-      sideOptions: List<int>.from(json['side_options'] ?? []),
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {
