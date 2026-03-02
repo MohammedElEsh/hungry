@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/components/custom_button.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 import '../../../cart/data/models/cart_model.dart';
