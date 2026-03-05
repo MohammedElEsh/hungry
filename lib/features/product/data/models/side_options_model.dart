@@ -10,10 +10,16 @@ class SideOptionsModel {
   });
 
   factory SideOptionsModel.fromJson(Map<String, dynamic> json) {
+    final idRaw = json['id'];
+    final id = idRaw is int
+        ? idRaw
+        : idRaw is num
+            ? idRaw.toInt()
+            : int.tryParse(idRaw?.toString() ?? '') ?? 0;
     return SideOptionsModel(
-      id: json['id'],
-      name: json['name'],
-      image: json['image'],
+      id: id,
+      name: json['name']?.toString() ?? '',
+      image: json['image']?.toString() ?? '',
     );
   }
 

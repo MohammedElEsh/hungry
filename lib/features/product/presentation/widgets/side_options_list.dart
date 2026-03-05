@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../data/models/side_options_model.dart';
-import '../widgets/topping_card.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../domain/entities/side_option_entity.dart';
+import 'topping_card.dart';
 
 class SideOptionsList extends StatelessWidget {
-  final List<SideOptionsModel> items;
+  final List<SideOptionEntity> items;
   final Set<int> selectedIds;
   final ValueChanged<int> onSideOptionTapped;
 
@@ -19,10 +19,11 @@ class SideOptionsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) {
-      return SizedBox(
-        height: 50.h,
-        child: const Center(
-          child: CupertinoActivityIndicator(),
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Text(
+          'No side options available',
+          style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
         ),
       );
     }

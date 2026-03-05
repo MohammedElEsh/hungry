@@ -1,0 +1,15 @@
+import 'package:hungry/core/domain/result.dart';
+
+import '../entities/user_entity.dart';
+import '../repositories/auth_repository.dart';
+
+/// Login use case.
+class LoginUseCase {
+  final AuthRepository _repository;
+
+  LoginUseCase(this._repository);
+
+  Future<Result<UserEntity>> call(String email, String password) {
+    return _repository.login(email, password);
+  }
+}

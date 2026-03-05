@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
 import '../widgets/custom_button.dart';
@@ -90,10 +90,18 @@ class LoginForm extends StatelessWidget {
             ),
             Gap(60.h),
             isLoading
-                ? const CupertinoActivityIndicator(color: AppColors.primary)
+                ? SizedBox(
+                    height: 56.h,
+                    child: const Center(
+                      child: CupertinoActivityIndicator(
+                        color: AppColors.primary,
+                        radius: 12,
+                      ),
+                    ),
+                  )
                 : CustomButton(
                     width: 0.9.sw,
-                    text: isLoading ? 'Loading...' : 'Login',
+                    text: 'Login',
                     onPressed: () => login(),
                   ),
             Gap(20.h),

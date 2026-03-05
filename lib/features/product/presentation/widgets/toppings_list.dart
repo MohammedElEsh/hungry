@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../data/models/topping_model.dart';
-import '../widgets/topping_card.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../domain/entities/topping_entity.dart';
+import 'topping_card.dart';
 
 class ToppingsList extends StatelessWidget {
-  final List<ToppingModel> toppings;
+  final List<ToppingEntity> toppings;
   final Set<int> selectedIds;
   final ValueChanged<int> onToppingTapped;
 
@@ -19,10 +19,11 @@ class ToppingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (toppings.isEmpty) {
-      return SizedBox(
-        height: 50.h,
-        child: const Center(
-          child: CupertinoActivityIndicator(),
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Text(
+          'No toppings available',
+          style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
         ),
       );
     }

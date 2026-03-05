@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/animations/fade_in.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../product/data/models/product_model.dart';
@@ -29,11 +31,15 @@ class _GridViewSectionState extends State<GridViewSection> {
       delegate: SliverChildBuilderDelegate((context, index) {
         final product = widget.products[index];
         final productId = product.id ?? 0;
-        return GestureDetector(
-          onTap: () {
-            context.push(AppRouter.kProductView, extra: product);
-          },
-          child: CardItem(
+        return FadeIn(
+          child: GestureDetector(
+            onTap: () {
+              final id = product.id?.toString();
+              if (id != null) {
+                context.push(AppRouter.kProductView, extra: id);
+              }
+            },
+            child: CardItem(
             imagePath: product.image ?? AssetsData.burger,
             title: product.name ?? "Unknown",
             price: "${product.price ?? '0'} \$",
@@ -44,7 +50,8 @@ class _GridViewSectionState extends State<GridViewSection> {
                 ? () => widget.onFavoriteTap!(productId)
                 : null,
           ),
-        );
+        ),
+      );
       }, childCount: widget.products.length),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

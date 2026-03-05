@@ -2,24 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/styles.dart';
-import '../../data/models/cart_model.dart';
+import '../../domain/entities/cart_item_entity.dart';
+
+/// Display model for cart item (entity + optional UI fields from API).
+class CartDisplayItem {
+  final String itemId;
+  final String name;
+  final double price;
+  final int quantity;
+  /// Unit price formatted like API (e.g. "140.00").
+  final String priceFormatted;
+  final String? image;
+  final List<String> toppingNames;
+  final List<String> sideOptionNames;
+  final double spicy;
+
+  CartDisplayItem({
+    required this.itemId,
+    required this.name,
+    required this.price,
+    required this.quantity,
+    String? priceFormatted,
+    this.image,
+    this.toppingNames = const [],
+    this.sideOptionNames = const [],
+    this.spicy = 0,
+  }) : priceFormatted = priceFormatted ?? price.toStringAsFixed(2);
+
+  factory CartDisplayItem.fromEntity(CartItemEntity e, {String? imageUrl}) {
+    return CartDisplayItem(
+      itemId: e.id,
+      name: e.name,
+      price: e.price,
+      quantity: e.quantity,
+      priceFormatted: e.priceFormatted,
+      image: e.image ?? imageUrl,
+      spicy: e.spicy,
+      toppingNames: e.toppingNames,
+      sideOptionNames: e.sideOptionNames,
+    );
+  }
+}
 
 class CartItemWidget extends StatelessWidget {
   final CartDisplayItem item;
+  final bool isRemoving;
   final VoidCallback onRemove;
 
   const CartItemWidget({
     super.key,
     required this.item,
+    this.isRemoving = false,
     required this.onRemove,
   });
 
   String _getItemTotal(CartDisplayItem item) {
-    final unitPrice = double.tryParse(item.price) ?? 0;
-    final total = unitPrice * item.quantity;
-    return total.toStringAsFixed(2);
+    return (item.price * item.quantity).toStringAsFixed(2);
   }
 
   @override
@@ -28,28 +68,56 @@ class CartItemWidget extends StatelessWidget {
       key: ValueKey(item.itemId),
       direction: DismissDirection.endToStart,
       onDismissed: (_) => onRemove(),
+      confirmDismiss: isRemoving ? (_) => Future.value(false) : null,
       background: _buildDeleteBackground(),
+      child: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            padding: EdgeInsets.all(14.w),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(20.r),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withOpacity(0.05),
+                  blurRadius: 30,
+                  offset: const Offset(0, 12),
+                ),
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageWithBadge(),
+                Gap(16.w),
+                Expanded(child: _buildContent()),
+              ],
+            ),
+          ),
+          if (isRemoving) _buildRemovingOverlay(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRemovingOverlay() {
+    return Positioned.fill(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-        padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.white.withOpacity(0.85),
           borderRadius: BorderRadius.circular(20.r),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withOpacity(0.05),
-              blurRadius: 30,
-              offset: const Offset(0, 12),
-            ),
-          ],
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImageWithBadge(),
-            Gap(16.w),
-            Expanded(child: _buildContent()),
-          ],
+        child: Center(
+          child: SizedBox(
+            width: 36.w,
+            height: 36.w,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.5,
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            ),
+          ),
         ),
       ),
     );
@@ -69,9 +137,9 @@ class CartItemWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSpicyLabel(),
-              if (item.toppings.isNotEmpty) _buildToppingsRow(),
-              if (item.sideOptions.isNotEmpty) _buildSideOptionsRow(),
+              if (item.spicy > 0) _buildSpicyLabel(),
+              if (item.toppingNames.isNotEmpty) _buildToppingsRow(),
+              if (item.sideOptionNames.isNotEmpty) _buildSideOptionsRow(),
             ],
           ),
         ),
@@ -105,7 +173,7 @@ class CartItemWidget extends StatelessWidget {
 
   Widget _buildPriceBreakdown() {
     return Text(
-      '\$${item.price} × ${item.quantity} = \$${_getItemTotal(item)}',
+      '\$${item.priceFormatted} × ${item.quantity} = \$${_getItemTotal(item)}',
       style: AppTextStyles.bodySmall.copyWith(
         fontSize: 11.sp,
         color: AppColors.grey,
@@ -134,7 +202,7 @@ class CartItemWidget extends StatelessWidget {
   }
 
   Widget _buildToppingsRow() {
-    final names = item.toppings.map((t) => t.name).join(', ');
+    final names = item.toppingNames.join(', ');
     return Padding(
       padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
@@ -159,7 +227,7 @@ class CartItemWidget extends StatelessWidget {
   }
 
   Widget _buildSideOptionsRow() {
-    final names = item.sideOptions.map((s) => s.name).join(', ');
+    final names = item.sideOptionNames.join(', ');
     return Padding(
       padding: EdgeInsets.only(bottom: 4.h),
       child: Row(

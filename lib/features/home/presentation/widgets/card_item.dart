@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hungry/core/utils/assets.dart';
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 
 class CardItem extends StatelessWidget {

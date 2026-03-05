@@ -31,10 +31,24 @@ dependencies:
   go_router: ^17.1.0
 
   # ----------------------------
+  # State Management
+  # ----------------------------
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.7
+
+  # ----------------------------
+  # Dependency Injection
+  # ----------------------------
+  get_it: ^8.0.2
+
+  # ----------------------------
   # Networking & Local Storage
   # ----------------------------
   dio: ^5.9.2
   shared_preferences: ^2.5.4
+  connectivity_plus: ^6.1.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
   # ----------------------------
   # Media & Images
@@ -48,17 +62,22 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
 
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
+  build_runner: ^2.4.14
+  mocktail: ^1.0.4
+  bloc_test: ^9.1.6
 
 # --------------------------------------------------
 # App Icons
 # --------------------------------------------------
 flutter_launcher_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
-  image_path: assets/icon/app_icon.png
+  image_path: "assets/icon/app_icon.png"
 
 # --------------------------------------------------
 # Flutter Config

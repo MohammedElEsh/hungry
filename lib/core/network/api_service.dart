@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+
 import 'package:hungry/core/network/api_error.dart';
 import 'package:hungry/core/network/api_exceptions.dart';
 import 'package:hungry/core/network/dio_client.dart';
 
 class ApiService {
-  final DioClient _dioClient = DioClient();
+  DioClient get _dioClient => GetIt.instance<DioClient>();
 
   Future<dynamic> get(String endPoint) async {
     try {

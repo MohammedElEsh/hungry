@@ -1,10 +1,8 @@
 // home_app_bar.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 import 'header_section.dart';
-import 'search_bar.dart';
 
 class HomeAppBar extends StatelessWidget {
   final String? imageUrl;
@@ -32,7 +30,7 @@ class HomeAppBar extends StatelessWidget {
       elevation: 0,
       scrolledUnderElevation: 0,
       pinned: true,
-      toolbarHeight: 220.h,
+      toolbarHeight: 140.h,
       backgroundColor: AppColors.white,
       automaticallyImplyLeading: false,
       flexibleSpace: Padding(
@@ -48,8 +46,6 @@ class HomeAppBar extends StatelessWidget {
               onFavoritesTap: onFavoritesTap,
               onCartTap: onCartTap,
             ),
-            Gap(25.h),
-            const SearchField(),
           ],
         ),
       ),

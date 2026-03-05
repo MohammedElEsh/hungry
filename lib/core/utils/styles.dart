@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
+import '../constants/app_colors.dart';
 
 /// Centralized text styles for the app
 /// Naming convention is aligned with Material 3 (Flutter standard)
@@ -8,7 +8,7 @@ import 'app_colors.dart';
 abstract class AppTextStyles {
   // ================== Display ==================
   static final displayLarge = GoogleFonts.luckiestGuy(
-    textStyle: const TextStyle(
+    textStyle: TextStyle(
       fontSize: 60,
       fontWeight: FontWeight.w500,
       color: AppColors.forth,

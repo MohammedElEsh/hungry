@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../features/home/presentation/views/home_view.dart';
-import '../../features/cart/presentation/views/cart_view.dart';
-import '../../features/orders/presentation/views/orders_view.dart';
-import '../../features/profile/presentation/views/profile_view.dart';
-import '../../core/utils/app_colors.dart';
+import '../../features/cart/presentation/cubit/cart_cubit.dart';
+import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/cart/presentation/screens/cart_screen.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/orders/presentation/screens/orders_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../constants/app_colors.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({super.key});
@@ -31,31 +34,42 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   }
 
   void goToPage(int index) {
+    if (index == currentIndex) return;
     pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+      duration: const Duration(milliseconds: 380),
+      curve: Curves.easeOutCubic,
     );
-    setState(() => currentIndex = index);
+    // currentIndex updates in onPageChanged so the nav indicator stays in sync with the page animation
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
-      HomeView(
+      HomeScreen(
         onProfileTap: () => goToPage(3),
         onCartTap: () => goToPage(1),
       ),
-      const CartView(),
-      OrdersView(onHomeTap: () => goToPage(0)),
-      const ProfileView(),
+      CartScreen(onHomeTap: () => goToPage(0)),
+      OrdersScreen(onHomeTap: () => goToPage(0)),
+      const ProfileScreen(),
     ];
 
     return Scaffold(
       body: PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        onPageChanged: (index) => setState(() => currentIndex = index),
+        onPageChanged: (index) {
+          if (currentIndex != index) {
+            setState(() => currentIndex = index);
+          }
+          if (index == 0) {
+            context.read<HomeCubit>().refresh();
+            context.read<CartCubit>().loadCart();
+          } else if (index == 1) {
+            context.read<CartCubit>().loadCart();
+          }
+        },
         children: screens,
       ),
       bottomNavigationBar: Container(

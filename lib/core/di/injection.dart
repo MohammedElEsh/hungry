@@ -1,0 +1,183 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:get_it/get_it.dart';
+
+import '../network/dio_client.dart';
+import '../network/network_info.dart';
+import '../network/token_provider.dart';
+import '../network/interceptors/auth_interceptor.dart';
+import '../../features/auth/data/datasources/auth_remote_datasource.dart';
+import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/auth/domain/usecases/get_cached_user_usecase.dart';
+import '../../features/auth/domain/usecases/login_usecase.dart';
+import '../../features/auth/domain/usecases/logout_usecase.dart';
+import '../../features/auth/domain/usecases/register_usecase.dart';
+import '../../features/auth/presentation/cubit/auth_cubit.dart';
+import '../../features/cart/data/datasources/cart_remote_datasource.dart';
+import '../../features/cart/data/repositories/cart_repository_impl.dart';
+import '../../features/cart/domain/repositories/cart_repository.dart';
+import '../../features/cart/domain/usecases/add_to_cart_usecase.dart';
+import '../../features/cart/domain/usecases/clear_cart_usecase.dart';
+import '../../features/cart/domain/usecases/get_cart_items_usecase.dart';
+import '../../features/cart/domain/usecases/remove_from_cart_usecase.dart';
+import '../../features/cart/presentation/cubit/cart_cubit.dart';
+import '../../features/home/data/datasources/category_remote_datasource.dart';
+import '../../features/home/data/datasources/favorite_remote_datasource.dart';
+import '../../features/home/data/datasources/product_remote_datasource.dart';
+import '../../features/home/data/repositories/category_repository_impl.dart';
+import '../../features/home/data/repositories/favorite_repository_impl.dart';
+import '../../features/home/data/repositories/product_repository_impl.dart';
+import '../../features/home/domain/repositories/category_repository.dart';
+import '../../features/home/domain/repositories/favorite_repository.dart';
+import '../../features/home/domain/repositories/product_repository.dart';
+import '../../features/home/domain/usecases/get_categories_usecase.dart';
+import '../../features/home/domain/usecases/get_favorites_usecase.dart';
+import '../../features/home/domain/usecases/get_products_usecase.dart';
+import '../../features/home/domain/usecases/toggle_favorite_usecase.dart';
+import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/product/data/datasources/product_remote_datasource.dart';
+import '../../features/product/data/repositories/product_detail_repository_impl.dart';
+import '../../features/product/domain/repositories/product_detail_repository.dart';
+import '../../features/product/domain/usecases/get_product_detail_usecase.dart';
+import '../../features/product/presentation/cubit/product_cubit.dart';
+import '../../features/orders/data/datasources/order_remote_datasource.dart';
+import '../../features/orders/data/repositories/order_repository_impl.dart';
+import '../../features/orders/domain/repositories/order_repository.dart';
+import '../../features/orders/domain/usecases/get_orders_usecase.dart';
+import '../../features/orders/presentation/cubit/orders_cubit.dart';
+import '../../features/auth/data/repositories/auth_repo.dart';
+import '../../features/profile/data/repositories/profile_repository_impl.dart';
+import '../../features/profile/domain/repositories/profile_repository.dart';
+import '../../features/profile/domain/usecases/get_profile_usecase.dart';
+import '../../features/profile/domain/usecases/profile_logout_usecase.dart';
+import '../../features/profile/domain/usecases/update_profile_usecase.dart';
+import '../../features/profile/presentation/cubit/profile_cubit.dart';
+final sl = GetIt.instance;
+
+Future<void> init() async {
+  sl.registerLazySingleton<TokenProvider>(() => TokenProviderImpl());
+  sl.registerLazySingleton<AuthInterceptor>(
+    () => AuthInterceptor(sl<TokenProvider>()),
+  );
+  sl.registerLazySingleton<DioClient>(
+    () => DioClient(authInterceptor: sl<AuthInterceptor>()),
+  );
+  sl.registerLazySingleton(() => Connectivity());
+  sl.registerLazySingleton<NetworkInfo>(
+    () => NetworkInfoImpl(sl<Connectivity>()),
+  );
+
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
+  sl.registerLazySingleton<AuthRepo>(() => AuthRepo());
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(
+      sl<AuthRemoteDataSource>(),
+      sl<NetworkInfo>(),
+      sl<TokenProvider>(),
+      sl<AuthRepo>(),
+    ),
+  );
+  sl.registerLazySingleton(() => LoginUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => RegisterUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => LogoutUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => GetCachedUserUseCase(sl<AuthRepository>()));
+
+  sl.registerFactory(() => AuthCubit(
+        sl<LoginUseCase>(),
+        sl<LogoutUseCase>(),
+        sl<GetCachedUserUseCase>(),
+        sl<RegisterUseCase>(),
+      ));
+
+  sl.registerLazySingleton<CartRemoteDataSource>(
+    () => CartRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
+  sl.registerLazySingleton<CartRepository>(
+    () => CartRepositoryImpl(sl<CartRemoteDataSource>(), sl<NetworkInfo>()),
+  );
+  sl.registerLazySingleton(() => GetCartItemsUseCase(sl<CartRepository>()));
+  sl.registerLazySingleton(() => AddToCartUseCase(sl<CartRepository>()));
+  sl.registerLazySingleton(() => RemoveFromCartUseCase(sl<CartRepository>()));
+  sl.registerLazySingleton(() => ClearCartUseCase(sl<CartRepository>()));
+  sl.registerLazySingleton(() => CartCubit(
+        sl<GetCartItemsUseCase>(),
+        sl<AddToCartUseCase>(),
+        sl<RemoveFromCartUseCase>(),
+        sl<ClearCartUseCase>(),
+      ));
+
+  sl.registerLazySingleton<ProductRemoteDataSource>(
+    () => ProductRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
+  sl.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(sl<ProductRemoteDataSource>(), sl<NetworkInfo>()),
+  );
+  sl.registerLazySingleton<CategoryRemoteDataSource>(
+    () => CategoryRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
+  sl.registerLazySingleton<CategoryRepository>(
+    () => CategoryRepositoryImpl(sl<CategoryRemoteDataSource>(), sl<NetworkInfo>()),
+  );
+  sl.registerLazySingleton<FavoriteRemoteDataSource>(
+    () => FavoriteRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
+  sl.registerLazySingleton<FavoriteRepository>(
+    () => FavoriteRepositoryImpl(sl<FavoriteRemoteDataSource>()),
+  );
+  sl.registerLazySingleton(() => GetProductsUseCase(sl<ProductRepository>()));
+  sl.registerLazySingleton(
+      () => GetCategoriesUseCase(sl<CategoryRepository>()));
+  sl.registerLazySingleton(
+      () => GetFavoritesUseCase(sl<FavoriteRepository>()));
+  sl.registerLazySingleton(
+      () => ToggleFavoriteUseCase(sl<FavoriteRepository>()));
+  sl.registerLazySingleton(() => HomeCubit(
+        sl<GetProductsUseCase>(),
+        sl<GetCategoriesUseCase>(),
+        sl<GetFavoritesUseCase>(),
+        sl<ToggleFavoriteUseCase>(),
+        sl<GetCachedUserUseCase>(),
+        sl<GetProfileUseCase>(),
+      ));
+
+  sl.registerLazySingleton<ProductDetailRemoteDataSource>(
+    () => ProductDetailRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
+  sl.registerLazySingleton<ProductDetailRepository>(
+    () => ProductDetailRepositoryImpl(sl<ProductDetailRemoteDataSource>()),
+  );
+  sl.registerLazySingleton(
+      () => GetProductDetailUseCase(sl<ProductDetailRepository>()));
+  sl.registerFactory(() => ProductCubit(
+        sl<GetProductDetailUseCase>(),
+        sl<AddToCartUseCase>(),
+      ));
+
+  sl.registerLazySingleton<OrderRemoteDataSource>(
+    () => OrderRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
+  sl.registerLazySingleton<OrderRepository>(
+    () => OrderRepositoryImpl(sl<OrderRemoteDataSource>()),
+  );
+  sl.registerLazySingleton(() => GetOrdersUseCase(sl<OrderRepository>()));
+  sl.registerLazySingleton(() => OrdersCubit(
+        sl<GetOrdersUseCase>(),
+        sl<GetCachedUserUseCase>(),
+      ));
+
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(sl<AuthRepo>()),
+  );
+  sl.registerLazySingleton(() => GetProfileUseCase(sl<ProfileRepository>()));
+  sl.registerLazySingleton(
+      () => UpdateProfileUseCase(sl<ProfileRepository>()));
+  sl.registerLazySingleton(
+      () => ProfileLogoutUseCase(sl<ProfileRepository>()));
+  sl.registerLazySingleton(() => ProfileCubit(
+        sl<GetProfileUseCase>(),
+        sl<UpdateProfileUseCase>(),
+        sl<ProfileLogoutUseCase>(),
+      ));
+}

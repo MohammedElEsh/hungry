@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'custom_text_field.dart';
+import 'package:gap/gap.dart';
+
+import '../../../../core/components/profile_text_field.dart';
 
 class ProfileFields extends StatelessWidget {
   final TextEditingController nameController;
@@ -24,26 +25,26 @@ class ProfileFields extends StatelessWidget {
       child: Column(
         children: [
           // Name TextField
-          CustomTextField(
+          ProfileTextField(
             controller: nameController,
             labelText: 'Name',
             // readOnly: true,
           ),
           Gap(20.h),
           // Email TextField
-          CustomTextField(
+          ProfileTextField(
             controller: emailController,
             labelText: 'Email',
             readOnly: true,
           ),
           Gap(20.h),
           // Address TextField
-          CustomTextField(
+          ProfileTextField(
             controller: addressController,
             labelText: 'Address',
             // readOnly: true,
           ),
-          Gap(50.h),
+          Gap(20.h),
           // Password TextField
           // CustomTextField(
           //   controller: passwordController,

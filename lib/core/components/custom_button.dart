@@ -1,29 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
+import '../constants/app_colors.dart';
 
-/// A highly customizable button widget that supports:
+/// Button variants: filled, outlined, or text only
+enum ButtonVariant { filled, outlined, text }
+
+/// Icon position in the button: start (left) or end (right)
+enum IconPosition { start, end }
+
+/// Highly customizable button widget with:
 /// - Text and/or Icon
 /// - Gradient background
 /// - Border and shadow
 /// - Ripple effect
 /// - Loading state
-/// - Flexible width, height, and styling
+/// - Disabled state
+/// - Flexible width, height, padding, and styling
 class CustomButton extends StatelessWidget {
   /// Text to display on the button
   final String? text;
 
-  /// Icon to display on the button (optional)
+  /// Optional text to display while loading
+  final String? loadingText;
+
+  /// Optional icon to display on the button
   final IconData? icon;
 
-  /// Callback when the button is pressed
+  /// Callback function when the button is pressed
   final VoidCallback? onPressed;
 
   /// Background color (ignored if gradient is provided)
   final Color? backgroundColor;
 
-  /// Optional gradient for the button background
+  /// Gradient background for the button
   final Gradient? gradient;
 
   /// Text color
@@ -35,27 +45,43 @@ class CustomButton extends StatelessWidget {
   /// Button width
   final double? width;
 
-  /// Border radius
+  /// Border radius for rounded corners
   final double? borderRadius;
 
   /// Optional border for the button
   final Border? border;
 
-  /// If true, shows a loading spinner instead of text/icon
+  /// Show loading spinner instead of text/icon
   final bool isLoading;
+
+  /// Disable button interaction
+  final bool isDisabled;
 
   /// Icon size
   final double? iconSize;
 
-  /// Optional custom text style
+  /// Custom text style
   final TextStyle? textStyle;
+
+  /// Padding inside the button
+  final EdgeInsetsGeometry? padding;
+
+  /// Button variant: filled, outlined, or text
+  final ButtonVariant variant;
+
+  /// Position of the icon: start or end
+  final IconPosition iconPosition;
+
+  /// Button elevation (shadow height)
+  final double elevation;
 
   const CustomButton({
     super.key,
     this.text,
+    this.loadingText,
     this.icon,
     required this.onPressed,
-    this.backgroundColor = Colors.transparent,
+    this.backgroundColor,
     this.gradient,
     this.textColor,
     this.height,
@@ -63,71 +89,127 @@ class CustomButton extends StatelessWidget {
     this.borderRadius,
     this.border,
     this.isLoading = false,
+    this.isDisabled = false,
     this.iconSize,
     this.textStyle,
+    this.padding,
+    this.variant = ButtonVariant.filled,
+    this.iconPosition = IconPosition.start,
+    this.elevation = 0,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      // Transparent material for ripple effect
-      child: InkWell(
-        onTap: isLoading ? null : onPressed,
-        borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
-        child: Container(
-          width: width ?? 170.w,
-          height: height ?? 60.h,
+    // Determine if the button should be disabled
+    final bool disabled = isDisabled || isLoading || onPressed == null;
+
+    // Determine effective text color based on variant
+    final Color effectiveTextColor =
+        textColor ?? (variant == ButtonVariant.filled ? AppColors.white : AppColors.primary);
+
+    // Determine gradient for filled variant only
+    final Gradient? effectiveGradient = (variant == ButtonVariant.filled) ? gradient : null;
+
+    // Determine background color for filled variant
+    final Color effectiveBackgroundColor =
+        variant == ButtonVariant.filled ? (backgroundColor ?? AppColors.primary) : Colors.transparent;
+
+    return Semantics(
+      // Accessibility: mark this widget as a button
+      button: true,
+      label: text,
+      child: Material(
+        // Transparent material to allow ripple effect
+        color: Colors.transparent,
+        elevation: elevation, // Shadow elevation
+        child: Ink(
+          width: width ?? 170.w, // Default width
+          height: height ?? 60.h, // Default height
           decoration: BoxDecoration(
-            // If gradient is null, use solid color
-            color: gradient == null
-                ? (backgroundColor ?? AppColors.primary)
-                : null,
-            gradient: gradient,
+            // Disabled button color
+            color: disabled ? AppColors.grey.withOpacity(0.3) : effectiveBackgroundColor,
+            gradient: disabled ? null : effectiveGradient,
             borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
-            border: border,
+            border: border ??
+                (variant == ButtonVariant.outlined
+                    ? Border.all(color: AppColors.primary, width: 1.5)
+                    : null),
             boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
+              if (!disabled && elevation > 0)
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
             ],
           ),
-          alignment: Alignment.center,
-          child: isLoading
-              // Show CircularProgressIndicator when loading
-              ? SizedBox(
-                  width: 24.w,
-                  height: 24.w,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    color: textColor ?? AppColors.white,
-                  ),
-                )
-              // Show Row with Icon + Text
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (icon != null)
-                      Icon(
-                        icon,
-                        color: textColor ?? AppColors.white,
-                        size: iconSize ?? 24.sp,
-                      ),
-                    if (icon != null && text != null) SizedBox(width: 8.w),
-                    if (text != null)
-                      Text(
-                        text!,
-                        style:
-                            textStyle ??
-                            AppTextStyles.titleMedium.copyWith(
-                              color: textColor ?? AppColors.white,
-                            ),
-                      ),
-                  ],
+          child: InkWell(
+            onTap: disabled ? null : onPressed, // Disable interaction if needed
+            borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
+            splashFactory: InkRipple.splashFactory, // Ripple effect
+            highlightColor: Colors.transparent, // Remove default highlight color
+            child: Padding(
+              padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w),
+              child: Center(
+                // Animate between loading spinner and content
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: isLoading
+                      ? SizedBox(
+                          width: 24.w,
+                          height: 24.w,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: effectiveTextColor,
+                          ),
+                        )
+                      : _buildContent(effectiveTextColor),
                 ),
+              ),
+            ),
+          ),
         ),
       ),
+    );
+  }
+
+  /// Builds the content of the button (icon + text)
+  Widget _buildContent(Color effectiveTextColor) {
+    final List<Widget> children = [];
+
+    // If icon is at the start
+    if (icon != null && iconPosition == IconPosition.start) {
+      children.add(Icon(
+        icon,
+        color: effectiveTextColor,
+        size: iconSize ?? 24.sp,
+      ));
+      if (text != null) children.add(SizedBox(width: 8.w)); // Space between icon and text
+    }
+
+    // Add the text
+    if (text != null) {
+      children.add(Text(
+        isLoading && loadingText != null ? loadingText! : text!,
+        style: textStyle ??
+            AppTextStyles.titleMedium.copyWith(color: effectiveTextColor),
+      ));
+    }
+
+    // If icon is at the end
+    if (icon != null && iconPosition == IconPosition.end) {
+      if (text != null) children.add(SizedBox(width: 8.w));
+      children.add(Icon(
+        icon,
+        color: effectiveTextColor,
+        size: iconSize ?? 24.sp,
+      ));
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: children,
     );
   }
 }

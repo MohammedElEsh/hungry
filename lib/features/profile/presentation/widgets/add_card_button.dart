@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+
 import '../../../../core/components/custom_button.dart';
-import '../../../../core/utils/app_colors.dart';
-import 'custom_text_field.dart';
+import '../../../../core/components/profile_text_field.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class AddCardButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -22,7 +23,7 @@ class AddCardButton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CustomTextField(
+          ProfileTextField(
             controller: cardController,
             labelText: 'Card Number',
             keyboardType: TextInputType.number,

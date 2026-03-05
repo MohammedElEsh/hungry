@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 
 class ToppingCard extends StatelessWidget {
@@ -18,6 +18,28 @@ class ToppingCard extends StatelessWidget {
     this.isSelected = false,
     required this.onTap,
   });
+
+  Widget _buildImage() {
+    final url = imageUrl.trim();
+    if (url.isEmpty) {
+      return SizedBox(
+        height: 65.h,
+        width: 130.w,
+        child: Icon(Icons.image_not_supported_outlined, size: 32.sp, color: AppColors.grey),
+      );
+    }
+    return Image.network(
+      url,
+      fit: BoxFit.contain,
+      height: 65.h,
+      width: 130.w,
+      errorBuilder: (_, _, _) => SizedBox(
+        height: 65.h,
+        width: 130.w,
+        child: Icon(Icons.broken_image_outlined, size: 32.sp, color: AppColors.grey),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +71,7 @@ class ToppingCard extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
-                height: 65.h,
-                width: 130.w,
-              ),
+              child: _buildImage(),
             ),
             Padding(
               padding: EdgeInsets.only(top: 8.h, left: 6.w, right: 6.w),

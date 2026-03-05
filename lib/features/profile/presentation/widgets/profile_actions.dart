@@ -1,6 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/components/custom_button.dart';
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 
 class ProfileActions extends StatelessWidget {

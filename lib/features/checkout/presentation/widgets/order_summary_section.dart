@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+
 import '../../../../core/utils/styles.dart';
-import '../../../cart/data/models/cart_model.dart';
-import '../widgets/order_checkout_details.dart';
+import 'order_checkout_details.dart';
 
-class OrderSummary extends StatelessWidget {
-  final CartModel cart;
+class OrderSummarySection extends StatelessWidget {
+  final double subtotal;
 
-  const OrderSummary({super.key, required this.cart});
+  const OrderSummarySection({super.key, required this.subtotal});
 
   @override
   Widget build(BuildContext context) {
-    final orderSubtotal = _parsePrice(cart.totalPrice);
-    const taxRate = 0.10; // 10% tax
+    const taxRate = 0.10;
     const deliveryFee = 2.99;
-    final taxes = orderSubtotal * taxRate;
-    final total = orderSubtotal + taxes + deliveryFee;
+    final taxes = subtotal * taxRate;
+    final total = subtotal + taxes + deliveryFee;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +23,7 @@ class OrderSummary extends StatelessWidget {
         Gap(15.h),
         OrderCheckoutDetails(
           title: "Order",
-          price: "\$ ${_formatPrice(orderSubtotal)}",
+          price: "\$ ${_formatPrice(subtotal)}",
         ),
         OrderCheckoutDetails(
           title: "Taxes",
@@ -34,7 +33,7 @@ class OrderSummary extends StatelessWidget {
           title: "Delivery fees",
           price: "\$ ${_formatPrice(deliveryFee)}",
         ),
-        Divider(),
+        const Divider(),
         OrderCheckoutDetails(
           title: "Total:",
           price: "\$ ${_formatPrice(total)}",
@@ -48,11 +47,5 @@ class OrderSummary extends StatelessWidget {
     );
   }
 
-  static double _parsePrice(String value) {
-    return double.tryParse(value.replaceAll(RegExp(r'[^\d.]'), '')) ?? 0.0;
-  }
-
-  static String _formatPrice(double value) {
-    return value.toStringAsFixed(2);
-  }
+  static String _formatPrice(double value) => value.toStringAsFixed(2);
 }

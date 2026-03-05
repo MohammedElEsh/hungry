@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../data/models/order_model.dart';
+import '../../../../core/constants/app_colors.dart' show AppColors;
+import '../../domain/entities/order_entity.dart';
+import 'order_status_badge.dart';
 
 /// --- Main Redesigned Order Card ---
 class OrderCard extends StatelessWidget {
-  final OrderModel order;
+  final OrderEntity order;
   final VoidCallback? onTap;
 
   const OrderCard({
@@ -14,9 +15,6 @@ class OrderCard extends StatelessWidget {
     required this.order,
     this.onTap,
   });
-
-  double get _totalAmount =>
-      double.tryParse(order.totalPrice.replaceAll(RegExp(r'[^\d.]'), '')) ?? 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class OrderCard extends StatelessWidget {
                                   color: AppColors.black,
                                 ),
                               ),
-                              _StatusBadge(status: order.status),
+                              OrderStatusBadge(status: order.status),
                             ],
                           ),
                           Gap(4.h),
@@ -114,7 +112,7 @@ class OrderCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "\$${_totalAmount.toStringAsFixed(2)}",
+                          "\$${order.total.toStringAsFixed(2)}",
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w900,
@@ -180,49 +178,6 @@ class OrderCard extends StatelessWidget {
           Gap(4.w),
           Icon(Icons.arrow_forward_ios, size: 10.sp, color: Colors.white),
         ],
-      ),
-    );
-  }
-}
-
-/// --- Custom Status Badge with Dynamic Colors ---
-class _StatusBadge extends StatelessWidget {
-  final String status;
-  const _StatusBadge({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    Color color;
-    switch (status.toLowerCase()) {
-      case 'completed':
-      case 'delivered':
-        color = Colors.green;
-        break;
-      case 'pending':
-      case 'processing':
-        color = Colors.orange;
-        break;
-      case 'cancelled':
-        color = Colors.red;
-        break;
-      default:
-        color = AppColors.primary;
-    }
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Text(
-        status.toUpperCase(),
-        style: TextStyle(
-          color: color,
-          fontSize: 10.sp,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 0.5,
-        ),
       ),
     );
   }

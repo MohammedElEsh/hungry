@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/utils/app_colors.dart';
+import 'package:hungry/core/utils/styles.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/validators.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -37,6 +38,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
       controller: widget.controller,
       cursorColor: AppColors.primary,
       cursorHeight: 20.h,
+      style: AppTextStyles.titleMedium.copyWith(
+        color: AppColors.primary,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w100,
+      ),
       validator:
           widget.validator ??
           (widget.isPassword ? Validators.password : Validators.email),
@@ -65,6 +71,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : null,
         hintText: widget.hintText,
+        hintStyle: AppTextStyles.titleMedium.copyWith(
+          color: AppColors.grey,
+        ),
         errorStyle: TextStyle(color: AppColors.white, fontSize: 12.sp),
         fillColor: AppColors.forth,
         filled: true,

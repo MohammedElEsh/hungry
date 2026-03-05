@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hungry/core/utils/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/styles.dart';
-import '../../../auth/data/models/user_model.dart';
 import '../../../checkout/presentation/widgets/custom_list_tile.dart';
+import '../../domain/entities/profile_entity.dart';
 
 class DebitCard extends StatelessWidget {
-  final UserModel? userModel;
-  const DebitCard({super.key, this.userModel});
+  final ProfileEntity? profile;
+
+  const DebitCard({super.key, this.profile});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,9 @@ class DebitCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: CustomListTile(
         title: "Debit Card",
-        subtitle: userModel?.visa.toString() ?? "**** **** **** 9142",
+        subtitle: (profile?.visa != null && profile!.visa!.isNotEmpty)
+            ? profile!.visa!
+            : "**** **** **** 9142",
         imageAsset: AssetsData.visa,
         value: "Debit",
         groupValue: "Debit",

@@ -1,48 +1,28 @@
 import 'package:dio/dio.dart';
-import 'package:hungry/core/network/api_error.dart';
-import 'package:hungry/core/network/api_exceptions.dart';
-import 'package:hungry/core/utils/pref_helper.dart';
+
+import '../constants/api_endpoints.dart';
+import 'interceptors/auth_interceptor.dart';
+import '../interceptors/logging_interceptor.dart';
 
 class DioClient {
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: 'https://sonic-zdi0.onrender.com/api',
-      headers: {'Content-Type': 'application/json'},
-    ),
-  );
+  late final Dio _dio;
 
-  DioClient() {
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final token = await PrefHelper.getToken();
-          if (token != null && token.isNotEmpty) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
-          return handler.next(options);
-        },
-        onError: (DioException e, handler) async {
-          if (e.response?.statusCode == 401) {
-            await PrefHelper.removeToken();
-          }
-          return handler.next(e);
+  DioClient({required AuthInterceptor authInterceptor, String? baseUrl}) {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl ?? ApiEndpoints.baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
       ),
-    );
-  }
-
-  Future<Response> getRequest(String endpoint) async {
-    try {
-      final response = await _dio.get(endpoint);
-      return response;
-    } on DioException catch (e) {
-      throw ApiExceptions.handleError(e);
-    } catch (e) {
-      throw ApiError(
-        message: "Unexpected error: ${e.toString()}",
-        statusCode: 500,
-      );
-    }
+    )..interceptors.addAll([
+        authInterceptor,
+        LoggingInterceptor(),
+      ]);
   }
 
   Dio get dio => _dio;

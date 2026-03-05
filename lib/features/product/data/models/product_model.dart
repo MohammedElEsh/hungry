@@ -15,14 +15,35 @@ class ProductModel {
     this.price,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-    id: json['id'] as int?,
-    name: json['name'] as String?,
-    description: json['description'] as String?,
-    image: json['image'] as String?,
-    rating: json['rating'] as String?,
-    price: json['price'] as String?,
-  );
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    final idRaw = json['id'] ?? json['product_id'];
+    final id = idRaw is int
+        ? idRaw
+        : idRaw is num
+            ? idRaw.toInt()
+            : idRaw != null
+                ? int.tryParse(idRaw.toString())
+                : null;
+    final priceRaw = json['price'] ?? json['amount'];
+    final price = priceRaw is num
+        ? priceRaw.toString()
+        : priceRaw?.toString();
+    final image = json['image']?.toString() ??
+        json['image_url']?.toString() ??
+        json['imageUrl']?.toString() ??
+        json['photo']?.toString();
+    final name = json['name']?.toString() ??
+        json['title']?.toString() ??
+        json['product_name']?.toString();
+    return ProductModel(
+      id: id,
+      name: name,
+      description: json['description']?.toString(),
+      image: image,
+      rating: json['rating']?.toString(),
+      price: price,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'id': id,

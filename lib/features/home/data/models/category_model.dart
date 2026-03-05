@@ -1,14 +1,27 @@
-/// Category from API (GET /categories)
-class CategoryModel {
-  final int id;
-  final String name;
+import '../../domain/entities/category_entity.dart';
 
-  CategoryModel({required this.id, required this.name});
+class CategoryModel extends CategoryEntity {
+  const CategoryModel({required super.id, required super.name});
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+  static String? _str(dynamic v) {
+    if (v == null) return null;
+    return v is String ? v : v.toString();
+  }
+
+  factory CategoryModel.fromJson(Map<String, dynamic>? json) {
+    if (json == null || json.isEmpty) {
+      return const CategoryModel(id: '', name: '');
+    }
+    final name = _str(json['name']) ??
+        _str(json['title']) ??
+        _str(json['category_name']) ??
+        _str(json['categoryName']) ??
+        '';
     return CategoryModel(
-      id: (json['id'] as num).toInt(),
-      name: (json['name'] ?? '').toString(),
+      id: _str(json['id']) ?? _str(json['category_id']) ?? '',
+      name: name,
     );
   }
+
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }

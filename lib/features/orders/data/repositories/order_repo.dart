@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/network/api_exceptions.dart';
 import '../../../../core/network/api_service.dart';
-import '../../../cart/data/models/cart_model.dart';
+import '../../../cart/domain/entities/cart_item_entity.dart';
 import '../models/order_model.dart';
 
 class OrderRepo {
@@ -21,7 +21,6 @@ class OrderRepo {
         .toList();
   }
 
-  /// GET /orders - Get user orders history
   Future<List<OrderModel>> getOrders() async {
     try {
       final response = await _apiService.get('/orders');
@@ -33,7 +32,6 @@ class OrderRepo {
     }
   }
 
-  /// GET /orders/:id - Get order details
   Future<Map<String, dynamic>> getOrderById(int id) async {
     try {
       final response = await _apiService.get('/orders/$id');
@@ -48,19 +46,17 @@ class OrderRepo {
     }
   }
 
-  /// POST /orders - Create order from cart items
-  Future<void> createOrder(List<CartDisplayItem> cartItems) async {
+  Future<void> createOrder(List<CartItemEntity> cartItems) async {
     if (cartItems.isEmpty) {
       throw ApiError(message: 'Cart is empty');
     }
     try {
-      final items = cartItems.map((item) => {
-        'product_id': item.productId,
-        'quantity': item.quantity,
-        'spicy': item.spicy,
-        'toppings': item.toppings.map((t) => t.id).toList(),
-        'side_options': item.sideOptions.map((s) => s.id).toList(),
-      }).toList();
+      final items = cartItems
+          .map((item) => {
+                'product_id': int.tryParse(item.productId) ?? 0,
+                'quantity': item.quantity,
+              })
+          .toList();
       await _apiService.post('/orders', {'items': items});
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);

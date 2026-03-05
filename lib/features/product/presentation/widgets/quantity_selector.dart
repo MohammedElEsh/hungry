@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/components/custom_button.dart';
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 
 class QuantitySelector extends StatelessWidget {
@@ -36,6 +36,7 @@ class QuantitySelector extends StatelessWidget {
                 borderRadius: 12,
                 backgroundColor: AppColors.primary,
                 textColor: AppColors.white,
+                iconSize: 12.sp,
               ),
               Gap(15.w),
               Text(
@@ -51,6 +52,7 @@ class QuantitySelector extends StatelessWidget {
                 borderRadius: 12,
                 backgroundColor: AppColors.primary,
                 textColor: AppColors.white,
+                iconSize: 12.sp,
               ),
             ],
           ),

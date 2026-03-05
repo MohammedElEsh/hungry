@@ -15,11 +15,17 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
+    final idRaw = json['id'];
+    final id = idRaw is int
+        ? idRaw
+        : idRaw is num
+            ? idRaw.toInt()
+            : int.tryParse(idRaw?.toString() ?? '') ?? 0;
     return OrderModel(
-      id: (json['id'] as num).toInt(),
-      status: (json['status'] ?? '').toString(),
-      totalPrice: (json['total_price'] ?? '0').toString(),
-      createdAt: (json['created_at'] ?? '').toString(),
+      id: id,
+      status: json['status']?.toString() ?? '',
+      totalPrice: json['total_price']?.toString() ?? '0',
+      createdAt: json['created_at']?.toString() ?? '',
       productImage: json['product_image']?.toString(),
     );
   }
