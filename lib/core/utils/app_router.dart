@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hungry/core/di/injection.dart';
+import 'package:hungry/core/analytics/analytics_service.dart';
+import 'package:hungry/core/router/analytics_route_observer.dart';
+import 'package:hungry/core/router/auth_refresh_notifier.dart';
+import 'package:hungry/features/auth/domain/auth_state_source.dart';
 import 'package:hungry/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:hungry/features/auth/presentation/screens/login_screen.dart';
 import 'package:hungry/features/cart/presentation/cubit/cart_cubit.dart';
@@ -17,6 +21,9 @@ import '../../features/home/presentation/cubit/home_cubit.dart';
 import '../../features/orders/presentation/cubit/orders_cubit.dart';
 import '../components/custom_bottom_nav_bar.dart';
 
+/// App routing and deep link conventions:
+/// - Product: [kProductView]?id=123 or extra: productId (int/String).
+/// - Custom scheme (e.g. hungry://product/123) can be mapped to the above in platform config.
 abstract class AppRouter {
   static String? _productIdFromExtra(dynamic extra) {
     if (extra == null) return null;
@@ -36,8 +43,31 @@ abstract class AppRouter {
   static const kCartView = '/cartView';
   static const kProfileView = '/profileView';
 
+  static const _publicPaths = {kSplashView, kHomeView, kLoginView, kSignupView};
+
+  static String? _redirect(BuildContext context, GoRouterState state) {
+    final path = state.uri.path;
+    final auth = sl<AuthStateSource>();
+    final isLoggedInOrGuest = auth.isLoggedIn || auth.isGuest;
+
+    if (_publicPaths.contains(path)) {
+      if ((path == kLoginView || path == kSignupView) && isLoggedInOrGuest) {
+        return kHomeView;
+      }
+      return null;
+    }
+
+    if (!isLoggedInOrGuest) {
+      return kLoginView;
+    }
+    return null;
+  }
+
   static final GoRouter router = GoRouter(
     initialLocation: kSplashView,
+    refreshListenable: sl<AuthRefreshNotifier>(),
+    redirect: _redirect,
+    observers: [AnalyticsRouteObserver(sl<AnalyticsService>())],
     routes: [
       GoRoute(
         path: kSplashView,

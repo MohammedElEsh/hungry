@@ -4,7 +4,15 @@ import 'package:get_it/get_it.dart';
 import '../network/dio_client.dart';
 import '../network/network_info.dart';
 import '../network/token_provider.dart';
+import '../analytics/analytics_service.dart';
+import '../analytics/analytics_service_impl.dart';
+import '../logger/app_logger_interface.dart';
+import '../logger/app_logger_impl.dart';
 import '../network/interceptors/auth_interceptor.dart';
+import '../storage/secure_storage.dart';
+import '../storage/secure_storage_impl.dart';
+import '../router/auth_refresh_notifier.dart';
+import '../storage/token_storage.dart';
 import '../../features/auth/data/datasources/auth_remote_datasource.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -46,6 +54,7 @@ import '../../features/orders/domain/repositories/order_repository.dart';
 import '../../features/orders/domain/usecases/get_orders_usecase.dart';
 import '../../features/orders/presentation/cubit/orders_cubit.dart';
 import '../../features/auth/data/repositories/auth_repo.dart';
+import '../../features/auth/domain/auth_state_source.dart';
 import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/repositories/profile_repository.dart';
 import '../../features/profile/domain/usecases/get_profile_usecase.dart';
@@ -55,6 +64,9 @@ import '../../features/profile/presentation/cubit/profile_cubit.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  sl.registerLazySingleton<AppLoggerInterface>(() => AppLoggerImpl());
+  sl.registerLazySingleton<AnalyticsService>(() => AnalyticsServiceImpl());
+  sl.registerLazySingleton<AuthRefreshNotifier>(() => AuthRefreshNotifier());
   sl.registerLazySingleton<TokenProvider>(() => TokenProviderImpl());
   sl.registerLazySingleton<AuthInterceptor>(
     () => AuthInterceptor(sl<TokenProvider>()),
@@ -67,15 +79,28 @@ Future<void> init() async {
     () => NetworkInfoImpl(sl<Connectivity>()),
   );
 
+  sl.registerLazySingleton<SecureStorage>(() => SecureStorageImpl());
+  sl.registerLazySingleton<TokenStorage>(
+    () => TokenStorageImpl(sl<SecureStorage>()),
+  );
+
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(sl<DioClient>().dio),
   );
-  sl.registerLazySingleton<AuthRepo>(() => AuthRepo());
+  sl.registerLazySingleton<AuthRepo>(
+    () => AuthRepo(
+      sl<TokenStorage>(),
+      sl<TokenProvider>(),
+      sl<AuthRefreshNotifier>(),
+    ),
+  );
+  sl.registerLazySingleton<AuthStateSource>(() => sl<AuthRepo>());
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
       sl<AuthRemoteDataSource>(),
       sl<NetworkInfo>(),
       sl<TokenProvider>(),
+      sl<TokenStorage>(),
       sl<AuthRepo>(),
     ),
   );
@@ -89,6 +114,8 @@ Future<void> init() async {
         sl<LogoutUseCase>(),
         sl<GetCachedUserUseCase>(),
         sl<RegisterUseCase>(),
+        sl<AuthRefreshNotifier>(),
+        sl<AnalyticsService>(),
       ));
 
   sl.registerLazySingleton<CartRemoteDataSource>(

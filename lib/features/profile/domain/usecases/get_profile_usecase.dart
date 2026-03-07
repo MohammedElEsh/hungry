@@ -1,6 +1,7 @@
+import 'package:hungry/core/domain/result.dart';
+
 import '../entities/profile_entity.dart';
 import '../repositories/profile_repository.dart';
-import '../result.dart';
 
 class GetProfileUseCase {
   final ProfileRepository _repository;

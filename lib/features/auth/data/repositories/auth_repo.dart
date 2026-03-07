@@ -1,31 +1,66 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/network/api_exceptions.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../../core/network/token_provider.dart';
+import '../../../../core/router/auth_refresh_notifier.dart';
+import '../../../../core/storage/token_storage.dart';
 import '../../../../core/utils/pref_helper.dart';
+import '../../domain/auth_state_source.dart';
+import '../../domain/entities/user_entity.dart';
 import '../models/user_model.dart';
 
-class AuthRepo {
-  // Singleton pattern
-  static final AuthRepo _instance = AuthRepo._internal();
-  factory AuthRepo() => _instance;
-  AuthRepo._internal();
+class AuthRepo implements AuthStateSource {
+  AuthRepo(this._tokenStorage, this._tokenProvider, this._authRefreshNotifier);
 
+  final TokenStorage _tokenStorage;
+  final TokenProvider _tokenProvider;
+  final AuthRefreshNotifier _authRefreshNotifier;
   final ApiService apiService = ApiService();
   bool _isGuest = false;
-  UserModel? currentUser;
+  UserModel? _currentUser;
 
-  /// مزامنة المستخدم بعد تسجيل الدخول عبر AuthCubit (ليعمل البروفايل والهوم بشكل صحيح)
-  void setUserFromLogin(UserModel user) {
-    currentUser = user;
+  @override
+  UserEntity? get currentUser =>
+      _currentUser != null ? _userModelToEntity(_currentUser!) : null;
+
+  /// For profile and other code that need the full model (e.g. image URL).
+  UserModel? get currentUserModel => _currentUser;
+
+  @override
+  void setUserFromLogin(UserEntity user) {
+    _currentUser = _userEntityToModel(user);
     _isGuest = false;
   }
+
+  void _setUserFromLoginModel(UserModel user) {
+    _currentUser = user;
+    _isGuest = false;
+  }
+
+  static UserEntity _userModelToEntity(UserModel m) => UserEntity(
+        id: m.id,
+        email: m.email,
+        name: m.name,
+        token: m.token,
+        address: m.address,
+        visa: m.visa,
+        image: m.image,
+      );
+
+  static UserModel _userEntityToModel(UserEntity e) => UserModel(
+        id: e.id,
+        email: e.email,
+        name: e.name,
+        token: e.token,
+        address: e.address,
+        visa: e.visa,
+        image: e.image,
+      );
 
   /// login — POST {{base_url}}/login with JSON { email, password }
   /// Response: { data: { token, id?, email?, name?, ... } } or { token, user: {...} }
@@ -69,11 +104,10 @@ class AuthRepo {
         visa: user.visa,
         image: user.image,
       );
-      await PrefHelper.saveToken(token);
-      GetIt.instance<TokenProvider>().setToken(token);
+      await _tokenStorage.saveToken(token);
+      _tokenProvider.setToken(token);
       await PrefHelper.setGuestMode(false);
-      _isGuest = false;
-      currentUser = userWithToken;
+      _setUserFromLoginModel(userWithToken);
       return userWithToken;
     } on DioException catch (e) {
       final err = ApiExceptions.handleError(e);
@@ -120,11 +154,10 @@ class AuthRepo {
         visa: user.visa,
         image: user.image,
       );
-      await PrefHelper.saveToken(token);
-      GetIt.instance<TokenProvider>().setToken(token);
+      await _tokenStorage.saveToken(token);
+      _tokenProvider.setToken(token);
       await PrefHelper.setGuestMode(false);
-      _isGuest = false;
-      currentUser = userWithToken;
+      _setUserFromLoginModel(userWithToken);
       return userWithToken;
     } on DioException catch (e) {
       final err = ApiExceptions.handleError(e);
@@ -139,15 +172,15 @@ class AuthRepo {
   /// API response: { "code": 200, "message": "PROFILE DATA", "data": { "name", "email", "image", "address", "Visa" } }
   Future<UserModel?> getProfileData() async {
     try {
-      final token = await PrefHelper.getToken();
+      final token = await _tokenStorage.getToken();
       if (token == null || token.isEmpty) return null;
 
       final response = await apiService.get(ApiEndpoints.profile);
-      if (response == null) return currentUser;
+      if (response == null) return _currentUser;
       final Map<String, dynamic>? map = response is Map
           ? Map<String, dynamic>.from(response)
           : null;
-      if (map == null || map.isEmpty) return currentUser;
+      if (map == null || map.isEmpty) return _currentUser;
 
       // Extract profile object from data or user key (API: { code, message, data: { name, email, image, address, Visa } })
       final data = map['data'];
@@ -161,21 +194,21 @@ class AuthRepo {
       } else {
         userMap = map;
       }
-      if (userMap.isEmpty) return currentUser;
+      if (userMap.isEmpty) return _currentUser;
 
       final user = UserModel.fromJson(userMap);
-      final id = user.id.isNotEmpty ? user.id : (currentUser?.id ?? user.email);
-      final preservedToken = currentUser?.token ?? token;
-      currentUser = UserModel(
+      final id = user.id.isNotEmpty ? user.id : (_currentUser?.id ?? user.email);
+      final preservedToken = _currentUser?.token ?? token;
+      _currentUser = UserModel(
         id: id,
         email: user.email.isNotEmpty ? user.email : (currentUser?.email ?? ''),
-        name: user.name ?? currentUser?.name,
+        name: user.name ?? _currentUser?.name,
         token: preservedToken,
-        address: user.address ?? currentUser?.address,
-        visa: user.visa ?? currentUser?.visa,
-        image: user.image ?? currentUser?.image,
+        address: user.address ?? _currentUser?.address,
+        visa: user.visa ?? _currentUser?.visa,
+        image: user.image ?? _currentUser?.image,
       );
-      return currentUser!;
+      return _currentUser!;
     } on DioException catch (e) {
       final err = ApiExceptions.handleError(e);
       throw ApiError(message: err.message);
@@ -217,7 +250,7 @@ class AuthRepo {
           ? Map<String, dynamic>.from(data)
           : Map<String, dynamic>.from(response);
       final updatedUser = UserModel.fromJson(userMap);
-      currentUser = updatedUser;
+      _currentUser = updatedUser;
       return updatedUser;
     } on DioException catch (e) {
       final err = ApiExceptions.handleError(e);
@@ -233,23 +266,23 @@ class AuthRepo {
     try {
       // If user is guest, just clear local state
       if (_isGuest) {
-        await PrefHelper.removeToken();
-        GetIt.instance<TokenProvider>().clearToken();
+        await _tokenStorage.deleteToken();
+        _tokenProvider.clearToken();
         await PrefHelper.setGuestMode(false);
 
         _isGuest = false;
-        currentUser = null;
+        _currentUser = null;
         return;
       }
 
       // If user is logged in, call API then clear state
       await apiService.post(ApiEndpoints.logout, {});
-      await PrefHelper.removeToken();
-      GetIt.instance<TokenProvider>().clearToken();
+      await _tokenStorage.deleteToken();
+      _tokenProvider.clearToken();
       await PrefHelper.setGuestMode(false);
 
       _isGuest = false;
-      currentUser = null;
+      _currentUser = null;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     } catch (e) {
@@ -264,12 +297,12 @@ class AuthRepo {
       final isGuestMode = await PrefHelper.isGuestMode();
       if (isGuestMode) {
         _isGuest = true;
-        currentUser = null;
+        _currentUser = null;
         return null;
       }
 
       // Try to get token
-      final token = await PrefHelper.getToken();
+      final token = await _tokenStorage.getToken();
 
       if (token == null) {
         return null;
@@ -279,7 +312,7 @@ class AuthRepo {
       final user = await getProfileData();
 
       if (user != null) {
-        currentUser = user;
+        _currentUser = user;
         _isGuest = false;
       }
 
@@ -291,15 +324,17 @@ class AuthRepo {
 
   /// CONTINUE AS GUEST
   Future<void> continueAsGuest() async {
-    await PrefHelper.removeToken();
+    await _tokenStorage.deleteToken();
     await PrefHelper.setGuestMode(true);
 
     _isGuest = true;
-    currentUser = null;
+    _currentUser = null;
+    _authRefreshNotifier.notifyAuthChanged();
   }
 
-  // UserModel? get currentUserModel => currentUser;
-  // bool get isGuestUser => _isGuest && currentUser == null;
-  bool get isLoggedIn => !_isGuest && currentUser != null;
+  @override
+  bool get isLoggedIn => !_isGuest && _currentUser != null;
+
+  @override
   bool get isGuest => _isGuest;
 }

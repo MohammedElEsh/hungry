@@ -3,23 +3,26 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../../core/network/token_provider.dart';
+import '../../../../core/storage/token_storage.dart';
 import '../../../../core/utils/pref_helper.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import 'auth_repo.dart';
 
-/// Auth repository implementation - remote only; token persisted via PrefHelper.
+/// Auth repository implementation - remote only; token persisted via [TokenStorage].
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remote;
   final NetworkInfo _networkInfo;
   final TokenProvider _tokenProvider;
+  final TokenStorage _tokenStorage;
   final AuthRepo _authRepo;
 
   AuthRepositoryImpl(
     this._remote,
     this._networkInfo,
     this._tokenProvider,
+    this._tokenStorage,
     this._authRepo,
   );
 
@@ -31,7 +34,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final user = await _remote.login(email, password);
       if (user.token != null && user.token!.isNotEmpty) {
-        await PrefHelper.saveToken(user.token!);
+        await _tokenStorage.saveToken(user.token!);
         await PrefHelper.setGuestMode(false);
         _tokenProvider.setToken(user.token!);
         _authRepo.setUserFromLogin(user);
@@ -53,7 +56,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final user = await _remote.register(email, password, name);
       if (user.token != null && user.token!.isNotEmpty) {
-        await PrefHelper.saveToken(user.token!);
+        await _tokenStorage.saveToken(user.token!);
         await PrefHelper.setGuestMode(false);
         _tokenProvider.setToken(user.token!);
         _authRepo.setUserFromLogin(user);
@@ -70,14 +73,14 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Result<void>> logout() async {
-    await PrefHelper.removeToken();
+    await _tokenStorage.deleteToken();
     _tokenProvider.clearToken();
     return const Success(null);
   }
 
   @override
   Future<Result<UserEntity?>> getCachedUser() async {
-    final token = await PrefHelper.getToken();
+    final token = await _tokenStorage.getToken();
     if (token == null || token.isEmpty) return const Success(null);
     _tokenProvider.setToken(token);
     return Success(UserEntity(

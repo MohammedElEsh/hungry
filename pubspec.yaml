@@ -33,22 +33,41 @@ dependencies:
   # ----------------------------
   # State Management
   # ----------------------------
-  flutter_bloc: ^8.1.6
-  equatable: ^2.0.7
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.8
 
   # ----------------------------
   # Dependency Injection
   # ----------------------------
-  get_it: ^8.0.2
+  get_it: ^9.2.1
 
   # ----------------------------
   # Networking & Local Storage
   # ----------------------------
   dio: ^5.9.2
   shared_preferences: ^2.5.4
-  connectivity_plus: ^6.1.1
+  flutter_secure_storage: ^10.0.0
+  connectivity_plus: ^7.0.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+
+  # ----------------------------
+  # Localization
+  # ----------------------------
+  flutter_localizations:
+    sdk: flutter
+  easy_localization: ^3.0.8
+
+  # ----------------------------
+  # Crash reporting & Analytics
+  # ----------------------------
+  sentry_flutter: ^9.14.0
+
+  # ----------------------------
+  # Social login (backend must exchange token for app token)
+  # ----------------------------
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
 
   # ----------------------------
   # Media & Images
@@ -67,9 +86,9 @@ dev_dependencies:
 
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
-  build_runner: ^2.4.14
+  build_runner: ^2.12.2
   mocktail: ^1.0.4
-  bloc_test: ^9.1.6
+  bloc_test: ^10.0.0
 
 # --------------------------------------------------
 # App Icons
@@ -87,3 +106,4 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/translations/

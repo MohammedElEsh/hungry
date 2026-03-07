@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hungry/core/logger/app_logger.dart';
 import 'package:hungry/core/network/api_error.dart';
 
 class ApiExceptions {
@@ -19,10 +20,7 @@ class ApiExceptions {
     }
 
     if (kDebugMode) {
-      print(statusCode);
-    }
-    if (kDebugMode) {
-      print(data);
+      AppLogger.d('API error statusCode: $statusCode', data);
     }
 
     switch (error.type) {

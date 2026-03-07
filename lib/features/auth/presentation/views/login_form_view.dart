@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -32,17 +33,18 @@ class LoginFormView extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.primary,
-        body: Stack(
+        body: SafeArea(
+          child: Stack(
           children: [
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 60.h),
+                padding: EdgeInsets.only(top: 20.h),
                 child: Column(
                   children: [
-                    Text("Log in", style: AppTextStyles.displayLarge),
+                    Text('login'.tr(), style: AppTextStyles.displayLarge),
                     Text(
-                      "please sign in to your existing account",
+                      'login_subtitle'.tr(),
                       style: AppTextStyles.titleMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -69,6 +71,7 @@ class LoginFormView extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

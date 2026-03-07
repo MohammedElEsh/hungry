@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../core/di/injection.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_router.dart';
@@ -26,7 +27,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final AuthRepo _authRepo = AuthRepo();
+  AuthRepo get _authRepo => sl<AuthRepo>();
   final OrderRepo _orderRepo = OrderRepo();
   UserModel? _profile;
   bool _isLoading = true;

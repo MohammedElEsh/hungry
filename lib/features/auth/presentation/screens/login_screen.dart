@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/injection.dart';
 import '../../../../core/utils/app_router.dart';
+import '../../data/repositories/auth_repo.dart';
 import '../cubit/auth_cubit.dart';
 import '../listeners/auth_listener.dart';
 import '../views/login_view_factory.dart';
@@ -22,8 +25,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    _emailController.text = 'md36@gmail.com';
-    _passwordController.text = '123456789';
+    if (kDebugMode) {
+      _emailController.text = 'md36@gmail.com';
+      _passwordController.text = '123456789';
+    }
     super.initState();
   }
   
@@ -56,7 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
             emailController: _emailController,
             passwordController: _passwordController,
             onSubmit: () => _onSubmit(context),
-            onGuestMode: () => context.go(AppRouter.kHomeView),
+            onGuestMode: () async {
+              await sl<AuthRepo>().continueAsGuest();
+              if (context.mounted) context.go(AppRouter.kHomeView);
+            },
           );
         },
       ),

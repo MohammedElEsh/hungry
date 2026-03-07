@@ -1,23 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Non-sensitive app preferences (guest mode, locale, theme, etc.).
+/// For auth token use [TokenStorage] from DI.
 class PrefHelper {
-  static const String tokenKey = 'auth_token';
   static const String guestModeKey = 'guest_mode';
-
-  static Future<void> saveToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(tokenKey, token);
-  }
-
-  static Future<String?> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(tokenKey);
-  }
-
-  static Future<void> removeToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(tokenKey);
-  }
+  static const String localeKey = 'locale';
 
   static Future<void> setGuestMode(bool isGuest) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -27,5 +14,15 @@ class PrefHelper {
   static Future<bool> isGuestMode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool(guestModeKey) ?? false;
+  }
+
+  static Future<void> setLocale(String languageCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(localeKey, languageCode);
+  }
+
+  static Future<String?> getLocale() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(localeKey);
   }
 }

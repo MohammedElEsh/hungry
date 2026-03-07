@@ -1,5 +1,6 @@
+import 'package:hungry/core/domain/result.dart';
+
 import '../repositories/profile_repository.dart';
-import '../result.dart';
 
 class ProfileLogoutUseCase {
   final ProfileRepository _repository;

@@ -1,0 +1,19 @@
+{
+  "app_name": "هنغري",
+  "login": "تسجيل الدخول",
+  "login_subtitle": "يرجى تسجيل الدخول إلى حسابك",
+  "signup": "إنشاء حساب",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "confirm_password": "تأكيد كلمة المرور",
+  "name": "الاسم",
+  "continue_as_guest": "متابعة كزائر",
+  "home": "الرئيسية",
+  "cart": "السلة",
+  "profile": "الملف الشخصي",
+  "orders": "الطلبات",
+  "checkout": "الدفع",
+  "add_to_cart": "أضف إلى السلة",
+  "error_network": "خطأ في الشبكة",
+  "error_required": "هذا الحقل مطلوب"
+}

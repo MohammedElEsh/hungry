@@ -1,0 +1,19 @@
+{
+  "app_name": "Hungry",
+  "login": "Log in",
+  "login_subtitle": "please sign in to your existing account",
+  "signup": "Sign up",
+  "email": "Email",
+  "password": "Password",
+  "confirm_password": "Confirm password",
+  "name": "Name",
+  "continue_as_guest": "Continue as Guest",
+  "home": "Home",
+  "cart": "Cart",
+  "profile": "Profile",
+  "orders": "Orders",
+  "checkout": "Checkout",
+  "add_to_cart": "Add to Cart",
+  "error_network": "Network error",
+  "error_required": "This field is required"
+}

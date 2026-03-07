@@ -2,10 +2,10 @@ import 'dart:io';
 
 import '../../../../features/auth/data/models/user_model.dart';
 import '../../../../features/auth/data/repositories/auth_repo.dart';
+import '../../../../core/domain/result.dart';
+import '../../../../core/error/failures.dart';
 import '../../domain/entities/profile_entity.dart';
-import '../../domain/failures.dart';
 import '../../domain/repositories/profile_repository.dart';
-import '../../domain/result.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final AuthRepo _authRepo;
@@ -20,12 +20,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
       try {
         user = await _authRepo.getProfileData();
       } catch (_) {
-        user = _authRepo.currentUser;
+        user = _authRepo.currentUserModel;
       }
       if (user == null) return Success(null);
       return Success(_toEntity(user));
     } catch (e) {
-      final fallback = _authRepo.currentUser;
+      final fallback = _authRepo.currentUserModel;
       if (fallback != null) return Success(_toEntity(fallback));
       return FailureResult(ServerFailure('Failed to load profile'));
     }

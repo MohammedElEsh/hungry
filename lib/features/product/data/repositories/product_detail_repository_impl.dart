@@ -1,9 +1,9 @@
+import '../../../../core/domain/result.dart';
+import '../../../../core/error/failures.dart';
 import '../../domain/entities/product_detail_entity.dart';
 import '../../domain/entities/side_option_entity.dart';
 import '../../domain/entities/topping_entity.dart';
-import '../../domain/failures.dart';
 import '../../domain/repositories/product_detail_repository.dart';
-import '../../domain/result.dart';
 import '../datasources/product_remote_datasource.dart';
 import '../models/product_model.dart';
 import '../models/side_options_model.dart';

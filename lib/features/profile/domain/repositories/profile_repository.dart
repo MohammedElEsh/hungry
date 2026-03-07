@@ -1,5 +1,6 @@
+import 'package:hungry/core/domain/result.dart';
+
 import '../entities/profile_entity.dart';
-import '../result.dart';
 
 abstract class ProfileRepository {
   Future<Result<ProfileEntity?>> getProfile();

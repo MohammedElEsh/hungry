@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hungry/core/di/injection.dart';
 import 'package:hungry/core/utils/app_router.dart';
 import 'package:hungry/core/utils/assets.dart';
 import 'package:hungry/core/utils/styles.dart';
@@ -24,7 +25,7 @@ class _SplashViewState extends State<SplashView> {
   bool animationTriggered = false;
   bool _navigationTriggered = false;
 
-  final AuthRepo _authRepo = AuthRepo();
+  AuthRepo get _authRepo => sl<AuthRepo>();
 
   Future<void> _checkAutoLogin() async {
     if (_navigationTriggered) return;
@@ -59,14 +60,15 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          if (!animationTriggered) {
-            startOutAnimation();
-          }
-        },
-        child: Stack(
+      body: SafeArea(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            if (!animationTriggered) {
+              startOutAnimation();
+            }
+          },
+          child: Stack(
           children: [
             if (!playOutAnimation)
               SlideInImage(imagePath: AssetsData.splash, targetTop: 540.h)
@@ -89,6 +91,7 @@ class _SplashViewState extends State<SplashView> {
                     ),
             ),
           ],
+        ),
         ),
       ),
     );

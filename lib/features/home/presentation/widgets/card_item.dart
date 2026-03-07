@@ -52,8 +52,7 @@ class _CardItemContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Gap(10.h),
-
+          Gap(8.h),
           Stack(
             children: [
               ClipRRect(
@@ -148,27 +147,35 @@ class _CardItemContent extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.all(12.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.title,
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: AppColors.primary,
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.title,
+                    style: AppTextStyles.titleMedium.copyWith(
+                      color: AppColors.primary,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Gap(6.h),
-                Text(
-                  widget.price,
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: AppColors.secondary,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 15.sp,
+                  Gap(4.h),
+                  Text(
+                    widget.price,
+                    style: AppTextStyles.titleMedium.copyWith(
+                      color: AppColors.secondary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 15.sp,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

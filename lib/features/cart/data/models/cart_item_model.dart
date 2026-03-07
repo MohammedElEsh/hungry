@@ -123,7 +123,9 @@ class CartItemModel extends CartItemEntity {
         ids.add(e.toInt());
       } else if (e is Map) {
         final id = e['id'];
+        // ignore: curly_braces_in_flow_control_structures
         if (id is int) ids.add(id);
+        // ignore: curly_braces_in_flow_control_structures
         else if (id is num) ids.add(id.toInt());
         else if (id != null) {
           final n = int.tryParse(id.toString());
