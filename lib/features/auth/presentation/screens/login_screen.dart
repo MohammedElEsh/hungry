@@ -65,6 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
               await sl<AuthRepo>().continueAsGuest();
               if (context.mounted) context.go(AppRouter.kHomeView);
             },
+            onGoogleSignIn: () => context.read<AuthCubit>().loginWithGoogle(),
+            onAppleSignIn: () => context.read<AuthCubit>().loginWithApple(),
           );
         },
       ),

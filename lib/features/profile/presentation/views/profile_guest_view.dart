@@ -32,10 +32,11 @@ class ProfileGuestView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Gap(60.h),
             const GuestProfileImage(),
             Gap(50.h),
             const GuestProfileFields(),
-            Gap(60.h),
+            Gap(40.h),
             GuestProfileActions(
               onSignUp: onSignUp,
               onLogOut: onLogOut,

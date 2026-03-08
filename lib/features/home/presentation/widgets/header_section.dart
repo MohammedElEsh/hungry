@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,7 +91,7 @@ class HeaderSection extends StatelessWidget {
             ),
             Gap(2.h),
             Text(
-              "Hello, ${userName ?? 'Username'}",
+              "${'hello'.tr()}, ${userName ?? 'username'.tr()}",
               style: AppTextStyles.titleMedium.copyWith(
                 color: AppColors.primary,
               ),

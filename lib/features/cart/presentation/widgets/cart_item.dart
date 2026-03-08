@@ -353,7 +353,7 @@ class CartItemWidget extends StatelessWidget {
 
   Widget _buildDeleteBackground() {
     return Container(
-      alignment: Alignment.centerRight,
+      alignment: AlignmentDirectional.centerEnd,
       padding: EdgeInsets.only(right: 25.w),
       margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
       decoration: BoxDecoration(

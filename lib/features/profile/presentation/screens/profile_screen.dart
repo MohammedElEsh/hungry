@@ -54,6 +54,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (mounted) setState(() => _pickedImage = null);
   }
 
+  Future<void> _onDeleteAccount() async {
+    await ProfileHandlers.deleteAccount(
+      context,
+      cubit: context.read<ProfileCubit>(),
+    );
+  }
+
   Future<void> _onLogOut({required bool isGuest}) async {
     await ProfileHandlers.logout(
       context,
@@ -93,6 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onLogOut: () => _onLogOut(isGuest: false),
               onGuestLogOut: () => _onLogOut(isGuest: true),
               onSignUp: () => context.go(AppRouter.kSignupView),
+              onDeleteAccount: _onDeleteAccount,
             );
           },
         ),

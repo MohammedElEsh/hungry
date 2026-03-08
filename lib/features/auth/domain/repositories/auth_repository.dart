@@ -12,4 +12,10 @@ abstract class AuthRepository {
   );
   Future<Result<void>> logout();
   Future<Result<UserEntity?>> getCachedUser();
+
+  Future<Result<UserEntity>> loginWithGoogle(String idToken);
+  Future<Result<UserEntity>> loginWithApple(String idToken);
+
+  Future<Result<void>> requestPasswordResetOtp(String email);
+  Future<Result<void>> resetPasswordWithOtp(String email, String otp, String newPassword);
 }

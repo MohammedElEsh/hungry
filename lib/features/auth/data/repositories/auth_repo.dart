@@ -8,18 +8,24 @@ import '../../../../core/network/api_exceptions.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../../core/network/token_provider.dart';
 import '../../../../core/router/auth_refresh_notifier.dart';
+import '../../../../core/storage/app_preferences.dart';
 import '../../../../core/storage/token_storage.dart';
-import '../../../../core/utils/pref_helper.dart';
 import '../../domain/auth_state_source.dart';
 import '../../domain/entities/user_entity.dart';
 import '../models/user_model.dart';
 
 class AuthRepo implements AuthStateSource {
-  AuthRepo(this._tokenStorage, this._tokenProvider, this._authRefreshNotifier);
+  AuthRepo(
+    this._tokenStorage,
+    this._tokenProvider,
+    this._authRefreshNotifier,
+    this._appPreferences,
+  );
 
   final TokenStorage _tokenStorage;
   final TokenProvider _tokenProvider;
   final AuthRefreshNotifier _authRefreshNotifier;
+  final AppPreferences _appPreferences;
   final ApiService apiService = ApiService();
   bool _isGuest = false;
   UserModel? _currentUser;
@@ -106,7 +112,7 @@ class AuthRepo implements AuthStateSource {
       );
       await _tokenStorage.saveToken(token);
       _tokenProvider.setToken(token);
-      await PrefHelper.setGuestMode(false);
+      await _appPreferences.setGuestMode(false);
       _setUserFromLoginModel(userWithToken);
       return userWithToken;
     } on DioException catch (e) {
@@ -156,7 +162,7 @@ class AuthRepo implements AuthStateSource {
       );
       await _tokenStorage.saveToken(token);
       _tokenProvider.setToken(token);
-      await PrefHelper.setGuestMode(false);
+      await _appPreferences.setGuestMode(false);
       _setUserFromLoginModel(userWithToken);
       return userWithToken;
     } on DioException catch (e) {
@@ -261,6 +267,43 @@ class AuthRepo implements AuthStateSource {
     }
   }
 
+  /// delete account — DELETE /profile/delete (bearer), optional { password }
+  Future<void> deleteAccount([String? password]) async {
+    try {
+      await apiService.delete(ApiEndpoints.deleteAccount);
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      if (statusCode == 404 || statusCode == 501) {
+        throw ApiError(message: 'delete_account_not_available');
+      }
+      final err = ApiExceptions.handleError(e);
+      throw ApiError(message: err.message);
+    } catch (e) {
+      if (e is ApiError) rethrow;
+      throw ApiError(message: e.toString());
+    }
+  }
+
+  /// change password — POST /change-password (bearer) { current_password, new_password }
+  Future<void> changePassword(String currentPassword, String newPassword) async {
+    try {
+      await apiService.post(ApiEndpoints.changePassword, {
+        'current_password': currentPassword,
+        'new_password': newPassword,
+      });
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      if (statusCode == 404 || statusCode == 501) {
+        throw ApiError(message: 'change_password_not_available');
+      }
+      final err = ApiExceptions.handleError(e);
+      throw ApiError(message: err.message);
+    } catch (e) {
+      if (e is ApiError) rethrow;
+      throw ApiError(message: e.toString());
+    }
+  }
+
   /// logout
   Future<void> logout() async {
     try {
@@ -268,21 +311,23 @@ class AuthRepo implements AuthStateSource {
       if (_isGuest) {
         await _tokenStorage.deleteToken();
         _tokenProvider.clearToken();
-        await PrefHelper.setGuestMode(false);
-
-        _isGuest = false;
-        _currentUser = null;
-        return;
-      }
-
-      // If user is logged in, call API then clear state
-      await apiService.post(ApiEndpoints.logout, {});
-      await _tokenStorage.deleteToken();
-      _tokenProvider.clearToken();
-      await PrefHelper.setGuestMode(false);
+        await _appPreferences.setGuestMode(false);
 
       _isGuest = false;
       _currentUser = null;
+      _authRefreshNotifier.notifyAuthChanged();
+      return;
+    }
+
+    // If user is logged in, call API then clear state
+    await apiService.post(ApiEndpoints.logout, {});
+      await _tokenStorage.deleteToken();
+      _tokenProvider.clearToken();
+      await _appPreferences.setGuestMode(false);
+
+      _isGuest = false;
+      _currentUser = null;
+      _authRefreshNotifier.notifyAuthChanged();
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     } catch (e) {
@@ -294,7 +339,7 @@ class AuthRepo implements AuthStateSource {
   Future<UserModel?> autoLogin() async {
     try {
       // Check if user is in guest mode
-      final isGuestMode = await PrefHelper.isGuestMode();
+      final isGuestMode = await _appPreferences.isGuestMode();
       if (isGuestMode) {
         _isGuest = true;
         _currentUser = null;
@@ -325,7 +370,7 @@ class AuthRepo implements AuthStateSource {
   /// CONTINUE AS GUEST
   Future<void> continueAsGuest() async {
     await _tokenStorage.deleteToken();
-    await PrefHelper.setGuestMode(true);
+    await _appPreferences.setGuestMode(true);
 
     _isGuest = true;
     _currentUser = null;

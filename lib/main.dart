@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -10,10 +12,12 @@ import 'core/hive/hive_manager.dart';
 import 'core/logger/app_logger.dart';
 import 'core/logger/app_logger_interface.dart';
 import 'core/network/token_provider.dart';
+import 'core/storage/app_preferences.dart';
 import 'core/storage/token_storage.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_notifier.dart';
+import 'core/notifications/notification_service.dart' as notifications;
 import 'core/utils/app_router.dart';
-import 'core/utils/pref_helper.dart';
 
 void main() {
   runZonedGuarded(
@@ -52,10 +56,14 @@ void main() {
             sl<TokenProvider>().setToken(token);
           }
 
-          final savedLocale = await PrefHelper.getLocale();
-          final startLocale = savedLocale != null && savedLocale == 'ar'
-              ? const Locale('ar')
-              : const Locale('en');
+          final appPrefs = sl<AppPreferences>();
+          await _migrateFromPrefHelper(appPrefs);
+          var savedLocale = await appPrefs.getLocale();
+          final startLocale =
+              savedLocale == 'ar' ? const Locale('ar') : const Locale('en');
+
+          await sl<ThemeNotifier>().init();
+          await sl<notifications.AppNotificationService>().init();
 
           runApp(
             EasyLocalization(
@@ -76,26 +84,49 @@ void main() {
   );
 }
 
+Future<void> _migrateFromPrefHelper(AppPreferences appPrefs) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    if (await appPrefs.getLocale() == null) {
+      final locale = prefs.getString('locale');
+      if (locale != null) await appPrefs.setLocale(locale);
+    }
+    final guestMode = prefs.getBool('guest_mode');
+    if (guestMode == true) await appPrefs.setGuestMode(true);
+  } catch (_) {}
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = sl<ThemeNotifier>();
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, _) {
-        return MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: 'Hungry',
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          themeMode: ThemeMode.light,
-          routerConfig: AppRouter.router,
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
+        return ListenableBuilder(
+          listenable: themeNotifier,
+          builder: (context, _) {
+            final isRtl = context.locale.languageCode == 'ar';
+            return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              title: 'Hungry',
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              themeMode: themeNotifier.themeMode,
+              routerConfig: AppRouter.router,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              builder: (context, child) => Directionality(
+                textDirection: isRtl ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                child: child ?? const SizedBox.shrink(),
+              ),
+            );
+          },
         );
       },
     );

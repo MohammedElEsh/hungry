@@ -52,6 +52,41 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  Future<Result<void>> changePassword(String currentPassword, String newPassword) async {
+    try {
+      await _authRepo.changePassword(currentPassword, newPassword);
+      return const Success(null);
+    } catch (e) {
+      final msg = e.toString();
+      if (msg.contains('change_password_not_available') ||
+          msg.contains('not_available') ||
+          msg.contains('404') ||
+          msg.contains('501')) {
+        return FailureResult(UnimplementedFailure('change_password_not_available'));
+      }
+      return FailureResult(ServerFailure(msg));
+    }
+  }
+
+  @override
+  Future<Result<void>> deleteAccount(String? password) async {
+    try {
+      await _authRepo.deleteAccount(password);
+      await _authRepo.logout();
+      return const Success(null);
+    } catch (e) {
+      final msg = e.toString();
+      if (msg.contains('delete_account_not_available') ||
+          msg.contains('not_available') ||
+          msg.contains('404') ||
+          msg.contains('501')) {
+        return FailureResult(UnimplementedFailure('delete_account_not_available'));
+      }
+      return FailureResult(ServerFailure(msg));
+    }
+  }
+
+  @override
   Future<Result<void>> logout() async {
     try {
       await _authRepo.logout();

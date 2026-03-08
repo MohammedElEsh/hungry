@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
+
+import '../widgets/offline_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../di/injection.dart';
+import '../../features/auth/domain/auth_state_source.dart';
 import '../../features/cart/presentation/cubit/cart_cubit.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
 import '../../features/cart/presentation/screens/cart_screen.dart';
+import '../../features/cart/presentation/widgets/guest_cart_view.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/orders/presentation/screens/orders_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
@@ -45,18 +50,25 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final isGuest = sl<AuthStateSource>().isGuest;
     final List<Widget> screens = [
       HomeScreen(
         onProfileTap: () => goToPage(3),
         onCartTap: () => goToPage(1),
       ),
-      CartScreen(onHomeTap: () => goToPage(0)),
+      isGuest
+          ? const GuestCartView()
+          : CartScreen(onHomeTap: () => goToPage(0)),
       OrdersScreen(onHomeTap: () => goToPage(0)),
       const ProfileScreen(),
     ];
 
     return Scaffold(
-      body: PageView(
+      body: Column(
+        children: [
+          const OfflineBanner(),
+          Expanded(
+            child: PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (index) {
@@ -71,6 +83,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           }
         },
         children: screens,
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),

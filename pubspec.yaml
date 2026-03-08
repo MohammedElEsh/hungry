@@ -75,6 +75,10 @@ dependencies:
   image_picker: ^1.2.1
   cached_network_image: ^3.4.1
 
+  # Local notifications (order placed, order status)
+  flutter_local_notifications: ^18.0.1
+  url_launcher: ^6.3.1
+
 # --------------------------------------------------
 # Dev Dependencies
 # --------------------------------------------------

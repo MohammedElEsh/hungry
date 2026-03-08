@@ -7,9 +7,15 @@ abstract class ApiEndpoints {
   // Auth
   static const String login = 'login';
   static const String register = 'register';
+  static const String authGoogle = 'auth/google';
+  static const String authApple = 'auth/apple';
   static const String logout = 'logout';
   static const String profile = 'profile';
   static const String updateProfile = 'update-profile';
+  static const String changePassword = 'change-password';
+  static const String deleteAccount = 'profile/delete';
+  static const String forgetPasswordRequestOtp = 'auth/forget-password/request-otp';
+  static const String forgetPasswordVerifyOtp = 'auth/forget-password/verify-otp';
 
   // Category
   static const String categories = 'categories';

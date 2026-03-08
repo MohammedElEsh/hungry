@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -27,10 +28,10 @@ class LoginLoadingView extends StatelessWidget {
                   padding: EdgeInsets.only(top: 60.h),
                   child: Column(
                     children: [
-                      Text('Log in', style: AppTextStyles.displayLarge),
+                      Text('login'.tr(), style: AppTextStyles.displayLarge),
                       Gap(8.h),
                       Text(
-                        'please sign in to your existing account',
+                        'login_subtitle'.tr(),
                         style: AppTextStyles.titleMedium,
                         textAlign: TextAlign.center,
                       ),
@@ -57,9 +58,9 @@ class LoginLoadingView extends StatelessWidget {
                         Gap(40.h),
                         // Email label
                         Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: AlignmentDirectional.centerStart,
                           child: Text(
-                            'Email',
+                            'email'.tr(),
                             style: AppTextStyles.titleMedium.copyWith(
                               color: AppColors.grey,
                             ),
@@ -77,9 +78,9 @@ class LoginLoadingView extends StatelessWidget {
                         Gap(24.h),
                         // Password label
                         Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: AlignmentDirectional.centerStart,
                           child: Text(
-                            'Password',
+                            'password'.tr(),
                             style: AppTextStyles.titleMedium.copyWith(
                               color: AppColors.grey,
                             ),
@@ -110,13 +111,13 @@ class LoginLoadingView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Don't have an account? ",
+                              "dont_have_account".tr(),
                               style: AppTextStyles.titleMedium.copyWith(
                                 color: AppColors.grey,
                               ),
                             ),
                             Text(
-                              'Sign Up',
+                              'signup'.tr(),
                               style: AppTextStyles.titleMedium.copyWith(
                                 color: AppColors.secondary,
                               ),
@@ -147,7 +148,7 @@ class LoginLoadingView extends StatelessWidget {
                               ),
                               Gap(8.w),
                               Text(
-                                'Continue as Guest',
+                                'continue_as_guest'.tr(),
                                 style: AppTextStyles.titleMedium.copyWith(
                                   color: AppColors.grey,
                                   fontWeight: FontWeight.w600,

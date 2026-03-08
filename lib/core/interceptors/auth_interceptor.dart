@@ -1,21 +1,20 @@
 import 'package:dio/dio.dart';
 
-/// Interceptor that adds auth token to requests.
-class AuthInterceptor extends Interceptor {
-  // Token should be injected via GetIt or similar
-  String? _token;
+import '../network/token_provider.dart';
 
-  void setToken(String? token) {
-    _token = token;
-  }
+class AuthInterceptor extends Interceptor {
+  final TokenProvider _tokenProvider;
+
+  AuthInterceptor(this._tokenProvider);
 
   @override
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
-    if (_token != null && _token!.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $_token';
+    final token = _tokenProvider.token;
+    if (token != null && token.isNotEmpty) {
+      options.headers['Authorization'] = 'Bearer $token';
     }
     handler.next(options);
   }

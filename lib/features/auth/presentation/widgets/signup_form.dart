@@ -1,4 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../../../core/widgets/terms_privacy_links.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +21,8 @@ class SignupForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final bool isLoading;
   final Function signUp;
+  final VoidCallback? onGoogleSignIn;
+  final VoidCallback? onAppleSignIn;
 
   const SignupForm({
     super.key,
@@ -26,12 +33,14 @@ class SignupForm extends StatelessWidget {
     required this.formKey,
     required this.isLoading,
     required this.signUp,
+    this.onGoogleSignIn,
+    this.onAppleSignIn,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 600.h,
+      height: 650.h,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20.r),
@@ -43,11 +52,11 @@ class SignupForm extends StatelessWidget {
 
           child: Column(
             children: [
-              Gap(40.h),
+              Gap(30.h),
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: Text(
-                  "Full Name",
+                  "full_name".tr(),
                   style: AppTextStyles.titleMedium.copyWith(
                     color: AppColors.grey,
                   ),
@@ -55,17 +64,17 @@ class SignupForm extends StatelessWidget {
               ),
               CustomTextField(
                 controller: nameController,
-                hintText: 'Full Name',
+                hintText: 'full_name'.tr(),
                 isPassword: false,
                 validator: (value) =>
-                    value!.isEmpty ? 'Please enter your name' : null,
+                    value!.isEmpty ? 'please_enter_name'.tr() : null,
               ),
-              Gap(16.h),
+              Gap(10.h),
 
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: Text(
-                  "Email Address",
+                  "email_address".tr(),
                   style: AppTextStyles.titleMedium.copyWith(
                     color: AppColors.grey,
                   ),
@@ -73,17 +82,17 @@ class SignupForm extends StatelessWidget {
               ),
               CustomTextField(
                 controller: emailController,
-                hintText: 'Email Address',
+                hintText: 'email_address'.tr(),
                 isPassword: false,
                 validator: (value) =>
-                    value!.isEmpty ? 'Please enter your email' : null,
+                    value!.isEmpty ? 'please_enter_email'.tr() : null,
               ),
-              Gap(16.h),
+              Gap(10.h),
 
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: Text(
-                  "Password",
+                  "password".tr(),
                   style: AppTextStyles.titleMedium.copyWith(
                     color: AppColors.grey,
                   ),
@@ -91,17 +100,17 @@ class SignupForm extends StatelessWidget {
               ),
               CustomTextField(
                 controller: passwordController,
-                hintText: 'Password',
+                hintText: 'password'.tr(),
                 isPassword: true,
                 validator: (value) =>
-                    value!.isEmpty ? 'Please enter a password' : null,
+                    value!.isEmpty ? 'please_enter_password'.tr() : null,
               ),
-              Gap(16.h),
+              Gap(10.h),
 
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: Text(
-                  "Confirm Password",
+                  "confirm_password".tr(),
                   style: AppTextStyles.titleMedium.copyWith(
                     color: AppColors.grey,
                   ),
@@ -109,12 +118,12 @@ class SignupForm extends StatelessWidget {
               ),
               CustomTextField(
                 controller: confirmPasswordController,
-                hintText: 'Confirm Password',
+                hintText: 'confirm_password'.tr(),
                 isPassword: true,
                 validator: (value) =>
-                    value!.isEmpty ? 'Please confirm your password' : null,
+                    value!.isEmpty ? 'please_confirm_password'.tr() : null,
               ),
-              Gap(50.h),
+              Gap(30.h),
               isLoading
                   ? SizedBox(
                       height: 56.h,
@@ -127,19 +136,56 @@ class SignupForm extends StatelessWidget {
                     )
                   : CustomButton(
                       width: 0.9.sw,
-                      text: 'Sign Up',
+                      text: 'signup'.tr(),
                       onPressed: () => signUp(),
                     ),
+              if (onGoogleSignIn != null)
+                Padding(
+                  padding: EdgeInsets.only(top: 12.h),
+                  child: SizedBox(
+                    width: 0.9.sw,
+                    child: OutlinedButton.icon(
+                      onPressed: isLoading ? null : onGoogleSignIn,
+                      icon: FaIcon(FontAwesomeIcons.google, size: 18.sp, color: AppColors.grey),
+                      label: Text('sign_in_with_google'.tr()),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.grey,
+                        side: BorderSide(color: AppColors.grey.withOpacity(0.5)),
+                        padding: EdgeInsets.symmetric(vertical: 14.h),
+                      ),
+                    ),
+                  ),
+                ),
+              if (onAppleSignIn != null)
+                Padding(
+                  padding: EdgeInsets.only(top: 12.h),
+                  child: SizedBox(
+                    width: 0.9.sw,
+                    child: OutlinedButton.icon(
+                      onPressed: isLoading ? null : onAppleSignIn,
+                      icon: FaIcon(FontAwesomeIcons.apple, size: 18.sp, color: AppColors.grey),
+                      label: Text('sign_in_with_apple'.tr()),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.grey,
+                        side: BorderSide(color: AppColors.grey.withOpacity(0.5)),
+                        padding: EdgeInsets.symmetric(vertical: 14.h),
+                      ),
+                    ),
+                  ),
+                ),
+              Gap(16.h),
+              TermsPrivacyLinks(textStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.grey)),
               Gap(20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Already have an account? ",
+                    "already_have_account".tr(),
                     style: AppTextStyles.titleMedium.copyWith(
                       color: AppColors.grey,
                     ),
                   ),
+                  Gap(5.w),
                   GestureDetector(
                     onTap: () {
                       context.go(
@@ -147,7 +193,7 @@ class SignupForm extends StatelessWidget {
                       ); // Navigate to login screen
                     },
                     child: Text(
-                      "Login",
+                      "login".tr(),
                       style: AppTextStyles.titleMedium.copyWith(
                         color: AppColors.secondary,
                       ),

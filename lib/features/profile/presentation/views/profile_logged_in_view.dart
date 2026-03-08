@@ -1,15 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/app_router.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../cubit/profile_cubit.dart';
 import '../handlers/profile_controllers.dart';
 import '../widgets/add_card_button.dart';
+import '../widgets/locale_selector.dart';
+import '../widgets/theme_selector.dart';
+import '../../../../core/widgets/terms_privacy_links.dart';
 import '../widgets/debit_card.dart';
 import '../widgets/profile_actions.dart';
 import '../widgets/profile_fields.dart';
@@ -23,6 +28,7 @@ class ProfileLoggedInView extends StatelessWidget {
   final VoidCallback onUpload;
   final VoidCallback onUpdate;
   final VoidCallback onLogOut;
+  final VoidCallback? onDeleteAccount;
 
   const ProfileLoggedInView({
     super.key,
@@ -32,6 +38,7 @@ class ProfileLoggedInView extends StatelessWidget {
     required this.onUpload,
     required this.onUpdate,
     required this.onLogOut,
+    this.onDeleteAccount,
   });
 
   bool get _hasCard =>
@@ -45,7 +52,7 @@ class ProfileLoggedInView extends StatelessWidget {
       onRefresh: () => context.read<ProfileCubit>().loadProfile(),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.only(top: 90.h),
+        padding: EdgeInsets.only(top: 50.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -55,7 +62,7 @@ class ProfileLoggedInView extends StatelessWidget {
               imageFile: pickedImage,
               onUpload: onUpload,
             ),
-            Gap(40.h),
+            Gap(20.h),
             ProfileFields(
               nameController: controllers.name,
               emailController: controllers.email,
@@ -69,13 +76,28 @@ class ProfileLoggedInView extends StatelessWidget {
                 cardController: controllers.card,
                 onPressed: onUpdate,
               ),
-            Gap(90.h),
+            Gap(10.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const LocaleSelector(),
+                Spacer(),
+                const ThemeSelector(),
+              ],
+            ),
+            Gap(10.h),
+            const LegalLinksRow(),
+            Gap(10.h),
             ProfileActions(
               onEditProfile: onUpdate,
               onLogOut: onLogOut,
+              onChangePassword: () => context.push(AppRouter.kChangePasswordView),
+              onDeleteAccount: onDeleteAccount != null
+                  ? () => onDeleteAccount!()
+                  : null,
               isLoggingOut: false,
             ),
-            Gap(20.h),
+            // Gap(20.h),
           ],
         ),
       ),

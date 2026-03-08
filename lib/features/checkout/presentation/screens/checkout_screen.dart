@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,14 +7,15 @@ import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../core/di/injection.dart';
-import '../../../../core/network/api_error.dart';
 import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_router.dart';
-import '../../../auth/data/models/user_model.dart';
-import '../../../auth/data/repositories/auth_repo.dart';
+import '../../../auth/domain/auth_state_source.dart';
 import '../../../cart/domain/entities/cart_item_entity.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
-import '../../../orders/data/repositories/order_repo.dart';
+import '../../../orders/domain/usecases/create_order_usecase.dart';
+import '../../../../core/notifications/notification_service.dart' as notifications;
+import '../../../profile/domain/entities/profile_entity.dart';
+import '../../../profile/domain/usecases/get_profile_usecase.dart';
 import '../../../../core/utils/styles.dart';
 import '../widgets/order_summary_section.dart';
 import '../widgets/payment_action_section.dart';
@@ -27,20 +29,22 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  AuthRepo get _authRepo => sl<AuthRepo>();
-  final OrderRepo _orderRepo = OrderRepo();
-  UserModel? _profile;
+  AuthStateSource get _authState => sl<AuthStateSource>();
+  CreateOrderUseCase get _createOrderUseCase => sl<CreateOrderUseCase>();
+  GetProfileUseCase get _getProfileUseCase => sl<GetProfileUseCase>();
+  ProfileEntity? _profile;
   bool _isLoading = true;
   bool _isPaying = false;
   String? _error;
 
   Future<void> _loadProfile() async {
-    if (!_authRepo.isGuest) {
-      try {
-        final profile = await _authRepo.getProfileData();
-        if (mounted) setState(() => _profile = profile);
-      } catch (_) {
-        if (mounted) setState(() => _profile = null);
+    if (!_authState.isGuest) {
+      final result = await _getProfileUseCase();
+      if (mounted) {
+        result.when(
+          success: (p) => setState(() => _profile = p),
+          onFailure: (_) => setState(() => _profile = null),
+        );
       }
     }
     if (mounted) setState(() => _isLoading = false);
@@ -58,31 +62,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     List<CartItemEntity> items,
   ) async {
     if (_isPaying) return;
-    if (_authRepo.isGuest) {
-      showErrorBanner(context, 'Please sign in to place an order');
+    if (_authState.isGuest) {
+      showErrorBanner(context, 'sign_in_to_place_order'.tr());
       return;
     }
     if (items.isEmpty) {
-      showErrorBanner(context, 'Your cart is empty. Add items before checkout.');
+      showErrorBanner(context, 'cart_empty'.tr());
       return;
     }
     setState(() => _isPaying = true);
-    try {
-      await _orderRepo.createOrder(items);
-      if (!context.mounted) return;
-      cartCubit.clearCart();
-      if (!context.mounted) return;
-      showSuccessBanner(context, 'Order placed successfully');
-      if (!context.mounted) return;
-      context.go(AppRouter.kHomeView);
-    } catch (e) {
-      if (context.mounted) {
-        final message = e is ApiError ? e.message : e.toString();
-        showErrorBanner(context, 'Order failed: $message');
-      }
-    } finally {
-      if (mounted) setState(() => _isPaying = false);
-    }
+    final result = await _createOrderUseCase(items);
+    if (!mounted) return;
+    setState(() => _isPaying = false);
+    result.when(
+      success: (_) async {
+        cartCubit.clearCart();
+        await sl<notifications.AppNotificationService>().showOrderPlaced();
+        if (!context.mounted) return;
+        showSuccessBanner(context, 'order_placed_success'.tr());
+        if (!context.mounted) return;
+        context.go(AppRouter.kHomeView);
+      },
+      onFailure: (f) {
+        if (mounted) setState(() => _isPaying = false);
+        if (context.mounted) {
+          showErrorBanner(context, '${'order_failed'.tr()}: ${f.message}');
+        }
+      },
+    );
   }
 
   @override
@@ -100,7 +107,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   setState(() => _error = null);
                   _loadProfile();
                 },
-                child: const Text('Retry'),
+                child: Text('retry'.tr()),
               ),
             ],
           ),
@@ -129,10 +136,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Gap(80.h),
-                  Text("Order Summary", style: AppTextStyles.bodyBrown),
+                  Text("order_summary".tr(), style: AppTextStyles.bodyBrown),
                   OrderSummarySection(subtotal: subtotal),
                   Gap(60.h),
-                  Text("Payment Methods", style: AppTextStyles.bodyBrown),
+                  Text("payment_methods".tr(), style: AppTextStyles.bodyBrown),
                   Gap(20.h),
                   PaymentMethods(savedCardDisplay: _profile?.visa),
                   Gap(115.h),

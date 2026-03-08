@@ -62,6 +62,8 @@ class _SignupScreenState extends State<SignupScreen> {
           formKey: _formKey,
           isLoading: isLoading,
           onSignUp: () => _onSignUp(context),
+          onGoogleSignIn: () => context.read<AuthCubit>().loginWithGoogle(),
+          onAppleSignIn: () => context.read<AuthCubit>().loginWithApple(),
         );
       },
     );

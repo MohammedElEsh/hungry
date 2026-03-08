@@ -30,21 +30,21 @@ class ProfileFields extends StatelessWidget {
             labelText: 'Name',
             // readOnly: true,
           ),
-          Gap(20.h),
+          Gap(10.h),
           // Email TextField
           ProfileTextField(
             controller: emailController,
             labelText: 'Email',
             readOnly: true,
           ),
-          Gap(20.h),
+          Gap(10.h),
           // Address TextField
           ProfileTextField(
             controller: addressController,
             labelText: 'Address',
             // readOnly: true,
           ),
-          Gap(20.h),
+          Gap(10.h),
           // Password TextField
           // CustomTextField(
           //   controller: passwordController,
@@ -54,7 +54,7 @@ class ProfileFields extends StatelessWidget {
           // ),
           // Gap(20.h),
           Divider(),
-          Gap(20.h),
+          Gap(10.h),
         ],
       ),
     );

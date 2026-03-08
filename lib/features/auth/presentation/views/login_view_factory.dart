@@ -15,6 +15,8 @@ class LoginViewFactory {
     required TextEditingController passwordController,
     required VoidCallback onSubmit,
     VoidCallback? onGuestMode,
+    VoidCallback? onGoogleSignIn,
+    VoidCallback? onAppleSignIn,
   }) {
     return LoginFormView(
       formKey: formKey,
@@ -23,6 +25,8 @@ class LoginViewFactory {
       onSubmit: onSubmit,
       isLoading: state is AuthLoading,
       onGuestMode: onGuestMode,
+      onGoogleSignIn: onGoogleSignIn,
+      onAppleSignIn: onAppleSignIn,
     );
   }
 }

@@ -24,6 +24,7 @@ class ProfileViewFactory {
     required VoidCallback onLogOut,
     required VoidCallback onGuestLogOut,
     required VoidCallback onSignUp,
+    VoidCallback? onDeleteAccount,
   }) {
     if (state is ProfileGuest) {
       return ProfileGuestView(
@@ -51,6 +52,7 @@ class ProfileViewFactory {
         onUpload: onUpload,
         onUpdate: onUpdate,
         onLogOut: onLogOut,
+        onDeleteAccount: onDeleteAccount,
       );
     }
     return ProfileLoadingView(controllers: controllers);

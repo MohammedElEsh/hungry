@@ -52,7 +52,7 @@ class ProductLoadedView extends StatelessWidget {
                 selectedIds: state.selectedToppingIds,
                 onToppingTapped: (id) => ProductActions.toggleTopping(context, id),
               ),
-              Gap(30.h),
+              Gap(20.h),
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text('Side Options', style: AppTextStyles.bodyBrown),

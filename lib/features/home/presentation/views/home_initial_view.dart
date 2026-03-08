@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/animations/fade_in.dart';
@@ -14,7 +15,7 @@ class HomeInitialView extends StatelessWidget {
       backgroundColor: AppColors.white,
       body: FadeIn(
         child: EmptyStateWidget(
-          title: 'Loading...',
+          title: 'loading'.tr(),
           icon: Icons.hourglass_empty,
         ),
       ),

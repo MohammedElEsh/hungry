@@ -24,3 +24,8 @@ class CacheFailure extends Failure {
 class AuthFailure extends Failure {
   const AuthFailure([super.message = 'Authentication failed']);
 }
+
+/// Used when a feature has no API implementation yet (e.g. social login, delete account).
+class UnimplementedFailure extends Failure {
+  const UnimplementedFailure([super.message = 'Feature not available yet']);
+}

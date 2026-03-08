@@ -11,6 +11,8 @@ import 'package:hungry/features/auth/presentation/screens/login_screen.dart';
 import 'package:hungry/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hungry/features/cart/presentation/screens/cart_screen.dart';
 import 'package:hungry/splash/presentation/views/splash_view.dart';
+import '../../features/auth/presentation/screens/forget_password_screen.dart';
+import '../../features/profile/presentation/screens/change_password_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/checkout/presentation/screens/checkout_screen.dart';
 import '../../features/product/presentation/cubit/product_cubit.dart';
@@ -19,6 +21,7 @@ import '../../features/profile/presentation/cubit/profile_cubit.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
 import '../../features/orders/presentation/cubit/orders_cubit.dart';
+import '../../onboarding/presentation/screens/onboarding_screen.dart';
 import '../components/custom_bottom_nav_bar.dart';
 
 /// App routing and deep link conventions:
@@ -42,8 +45,18 @@ abstract class AppRouter {
   static const kCheckoutView = '/checkoutView';
   static const kCartView = '/cartView';
   static const kProfileView = '/profileView';
+  static const kOnboardingView = '/onboardingView';
+  static const kForgetPasswordView = '/forgetPasswordView';
+  static const kChangePasswordView = '/changePasswordView';
 
-  static const _publicPaths = {kSplashView, kHomeView, kLoginView, kSignupView};
+  static const _publicPaths = {
+    kSplashView,
+    kHomeView,
+    kLoginView,
+    kSignupView,
+    kOnboardingView,
+    kForgetPasswordView,
+  };
 
   static String? _redirect(BuildContext context, GoRouterState state) {
     final path = state.uri.path;
@@ -51,13 +64,17 @@ abstract class AppRouter {
     final isLoggedInOrGuest = auth.isLoggedIn || auth.isGuest;
 
     if (_publicPaths.contains(path)) {
-      if ((path == kLoginView || path == kSignupView) && isLoggedInOrGuest) {
+      // Logged-in users: redirect away from login/signup. Guests: allow signup (they want to create account).
+      if ((path == kLoginView || path == kSignupView) && auth.isLoggedIn) {
         return kHomeView;
       }
       return null;
     }
 
     if (!isLoggedInOrGuest) {
+      return kLoginView;
+    }
+    if (path == kChangePasswordView && !auth.isLoggedIn) {
       return kLoginView;
     }
     return null;
@@ -72,6 +89,14 @@ abstract class AppRouter {
       GoRoute(
         path: kSplashView,
         builder: (context, state) => const SplashView(),
+      ),
+      GoRoute(
+        path: kOnboardingView,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: kForgetPasswordView,
+        builder: (context, state) => const ForgetPasswordScreen(),
       ),
       GoRoute(
         path: kLoginView,
@@ -127,6 +152,10 @@ abstract class AppRouter {
           value: sl<CartCubit>()..loadCart(),
           child: const CartScreen(),
         ),
+      ),
+      GoRoute(
+        path: kChangePasswordView,
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
       GoRoute(
         path: kProfileView,

@@ -14,24 +14,22 @@ class OrdersLoadedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: RefreshIndicator(
-          color: AppColors.white,
-          backgroundColor: AppColors.primary,
-          onRefresh: () => OrdersActions.refresh(context),
-          child: ListView.builder(
-            padding: EdgeInsets.all(20.w),
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              return OrderCard(
-                order: order,
-                onTap: () => OrdersActions.showOrderDetails(context, order),
-              );
-            },
-          ),
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: RefreshIndicator(
+        color: AppColors.white,
+        backgroundColor: AppColors.primary,
+        onRefresh: () => OrdersActions.refresh(context),
+        child: ListView.builder(
+          padding: EdgeInsets.only(top: 45.w),
+          itemCount: orders.length,
+          itemBuilder: (context, index) {
+            final order = orders[index];
+            return OrderCard(
+              order: order,
+              onTap: () => OrdersActions.showOrderDetails(context, order),
+            );
+          },
         ),
       ),
     );

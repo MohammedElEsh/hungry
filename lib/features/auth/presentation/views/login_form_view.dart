@@ -14,6 +14,8 @@ class LoginFormView extends StatelessWidget {
   final VoidCallback onSubmit;
   final bool isLoading;
   final VoidCallback? onGuestMode;
+  final VoidCallback? onGoogleSignIn;
+  final VoidCallback? onAppleSignIn;
 
   const LoginFormView({
     super.key,
@@ -23,6 +25,8 @@ class LoginFormView extends StatelessWidget {
     required this.onSubmit,
     required this.isLoading,
     this.onGuestMode,
+    this.onGoogleSignIn,
+    this.onAppleSignIn,
   });
 
 
@@ -33,45 +37,45 @@ class LoginFormView extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.primary,
-        body: SafeArea(
-          child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: EdgeInsets.only(top: 20.h),
-                child: Column(
-                  children: [
-                    Text('login'.tr(), style: AppTextStyles.displayLarge),
-                    Text(
-                      'login_subtitle'.tr(),
-                      style: AppTextStyles.titleMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+        body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.only(top: 60.h),
+              child: Column(
+                children: [
+                  Text('login'.tr(), style: AppTextStyles.displayLarge),
+                  Text(
+                    'login_subtitle'.tr(),
+                    style: AppTextStyles.titleMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    LoginForm(
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      formKey: formKey,
-                      isLoading: isLoading,
-                      login: onSubmit,
-                      onGuestMode: onGuestMode,
-                    ),
-                  ],
-                ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  LoginForm(
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    formKey: formKey,
+                    isLoading: isLoading,
+                    login: onSubmit,
+                    onGuestMode: onGuestMode,
+                    onGoogleSignIn: onGoogleSignIn,
+                    onAppleSignIn: onAppleSignIn,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        ],
+                ),
       ),
     );
   }

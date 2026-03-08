@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -24,7 +25,7 @@ class HomeLoadingView extends StatelessWidget {
         6,
         (i) => ProductModel(
           id: i,
-          name: 'Loading product name',
+          name: 'loading'.tr(),
           price: '0',
           image: null,
           rating: null,
@@ -44,7 +45,7 @@ class HomeLoadingView extends StatelessWidget {
             slivers: [
               HomeAppBar(
                 imageUrl: null,
-                userName: 'Loading',
+                userName: 'loading'.tr(),
                 onProfileTap: onProfileTap,
                 favoriteCount: 0,
                 cartItemCount: 0,
@@ -56,7 +57,7 @@ class HomeLoadingView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CategoriesList(
-                      categories: const ['All', 'Loading', 'Loading', 'Loading'],
+                      categories: ['all'.tr(), 'loading'.tr(), 'loading'.tr(), 'loading'.tr()],
                       currentIndex: 0,
                       onCategoryTap: (_) {},
                     ),

@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../core/animations/fade_in.dart';
+import '../../../../core/di/injection.dart';
+import '../../../auth/domain/auth_state_source.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../product/data/models/product_model.dart';
@@ -68,7 +70,7 @@ class HomeLoadedView extends StatelessWidget {
                   children: [
                     CategoriesList(
                       categories: [
-                        'All',
+                        'all'.tr(),
                         ...state.categories.map((c) => c.name),
                       ],
                       currentIndex: state.selectedCategoryIndex,
@@ -82,19 +84,34 @@ class HomeLoadedView extends StatelessWidget {
               if (state.products.isEmpty)
                 SliverFillRemaining(
                   child: FadeIn(
-                    child: EmptyStateWidget(
-                      title: 'No products',
-                      subtitle: 'Check back later',
+                    child:                     EmptyStateWidget(
+                      title: 'no_products'.tr(),
+                      subtitle: 'check_back_later'.tr(),
                       icon: Icons.restaurant_menu,
                     ),
                   ),
                 )
               else
-                GridViewSection(
-                  products: state.products.map(_entityToModel).toList(),
-                  favoriteIds: state.favoriteIds,
-                  onFavoriteTap: (id) =>
-                      HomeActions.toggleFavorite(context, id),
+                Builder(
+                  builder: (context) {
+                    final isGuest = sl<AuthStateSource>().isGuest;
+                    return GridViewSection(
+                      products: state.products.map(_entityToModel).toList(),
+                      favoriteIds: state.favoriteIds,
+                      onFavoriteTap: (id) =>
+                          HomeActions.toggleFavorite(context, id),
+                      onProductTap: isGuest
+                          ? (_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('guest_product_message'.tr()),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          : null,
+                    );
+                  },
                 ),
             ],
           ),

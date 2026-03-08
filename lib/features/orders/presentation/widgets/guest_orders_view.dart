@@ -37,7 +37,7 @@ class GuestOrdersView extends StatelessWidget {
                   color: AppColors.primary,
                 ),
               ),
-              Gap(40.h),
+              Gap(30.h),
 
               // Features List
               FeatureCard(
@@ -57,7 +57,7 @@ class GuestOrdersView extends StatelessWidget {
                 title: 'Reorder Easily',
                 description: 'Quickly reorder your favorite meals',
               ),
-              Gap(50.h),
+              Gap(30.h),
 
               // Sign Up Button
               CustomButton(
@@ -69,7 +69,7 @@ class GuestOrdersView extends StatelessWidget {
                   context.go(AppRouter.kSignupView);
                 },
               ),
-              Gap(40.h),
+              // Gap(40.h),
             ],
           ),
         ),

@@ -9,4 +9,6 @@ abstract class ProfileRepository {
     Object? imageFile,
   });
   Future<Result<void>> logout();
+  Future<Result<void>> changePassword(String currentPassword, String newPassword);
+  Future<Result<void>> deleteAccount(String? password);
 }

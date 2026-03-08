@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/components/custom_button.dart';
@@ -43,7 +44,7 @@ class PaymentActionSection extends StatelessWidget {
           const Spacer(),
           CustomButton(
             backgroundColor: AppColors.secondary,
-            text: 'Place Order',
+            text: 'place_order'.tr(),
             onPressed: onPayNow,
             isLoading: isLoading,
           ),

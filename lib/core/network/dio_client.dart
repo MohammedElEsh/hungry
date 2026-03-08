@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../constants/api_endpoints.dart';
-import 'interceptors/auth_interceptor.dart';
+import '../interceptors/auth_interceptor.dart';
 import '../interceptors/logging_interceptor.dart';
 
 class DioClient {

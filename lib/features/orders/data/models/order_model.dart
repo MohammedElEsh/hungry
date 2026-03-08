@@ -14,6 +14,14 @@ class OrderModel {
     this.productImage,
   });
 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'status': status,
+    'total_price': totalPrice,
+    'created_at': createdAt,
+    'product_image': productImage,
+  };
+
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     final idRaw = json['id'];
     final id = idRaw is int

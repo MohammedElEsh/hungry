@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -12,12 +13,15 @@ class GridViewSection extends StatefulWidget {
   final List<ProductModel> products;
   final Set<int> favoriteIds;
   final void Function(int productId)? onFavoriteTap;
+  /// If null, defaults to pushing to product detail. When provided, used instead (e.g. for guests).
+  final void Function(String productId)? onProductTap;
 
   const GridViewSection({
     super.key,
     required this.products,
     this.favoriteIds = const {},
     this.onFavoriteTap,
+    this.onProductTap,
   });
 
   @override
@@ -36,12 +40,16 @@ class _GridViewSectionState extends State<GridViewSection> {
             onTap: () {
               final id = product.id?.toString();
               if (id != null) {
-                context.push(AppRouter.kProductView, extra: id);
+                if (widget.onProductTap != null) {
+                  widget.onProductTap!(id);
+                } else {
+                  context.push(AppRouter.kProductView, extra: id);
+                }
               }
             },
             child: CardItem(
             imagePath: product.image ?? AssetsData.burger,
-            title: product.name ?? "Unknown",
+            title: product.name ?? 'unknown'.tr(),
             price: "${product.price ?? '0'} \$",
             rating: double.tryParse(product.rating ?? '0') ?? 0.0,
             productId: productId,

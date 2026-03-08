@@ -11,7 +11,7 @@ class OrdersLoadingView extends StatelessWidget {
   const OrdersLoadingView({super.key});
 
   static List<OrderEntity> get _placeholders => [
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
           const OrderEntity(
             id: '0',
             status: 'loading',
@@ -28,7 +28,7 @@ class OrdersLoadingView extends StatelessWidget {
         enabled: true,
         child: ListView.builder(
           padding: EdgeInsets.all(20.w),
-          itemCount: 3,
+          itemCount: 4,
           itemBuilder: (_, i) => OrderCard(order: _placeholders[i]),
         ),
       ),

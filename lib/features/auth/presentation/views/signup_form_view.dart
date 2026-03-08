@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,6 +15,8 @@ class SignupFormView extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final bool isLoading;
   final VoidCallback onSignUp;
+  final VoidCallback? onGoogleSignIn;
+  final VoidCallback? onAppleSignIn;
 
   const SignupFormView({
     super.key,
@@ -24,6 +27,8 @@ class SignupFormView extends StatelessWidget {
     required this.formKey,
     required this.isLoading,
     required this.onSignUp,
+    this.onGoogleSignIn,
+    this.onAppleSignIn,
   });
 
   @override
@@ -38,12 +43,12 @@ class SignupFormView extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 60.h),
+                padding: EdgeInsets.only(top: 40.h),
                 child: Column(
                   children: [
-                    Text("sign up", style: AppTextStyles.displayLarge),
+                    Text("signup".tr(), style: AppTextStyles.displayLarge),
                     Text(
-                      "please sign up to get started",
+                      "signup_subtitle".tr(),
                       style: AppTextStyles.titleMedium,
                     ),
                   ],
@@ -53,7 +58,7 @@ class SignupFormView extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: SingleChildScrollView(
-                child: SignupForm(
+                child:                 SignupForm(
                   nameController: nameController,
                   emailController: emailController,
                   passwordController: passwordController,
@@ -61,6 +66,8 @@ class SignupFormView extends StatelessWidget {
                   formKey: formKey,
                   isLoading: isLoading,
                   signUp: onSignUp,
+                  onGoogleSignIn: onGoogleSignIn,
+                  onAppleSignIn: onAppleSignIn,
                 ),
               ),
             ),

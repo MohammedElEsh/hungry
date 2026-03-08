@@ -44,5 +44,5 @@ void showWarningBanner(BuildContext context, String message) {
 }
 
 void showInfoBanner(BuildContext context, String message) {
-  _showBanner(context, message, AppColors.info);
+  _showBanner(context, message, AppColors.primary);
 }
