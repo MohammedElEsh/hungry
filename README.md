@@ -103,7 +103,11 @@ flutter build ios --release
 
 ## Configuration
 
-The app connects to a backend API. The base URL is configured in `lib/core/network/dio_client.dart`. No additional environment setup is required for basic usage.
+The app connects to a backend API. The base URL defaults to the value in `lib/core/config/app_config.dart`. To override:
+
+```bash
+flutter run --dart-define=API_BASE_URL=https://your-api.com/api/
+```
 
 ## License
 

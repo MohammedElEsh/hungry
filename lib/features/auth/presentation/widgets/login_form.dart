@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
-import '../widgets/custom_button.dart';
+import 'package:hungry/core/components/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 
 class LoginForm extends StatelessWidget {
@@ -98,21 +98,13 @@ class LoginForm extends StatelessWidget {
             ),
 
             Gap(30.h),
-            isLoading
-                ? SizedBox(
-                    height: 56.h,
-                    child: const Center(
-                      child: CupertinoActivityIndicator(
-                        color: AppColors.primary,
-                        radius: 12,
-                      ),
-                    ),
-                  )
-                : CustomButton(
-                    width: 0.9.sw,
-                    text: 'login'.tr(),
-                    onPressed: () => login(),
-                  ),
+            CustomButton(
+              width: 0.9.sw,
+              text: 'login'.tr(),
+              onPressed: () => login(),
+              backgroundColor: AppColors.secondary,
+              isLoading: isLoading,
+            ),
             Gap(10.h),
             Align(
               alignment: AlignmentDirectional.center,

@@ -5,24 +5,24 @@ import 'package:hungry/core/di/injection.dart';
 import 'package:hungry/core/analytics/analytics_service.dart';
 import 'package:hungry/core/router/analytics_route_observer.dart';
 import 'package:hungry/core/router/auth_refresh_notifier.dart';
-import 'package:hungry/features/auth/domain/auth_state_source.dart';
+import 'package:hungry/features/auth/domain/repositories/auth_repository.dart';
 import 'package:hungry/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:hungry/features/auth/presentation/screens/login_screen.dart';
 import 'package:hungry/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hungry/features/cart/presentation/screens/cart_screen.dart';
 import 'package:hungry/splash/presentation/views/splash_view.dart';
-import '../../features/auth/presentation/screens/forget_password_screen.dart';
-import '../../features/profile/presentation/screens/change_password_screen.dart';
-import '../../features/auth/presentation/screens/signup_screen.dart';
-import '../../features/checkout/presentation/screens/checkout_screen.dart';
-import '../../features/product/presentation/cubit/product_cubit.dart';
-import '../../features/product/presentation/screens/product_screen.dart';
-import '../../features/profile/presentation/cubit/profile_cubit.dart';
-import '../../features/profile/presentation/screens/profile_screen.dart';
-import '../../features/home/presentation/cubit/home_cubit.dart';
-import '../../features/orders/presentation/cubit/orders_cubit.dart';
-import '../../onboarding/presentation/screens/onboarding_screen.dart';
-import '../components/custom_bottom_nav_bar.dart';
+import 'package:hungry/core/components/custom_bottom_nav_bar.dart';
+import 'package:hungry/features/auth/presentation/screens/forget_password_screen.dart';
+import 'package:hungry/features/auth/presentation/screens/signup_screen.dart';
+import 'package:hungry/features/checkout/presentation/screens/checkout_screen.dart';
+import 'package:hungry/features/home/presentation/cubit/home_cubit.dart';
+import 'package:hungry/features/orders/presentation/cubit/orders_cubit.dart';
+import 'package:hungry/features/product/presentation/cubit/product_cubit.dart';
+import 'package:hungry/features/product/presentation/screens/product_screen.dart';
+import 'package:hungry/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:hungry/features/profile/presentation/screens/change_password_screen.dart';
+import 'package:hungry/features/profile/presentation/screens/profile_screen.dart';
+import 'package:hungry/onboarding/presentation/screens/onboarding_screen.dart';
 
 /// App routing and deep link conventions:
 /// - Product: [kProductView]?id=123 or extra: productId (int/String).
@@ -60,7 +60,7 @@ abstract class AppRouter {
 
   static String? _redirect(BuildContext context, GoRouterState state) {
     final path = state.uri.path;
-    final auth = sl<AuthStateSource>();
+    final auth = sl<AuthRepository>();
     final isLoggedInOrGuest = auth.isLoggedIn || auth.isGuest;
 
     if (_publicPaths.contains(path)) {

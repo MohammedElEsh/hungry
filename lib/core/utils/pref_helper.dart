@@ -1,7 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Non-sensitive app preferences (guest mode, locale, theme, etc.).
-/// For auth token use [TokenStorage] from DI.
+/// Legacy: Non-sensitive app preferences (guest mode, locale).
+/// Prefer [AppPreferences] from DI. This class is kept for reference only.
+/// Migration from old SharedPreferences to AppPreferences runs in main.dart
+/// (_migrateFromPrefHelper) using keys: guest_mode, locale.
 class PrefHelper {
   static const String guestModeKey = 'guest_mode';
   static const String localeKey = 'locale';

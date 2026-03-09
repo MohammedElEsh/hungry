@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../core/widgets/terms_privacy_links.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -10,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
-import '../widgets/custom_button.dart';
+import 'package:hungry/core/components/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 
 class SignupForm extends StatelessWidget {
@@ -124,21 +123,13 @@ class SignupForm extends StatelessWidget {
                     value!.isEmpty ? 'please_confirm_password'.tr() : null,
               ),
               Gap(30.h),
-              isLoading
-                  ? SizedBox(
-                      height: 56.h,
-                      child: const Center(
-                        child: CupertinoActivityIndicator(
-                          color: AppColors.primary,
-                          radius: 12,
-                        ),
-                      ),
-                    )
-                  : CustomButton(
-                      width: 0.9.sw,
-                      text: 'signup'.tr(),
-                      onPressed: () => signUp(),
-                    ),
+              CustomButton(
+                width: 0.9.sw,
+                text: 'signup'.tr(),
+                onPressed: () => signUp(),
+                backgroundColor: AppColors.secondary,
+                isLoading: isLoading,
+              ),
               if (onGoogleSignIn != null)
                 Padding(
                   padding: EdgeInsets.only(top: 12.h),

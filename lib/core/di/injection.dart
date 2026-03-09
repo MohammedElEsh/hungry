@@ -6,6 +6,7 @@ import '../cache/cache_store.dart';
 import '../cache/cache_store_impl.dart';
 import '../notifications/notification_service.dart' as notifications;
 import '../notifications/notification_service_impl.dart';
+import '../network/api_service.dart';
 import '../network/dio_client.dart';
 import '../network/network_info.dart';
 import '../network/token_provider.dart';
@@ -66,8 +67,7 @@ import '../../features/orders/domain/repositories/order_repository.dart';
 import '../../features/orders/domain/usecases/create_order_usecase.dart';
 import '../../features/orders/domain/usecases/get_orders_usecase.dart';
 import '../../features/orders/presentation/cubit/orders_cubit.dart';
-import '../../features/auth/data/repositories/auth_repo.dart';
-import '../../features/auth/domain/auth_state_source.dart';
+import '../../features/profile/data/datasources/profile_remote_datasource.dart';
 import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/repositories/profile_repository.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
@@ -89,6 +89,7 @@ Future<void> init() async {
   sl.registerLazySingleton<DioClient>(
     () => DioClient(authInterceptor: sl<AuthInterceptor>()),
   );
+  sl.registerLazySingleton<ApiService>(() => ApiService(sl<DioClient>()));
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(sl<Connectivity>()),
@@ -110,22 +111,14 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(sl<DioClient>().dio),
   );
-  sl.registerLazySingleton<AuthRepo>(
-    () => AuthRepo(
-      sl<TokenStorage>(),
-      sl<TokenProvider>(),
-      sl<AuthRefreshNotifier>(),
-      sl<AppPreferences>(),
-    ),
-  );
-  sl.registerLazySingleton<AuthStateSource>(() => sl<AuthRepo>());
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
       sl<AuthRemoteDataSource>(),
       sl<NetworkInfo>(),
       sl<TokenProvider>(),
       sl<TokenStorage>(),
-      sl<AuthRepo>(),
+      sl<ApiService>(),
+      sl<AuthRefreshNotifier>(),
       sl<AppPreferences>(),
     ),
   );
@@ -229,8 +222,11 @@ Future<void> init() async {
         sl<GetCachedUserUseCase>(),
       ));
 
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(sl<DioClient>().dio),
+  );
   sl.registerLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(sl<AuthRepo>()),
+    () => ProfileRepositoryImpl(sl<ProfileRemoteDataSource>(), sl<AuthRepository>()),
   );
   sl.registerLazySingleton(() => GetProfileUseCase(sl<ProfileRepository>()));
   sl.registerLazySingleton(() => ChangePasswordUseCase(sl<ProfileRepository>()));

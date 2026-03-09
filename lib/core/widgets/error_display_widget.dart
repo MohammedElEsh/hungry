@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_strings.dart';
-import 'custom_button.dart';
+import 'package:hungry/core/components/custom_button.dart';
 
 /// Reusable error display widget with retry.
 class ErrorDisplayWidget extends StatelessWidget {

@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/animations/fade_in.dart';
 import '../../../../core/di/injection.dart';
-import '../../../auth/domain/auth_state_source.dart';
+import '../../../auth/domain/repositories/auth_repository.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../product/data/models/product_model.dart';
@@ -94,7 +94,7 @@ class HomeLoadedView extends StatelessWidget {
               else
                 Builder(
                   builder: (context) {
-                    final isGuest = sl<AuthStateSource>().isGuest;
+                    final isGuest = sl<AuthRepository>().isGuest;
                     return GridViewSection(
                       products: state.products.map(_entityToModel).toList(),
                       favoriteIds: state.favoriteIds,

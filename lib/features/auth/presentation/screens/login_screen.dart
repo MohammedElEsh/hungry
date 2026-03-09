@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/utils/app_router.dart';
-import '../../data/repositories/auth_repo.dart';
+import '../../domain/repositories/auth_repository.dart';
 import '../cubit/auth_cubit.dart';
 import '../listeners/auth_listener.dart';
 import '../views/login_view_factory.dart';
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
             passwordController: _passwordController,
             onSubmit: () => _onSubmit(context),
             onGuestMode: () async {
-              await sl<AuthRepo>().continueAsGuest();
+              await sl<AuthRepository>().continueAsGuest();
               if (context.mounted) context.go(AppRouter.kHomeView);
             },
             onGoogleSignIn: () => context.read<AuthCubit>().loginWithGoogle(),

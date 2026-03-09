@@ -6,7 +6,7 @@ import 'package:hungry/core/storage/app_preferences.dart';
 import 'package:hungry/core/utils/app_router.dart';
 import 'package:hungry/core/utils/assets.dart';
 import 'package:hungry/core/utils/styles.dart';
-import 'package:hungry/features/auth/data/repositories/auth_repo.dart';
+import 'package:hungry/features/auth/domain/repositories/auth_repository.dart';
 import 'package:hungry/splash/presentation/widgets/fade_slide_in_text.dart';
 import 'package:hungry/splash/presentation/widgets/slide_in_image.dart';
 import 'package:hungry/splash/presentation/widgets/fade_slide_out_text.dart';
@@ -26,7 +26,7 @@ class _SplashViewState extends State<SplashView> {
   bool animationTriggered = false;
   bool _navigationTriggered = false;
 
-  AuthRepo get _authRepo => sl<AuthRepo>();
+  AuthRepository get _authRepository => sl<AuthRepository>();
 
   Future<void> _checkAutoLogin() async {
     if (_navigationTriggered) return;
@@ -37,9 +37,9 @@ class _SplashViewState extends State<SplashView> {
       context.go(AppRouter.kOnboardingView);
       return;
     }
-    await _authRepo.autoLogin();
+    await _authRepository.autoLogin();
     if (!mounted) return;
-    if (_authRepo.isLoggedIn || _authRepo.isGuest) {
+    if (_authRepository.isLoggedIn || _authRepository.isGuest) {
       context.go(AppRouter.kHomeView);
     } else {
       context.go(AppRouter.kLoginView);

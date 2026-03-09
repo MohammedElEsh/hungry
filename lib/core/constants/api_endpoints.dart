@@ -1,8 +1,10 @@
+import '../config/app_config.dart';
+
 /// API endpoint constants aligned with Sonic backend (SonicCollection.json).
 abstract class ApiEndpoints {
   ApiEndpoints._();
 
-  static const String baseUrl = 'https://sonic-zdi0.onrender.com/api/';
+  static String get baseUrl => AppConfig.baseUrl;
 
   // Auth
   static const String login = 'login';

@@ -9,7 +9,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/app_router.dart';
-import '../../../auth/domain/auth_state_source.dart';
+import '../../../auth/domain/repositories/auth_repository.dart';
 import '../../../cart/domain/entities/cart_item_entity.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../orders/domain/usecases/create_order_usecase.dart';
@@ -29,7 +29,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  AuthStateSource get _authState => sl<AuthStateSource>();
+  AuthRepository get _auth => sl<AuthRepository>();
   CreateOrderUseCase get _createOrderUseCase => sl<CreateOrderUseCase>();
   GetProfileUseCase get _getProfileUseCase => sl<GetProfileUseCase>();
   ProfileEntity? _profile;
@@ -38,7 +38,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String? _error;
 
   Future<void> _loadProfile() async {
-    if (!_authState.isGuest) {
+    if (!_auth.isGuest) {
       final result = await _getProfileUseCase();
       if (mounted) {
         result.when(
@@ -62,7 +62,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     List<CartItemEntity> items,
   ) async {
     if (_isPaying) return;
-    if (_authState.isGuest) {
+    if (_auth.isGuest) {
       showErrorBanner(context, 'sign_in_to_place_order'.tr());
       return;
     }

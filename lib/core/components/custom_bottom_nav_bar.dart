@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../di/injection.dart';
-import '../../features/auth/domain/auth_state_source.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/cart/presentation/cubit/cart_cubit.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
 import '../../features/cart/presentation/screens/cart_screen.dart';
@@ -50,7 +50,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final isGuest = sl<AuthStateSource>().isGuest;
+    final isGuest = sl<AuthRepository>().isGuest;
     final List<Widget> screens = [
       HomeScreen(
         onProfileTap: () => goToPage(3),
