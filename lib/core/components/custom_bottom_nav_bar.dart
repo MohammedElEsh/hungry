@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../widgets/offline_banner.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../di/injection.dart';
@@ -13,7 +14,6 @@ import '../../features/cart/presentation/widgets/guest_cart_view.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/orders/presentation/screens/orders_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
-import '../constants/app_colors.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({super.key});
@@ -87,46 +87,52 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(25.r),
-        ),
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          child: BottomNavigationBar(
-            elevation: 0,
-            currentIndex: currentIndex,
-            onTap: (index) => goToPage(index),
-            backgroundColor: Colors.transparent,
-            selectedItemColor: AppColors.white,
-            unselectedItemColor: AppColors.grey,
+      bottomNavigationBar: Builder(
+        builder: (context) {
+          final colorScheme = Theme.of(context).colorScheme;
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              borderRadius: BorderRadius.circular(25.r),
+            ),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+              ),
+              child: BottomNavigationBar(
+                elevation: 0,
+                currentIndex: currentIndex,
+                onTap: (index) => goToPage(index),
+                backgroundColor: Colors.transparent,
+                selectedItemColor: colorScheme.onPrimary,
+                unselectedItemColor: Colors.grey,
+                // unselectedItemColor: colorScheme.onSurfaceVariant,
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home_sharp),
-                label: 'Home',
+                icon: const Icon(Icons.home_sharp),
+                label: 'home'.tr(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                label: 'Cart',
+                icon: const Icon(Icons.shopping_cart),
+                label: 'cart'.tr(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.local_restaurant_sharp),
-                label: 'Orders',
+                icon: const Icon(Icons.local_restaurant_sharp),
+                label: 'orders'.tr(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.profile_circled),
-                label: 'Profile',
+                icon: const Icon(CupertinoIcons.profile_circled),
+                label: 'profile'.tr(),
               ),
             ],
           ),
         ),
+          );
+        },
       ),
     );
   }

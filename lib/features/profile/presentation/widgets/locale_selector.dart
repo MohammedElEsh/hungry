@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/di/injection.dart';
-import '../../../../core/storage/app_preferences.dart';
+import '../../../../core/theme/locale_notifier.dart';
 
 /// Language/locale selector (English / العربية).
 class LocaleSelector extends StatelessWidget {
@@ -13,46 +12,52 @@ class LocaleSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentLocale = context.locale.languageCode;
-    final appPrefs = sl<AppPreferences>();
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'language'.tr(),
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.grey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Gap(8.h),
-          Row(
+    final localeNotifier = sl<LocaleNotifier>();
+    return ListenableBuilder(
+      listenable: localeNotifier,
+      builder: (context, _) {
+        final currentLocale = localeNotifier.locale.languageCode;
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _LocaleChip(
-                label: 'English',
-                isSelected: currentLocale == 'en',
-                onTap: () async {
-                  await context.setLocale(const Locale('en'));
-                  await appPrefs.setLocale('en');
-                },
+              Text(
+                'language'.tr(),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              Gap(8.w),
-              _LocaleChip(
-                label: 'العربية',
-                isSelected: currentLocale == 'ar',
-                onTap: () async {
-                  await context.setLocale(const Locale('ar'));
-                  await appPrefs.setLocale('ar');
-                },
+              Gap(8.h),
+              Row(
+                children: [
+                  _LocaleChip(
+                    label: 'language_english'.tr(),
+                    isSelected: currentLocale == 'en',
+                    onTap: () async {
+                      await localeNotifier.setLocale(const Locale('en'));
+                      // ignore: use_build_context_synchronously
+                      await context.setLocale(const Locale('en'));
+                    },
+                  ),
+                  Gap(8.w),
+                  _LocaleChip(
+                    label: 'language_arabic'.tr(),
+                    isSelected: currentLocale == 'ar',
+                    onTap: () async {
+                      await localeNotifier.setLocale(const Locale('ar'));
+                      // ignore: use_build_context_synchronously
+                      await context.setLocale(const Locale('ar'));
+                    },
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -70,24 +75,25 @@ class _LocaleChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.white,
+          color: isSelected ? colorScheme.primary : colorScheme.surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: isSelected
-                ? AppColors.primary
-                : AppColors.grey.withOpacity(0.3),
+                ? colorScheme.primary
+                : colorScheme.onSurfaceVariant.withOpacity(0.3),
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 13.sp,
-            color: isSelected ? AppColors.white : AppColors.primary,
+            color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
             fontWeight: FontWeight.w600,
           ),
         ),

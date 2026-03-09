@@ -19,6 +19,7 @@ import '../storage/app_preferences.dart';
 import '../storage/app_preferences_impl.dart';
 import '../storage/secure_storage.dart';
 import '../storage/secure_storage_impl.dart';
+import '../theme/locale_notifier.dart';
 import '../theme/theme_notifier.dart';
 import '../router/auth_refresh_notifier.dart';
 import '../storage/token_storage.dart';
@@ -102,6 +103,9 @@ Future<void> init() async {
   sl.registerLazySingleton<AppPreferences>(() => AppPreferencesImpl());
   sl.registerLazySingleton<ThemeNotifier>(
     () => ThemeNotifier(sl<AppPreferences>()),
+  );
+  sl.registerLazySingleton<LocaleNotifier>(
+    () => LocaleNotifier(sl<AppPreferences>()),
   );
   sl.registerLazySingleton<CacheStore>(() => CacheStoreImpl());
   sl.registerLazySingleton<notifications.AppNotificationService>(

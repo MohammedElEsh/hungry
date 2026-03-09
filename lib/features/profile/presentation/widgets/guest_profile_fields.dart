@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,15 +55,15 @@ class GuestProfileFields extends StatelessWidget {
                   ),
                 ),
                 Gap(16.h),
-                _buildFeatureItem('Save your favorite meals'),
+                _buildFeatureItem('guest_profile_feature_1'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('Track your orders'),
+                _buildFeatureItem('guest_profile_feature_2'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('Save delivery addresses'),
+                _buildFeatureItem('guest_profile_feature_3'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('Manage payment methods'),
+                _buildFeatureItem('guest_profile_feature_4'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('Get personalized recommendations'),
+                _buildFeatureItem('guest_profile_feature_5'.tr()),
               ],
             ),
           ),

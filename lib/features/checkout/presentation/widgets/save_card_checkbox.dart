@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/styles.dart';
@@ -26,7 +27,7 @@ class SaveCardCheckboxState extends State<SaveCardCheckbox> {
           activeColor: AppColors.error,
         ),
         Text(
-          "Save this card for future payments",
+          "save_card_checkbox".tr(),
           style: AppTextStyles.bodyGrey,
         ),
       ],

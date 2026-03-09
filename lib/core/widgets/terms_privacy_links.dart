@@ -39,7 +39,7 @@ class TermsPrivacyLinks extends StatelessWidget {
         text: TextSpan(
           style: style,
           children: [
-            const TextSpan(text: 'By signing up you agree to our '),
+            TextSpan(text: 'agree_prefix'.tr()),
             TextSpan(
               text: terms,
               style: style.copyWith(
@@ -50,7 +50,7 @@ class TermsPrivacyLinks extends StatelessWidget {
               recognizer: TapGestureRecognizer()
                 ..onTap = () => _launch(AppLinks.termsUrl),
             ),
-            const TextSpan(text: ' and '),
+            TextSpan(text: 'agree_middle'.tr()),
             TextSpan(
               text: privacy,
               style: style.copyWith(

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -22,25 +23,25 @@ class OrderSummarySection extends StatelessWidget {
       children: [
         Gap(15.h),
         OrderCheckoutDetails(
-          title: "Order",
+          title: 'order'.tr(),
           price: "\$ ${_formatPrice(subtotal)}",
         ),
         OrderCheckoutDetails(
-          title: "Taxes",
+          title: 'taxes'.tr(),
           price: "\$ ${_formatPrice(taxes)}",
         ),
         OrderCheckoutDetails(
-          title: "Delivery fees",
+          title: 'delivery_fees'.tr(),
           price: "\$ ${_formatPrice(deliveryFee)}",
         ),
         const Divider(),
         OrderCheckoutDetails(
-          title: "Total:",
+          title: 'total_label'.tr(),
           price: "\$ ${_formatPrice(total)}",
           style: AppTextStyles.bodyBrown,
         ),
         OrderCheckoutDetails(
-          title: "Estimated delivery time:",
+          title: 'estimated_delivery_time'.tr(),
           price: "15 - 30 mins",
         ),
       ],

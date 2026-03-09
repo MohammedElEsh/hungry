@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/theme/theme_notifier.dart';
 
@@ -27,7 +26,7 @@ class ThemeSelector extends StatelessWidget {
                 'theme'.tr(),
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: AppColors.grey,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -68,22 +67,23 @@ class _ThemeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.white,
+          color: isSelected ? colorScheme.primary : colorScheme.surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.grey.withOpacity(0.3),
+            color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withOpacity(0.3),
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 13.sp,
-            color: isSelected ? AppColors.white : AppColors.primary,
+            color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
             fontWeight: FontWeight.w600,
           ),
         ),

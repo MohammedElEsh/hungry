@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -45,20 +46,20 @@ class GuestCartView extends StatelessWidget {
               // Features List
               FeatureCard(
                 icon: Icons.add_shopping_cart,
-                title: 'Add to Cart',
-                description: 'Save items and checkout when ready',
+                title: 'add_to_cart'.tr(),
+                description: 'guest_cart_desc_1'.tr(),
               ),
               Gap(16.h),
               FeatureCard(
                 icon: Icons.check_circle_outline,
-                title: 'Secure Checkout',
-                description: 'Pay safely with multiple payment options',
+                title: 'secure_checkout'.tr(),
+                description: 'guest_cart_desc_2'.tr(),
               ),
               Gap(16.h),
               FeatureCard(
                 icon: Icons.local_shipping_outlined,
-                title: 'Fast Delivery',
-                description: 'Track your order until it arrives',
+                title: 'fast_delivery'.tr(),
+                description: 'guest_cart_desc_3'.tr(),
               ),
               Gap(30.h),
 
@@ -66,7 +67,7 @@ class GuestCartView extends StatelessWidget {
               CustomButton(
                 width: double.infinity,
                 backgroundColor: AppColors.secondary,
-                text: 'Create Account',
+                text: 'create_account'.tr(),
                 icon: Icons.person_add,
                 onPressed: () {
                   context.go(AppRouter.kSignupView);

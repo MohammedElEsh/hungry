@@ -15,6 +15,7 @@ import 'core/network/token_provider.dart';
 import 'core/storage/app_preferences.dart';
 import 'core/storage/token_storage.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/locale_notifier.dart';
 import 'core/theme/theme_notifier.dart';
 import 'core/notifications/notification_service.dart' as notifications;
 import 'core/utils/app_router.dart';
@@ -63,6 +64,7 @@ void main() {
               savedLocale == 'ar' ? const Locale('ar') : const Locale('en');
 
           await sl<ThemeNotifier>().init();
+          await sl<LocaleNotifier>().init();
           await sl<notifications.AppNotificationService>().init();
 
           runApp(
@@ -102,25 +104,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = sl<ThemeNotifier>();
+    final localeNotifier = sl<LocaleNotifier>();
+    final listenable = Listenable.merge([themeNotifier, localeNotifier]);
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, _) {
         return ListenableBuilder(
-          listenable: themeNotifier,
+          listenable: listenable,
           builder: (context, _) {
-            final isRtl = context.locale.languageCode == 'ar';
+            final isRtl = localeNotifier.locale.languageCode == 'ar';
             return MaterialApp.router(
+              key: ValueKey(
+                '${themeNotifier.themeMode.index}_${localeNotifier.locale.languageCode}',
+              ),
               debugShowCheckedModeBanner: false,
-              title: 'Hungry',
+              title: 'app_name'.tr(),
               theme: AppTheme.light,
               darkTheme: AppTheme.dark,
               themeMode: themeNotifier.themeMode,
               routerConfig: AppRouter.router,
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
-              locale: context.locale,
+              locale: localeNotifier.locale,
               builder: (context, child) => Directionality(
                 textDirection: isRtl ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                 child: child ?? const SizedBox.shrink(),

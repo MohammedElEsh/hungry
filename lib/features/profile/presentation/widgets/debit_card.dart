@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,7 +18,7 @@ class DebitCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: CustomListTile(
-        title: "Debit Card",
+        title: 'debit_card'.tr(),
         subtitle: (profile?.visa != null && profile!.visa!.isNotEmpty)
             ? profile!.visa!
             : "**** **** **** 9142",

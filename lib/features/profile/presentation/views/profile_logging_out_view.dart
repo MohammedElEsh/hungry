@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -22,7 +23,7 @@ class ProfileLoggingOutView extends StatelessWidget {
           children: [
             Icon(Icons.logout_rounded, size: 48.sp, color: Colors.grey),
             Gap(16.h),
-            Text('Logging out...', style: TextStyle(fontSize: 16.sp)),
+            Text('logging_out'.tr(), style: TextStyle(fontSize: 16.sp)),
           ],
         ),
       ),

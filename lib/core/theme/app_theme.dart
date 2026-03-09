@@ -31,11 +31,21 @@ abstract class AppTheme {
   static ThemeData get dark => ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.dark(
-          primary: AppColors.secondary,
+          primary: AppColors.primary,
           secondary: AppColors.secondary,
           surface: AppColors.primary,
           error: AppColors.error,
+          onPrimary: AppColors.white,
+          onSecondary: AppColors.white,
+          onSurface: AppColors.white,
+          onError: AppColors.white,
         ),
         scaffoldBackgroundColor: AppColors.primary,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.white,
+          elevation: 0,
+        ),
+        textTheme: TextStyles.textTheme,
       );
 }

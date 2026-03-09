@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -47,7 +48,7 @@ class ProductLoadingView extends StatelessWidget {
                 Gap(20.h),
                 Padding(
                   padding: EdgeInsets.only(left: 20.w),
-                  child: Text('Toppings', style: AppTextStyles.bodyBrown),
+                  child: Text('toppings'.tr(), style: AppTextStyles.bodyBrown),
                 ),
                 Gap(15.h),
                 ToppingsList(
@@ -58,7 +59,7 @@ class ProductLoadingView extends StatelessWidget {
                 Gap(30.h),
                 Padding(
                   padding: EdgeInsets.only(left: 20.w),
-                  child: Text('Side Options', style: AppTextStyles.bodyBrown),
+                  child: Text('side_options'.tr(), style: AppTextStyles.bodyBrown),
                 ),
                 Gap(15.h),
                 SideOptionsList(
@@ -69,7 +70,7 @@ class ProductLoadingView extends StatelessWidget {
                 Gap(30.h),
                 Padding(
                   padding: EdgeInsets.only(left: 20.w),
-                  child: Text('Total', style: AppTextStyles.bodyBrown),
+                  child: Text('total'.tr(), style: AppTextStyles.bodyBrown),
                 ),
                 CheckoutSummary(
                   price: '0.00',

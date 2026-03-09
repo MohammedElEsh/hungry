@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
@@ -23,13 +24,13 @@ class EmptyCartWidget extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'Your cart is empty',
+              'cart_empty_short'.tr(),
               style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'Add items from the menu to get started',
+              'cart_empty_hint'.tr(),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.grey,
                   ),
@@ -38,7 +39,7 @@ class EmptyCartWidget extends StatelessWidget {
             if (onContinueShopping != null) ...[
               const SizedBox(height: 24),
               CustomButton(
-                text: 'Continue Shopping',
+                text: 'continue_shopping'.tr(),
                 onPressed: onContinueShopping!,
               ),
             ],

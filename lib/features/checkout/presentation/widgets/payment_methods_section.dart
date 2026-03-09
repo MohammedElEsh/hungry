@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -33,7 +34,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
       children: [
         // Cash on delivery option
         CustomListTile(
-          title: "Cash on delivery",
+          title: 'cash_on_delivery'.tr(),
           subtitle: "",
           imageAsset: AssetsData.dollar,
           value: "Cash",
@@ -53,7 +54,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
 
         // Debit card option (uses saved card from profile when available)
         CustomListTile(
-          title: "Debit Card",
+          title: 'debit_card'.tr(),
           subtitle: widget.savedCardDisplay?.isNotEmpty == true
               ? widget.savedCardDisplay!
               : "No card saved",

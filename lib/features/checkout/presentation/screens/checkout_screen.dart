@@ -142,7 +142,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   Text("payment_methods".tr(), style: AppTextStyles.bodyBrown),
                   Gap(20.h),
                   PaymentMethods(savedCardDisplay: _profile?.visa),
-                  Gap(115.h),
+                  Gap(80.h),
                   PaymentActionSection(
                     totalPrice: subtotal.toStringAsFixed(2),
                     onPayNow: () => _handlePayNow(

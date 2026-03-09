@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -35,7 +36,7 @@ class EmptyOrdersView extends StatelessWidget {
 
             // Title
             Text(
-              'No Orders Yet',
+              'no_orders_yet'.tr(),
               style: TextStyle(
                 fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
@@ -46,7 +47,7 @@ class EmptyOrdersView extends StatelessWidget {
 
             // Description
             Text(
-              'You haven\'t placed any orders yet. Start exploring our delicious menu!',
+              'no_orders_description'.tr(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15.sp,
@@ -60,7 +61,7 @@ class EmptyOrdersView extends StatelessWidget {
             CustomButton(
               width: 0.7.sw,
               backgroundColor: AppColors.secondary,
-              text: 'Start Shopping',
+              text: 'start_shopping'.tr(),
               icon: Icons.restaurant_menu,
               onPressed: onHomeTap,
             ),

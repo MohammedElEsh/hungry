@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -42,20 +43,20 @@ class GuestOrdersView extends StatelessWidget {
               // Features List
               FeatureCard(
                 icon: Icons.history,
-                title: 'Order History',
-                description: 'Track all your past and current orders',
+                title: 'order_history'.tr(),
+                description: 'guest_orders_desc_1'.tr(),
               ),
               Gap(16.h),
               FeatureCard(
                 icon: Icons.notifications_active,
-                title: 'Real-time Updates',
-                description: 'Get notified about your order status',
+                title: 'realtime_updates'.tr(),
+                description: 'guest_orders_desc_2'.tr(),
               ),
               Gap(16.h),
               FeatureCard(
                 icon: Icons.replay,
-                title: 'Reorder Easily',
-                description: 'Quickly reorder your favorite meals',
+                title: 'reorder_easily'.tr(),
+                description: 'guest_orders_desc_3'.tr(),
               ),
               Gap(30.h),
 
@@ -63,7 +64,7 @@ class GuestOrdersView extends StatelessWidget {
               CustomButton(
                 width: double.infinity,
                 backgroundColor: AppColors.secondary,
-                text: 'Create Account',
+                text: 'create_account'.tr(),
                 icon: Icons.person_add,
                 onPressed: () {
                   context.go(AppRouter.kSignupView);

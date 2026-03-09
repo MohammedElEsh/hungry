@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -24,7 +25,7 @@ class QuantitySelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Quantity", style: AppTextStyles.bodyBrown),
+          Text('quantity'.tr(), style: AppTextStyles.bodyBrown),
           Gap(15.h),
           Row(
             children: [

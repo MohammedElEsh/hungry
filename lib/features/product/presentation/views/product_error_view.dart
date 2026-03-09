@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -32,7 +33,7 @@ class ProductErrorView extends StatelessWidget {
               const Gap(16),
               TextButton(
                 onPressed: () => ProductActions.load(context, productId),
-                child: const Text('Retry'),
+                child: Text('retry'.tr()),
               ),
             ],
           ),

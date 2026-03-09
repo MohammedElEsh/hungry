@@ -105,14 +105,18 @@ class CustomButton extends StatelessWidget {
 
     // Determine effective text color based on variant
     final Color effectiveTextColor =
-        textColor ?? (variant == ButtonVariant.filled ? AppColors.white : AppColors.primary);
+        textColor ??
+        (variant == ButtonVariant.filled ? AppColors.white : AppColors.primary);
 
     // Determine gradient for filled variant only
-    final Gradient? effectiveGradient = (variant == ButtonVariant.filled) ? gradient : null;
+    final Gradient? effectiveGradient = (variant == ButtonVariant.filled)
+        ? gradient
+        : null;
 
     // Determine background color for filled variant
-    final Color effectiveBackgroundColor =
-        variant == ButtonVariant.filled ? (backgroundColor ?? AppColors.primary) : Colors.transparent;
+    final Color effectiveBackgroundColor = variant == ButtonVariant.filled
+        ? (backgroundColor ?? AppColors.primary)
+        : Colors.transparent;
 
     return Semantics(
       // Accessibility: mark this widget as a button
@@ -127,10 +131,13 @@ class CustomButton extends StatelessWidget {
           height: height ?? 60.h, // Default height
           decoration: BoxDecoration(
             // Disabled button color
-            color: disabled ? AppColors.grey.withOpacity(0.3) : effectiveBackgroundColor,
+            color: disabled
+                ? AppColors.grey.withOpacity(0.3)
+                : effectiveBackgroundColor,
             gradient: disabled ? null : effectiveGradient,
             borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
-            border: border ??
+            border:
+                border ??
                 (variant == ButtonVariant.outlined
                     ? Border.all(color: AppColors.primary, width: 1.5)
                     : null),
@@ -147,7 +154,8 @@ class CustomButton extends StatelessWidget {
             onTap: disabled ? null : onPressed, // Disable interaction if needed
             borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
             splashFactory: InkRipple.splashFactory, // Ripple effect
-            highlightColor: Colors.transparent, // Remove default highlight color
+            highlightColor:
+                Colors.transparent, // Remove default highlight color
             child: Padding(
               padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w),
               child: Center(
@@ -179,36 +187,42 @@ class CustomButton extends StatelessWidget {
 
     // If icon is at the start
     if (icon != null && iconPosition == IconPosition.start) {
-      children.add(Icon(
-        icon,
-        color: effectiveTextColor,
-        size: iconSize ?? 24.sp,
-      ));
-      if (text != null) children.add(SizedBox(width: 8.w)); // Space between icon and text
+      children.add(
+        Icon(icon, color: effectiveTextColor, size: iconSize ?? 24.sp),
+      );
+      if (text != null) {
+        children.add(SizedBox(width: 8.w)); // Space between icon and text
+      }
     }
 
-    // Add the text
+    // Add the text (wrapped in Expanded so long labels e.g. Arabic don't overflow)
     if (text != null) {
-      children.add(Text(
-        isLoading && loadingText != null ? loadingText! : text!,
-        style: textStyle ??
-            AppTextStyles.titleMedium.copyWith(color: effectiveTextColor),
-      ));
+      children.add(
+        Flexible(
+          child: Text(
+            isLoading && loadingText != null ? loadingText! : text!,
+            textAlign: TextAlign.center,
+            style:
+                textStyle ??
+                AppTextStyles.titleMedium.copyWith(color: effectiveTextColor),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+      );
     }
 
     // If icon is at the end
     if (icon != null && iconPosition == IconPosition.end) {
       if (text != null) children.add(SizedBox(width: 8.w));
-      children.add(Icon(
-        icon,
-        color: effectiveTextColor,
-        size: iconSize ?? 24.sp,
-      ));
+      children.add(
+        Icon(icon, color: effectiveTextColor, size: iconSize ?? 24.sp),
+      );
     }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
+      // mainAxisSize: MainAxisSize.min,
       children: children,
     );
   }
