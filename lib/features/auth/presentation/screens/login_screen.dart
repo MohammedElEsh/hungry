@@ -23,14 +23,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  @override
-  void initState() {
-    if (kDebugMode) {
-      _emailController.text = 'md36@gmail.com';
-      _passwordController.text = '123456789';
-    }
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   if (kDebugMode) {
+  //     _emailController.text = 'md36@gmail.com';
+  //     _passwordController.text = '123456789';
+  //   }
+  //   super.initState();
+  // }
   
   @override
   void dispose() {

@@ -19,49 +19,99 @@
 
 | Feature | Description |
 |---------|-------------|
-| **Authentication** | Login, signup, and guest mode support |
+| **Authentication** | Login, signup, guest mode, and social sign-in (Google, Apple) |
 | **Home** | Category-based product browsing with search |
 | **Product Details** | Customize items with toppings, side options, and spice level |
 | **Favorites** | Save and manage favorite products (registered users) |
 | **Cart** | Add items, adjust quantities, view summary |
 | **Checkout** | Multiple payment methods with order summary |
-| **Orders** | View order history and track status |
+| **Orders** | View order history and track status; local notifications for updates |
 | **Profile** | Manage account, payment methods, and profile data |
+| **Localization** | Multi-language support via easy_localization |
 
 ## Tech Stack
 
-- **Framework**: Flutter (Material 3)
-- **Routing**: [go_router](https://pub.dev/packages/go_router)
-- **Networking**: [Dio](https://pub.dev/packages/dio)
-- **State & Storage**: [shared_preferences](https://pub.dev/packages/shared_preferences)
-- **UI**: [Google Fonts](https://pub.dev/packages/google_fonts), [flutter_screenutil](https://pub.dev/packages/flutter_screenutil), [Skeletonizer](https://pub.dev/packages/skeletonizer), [Font Awesome](https://pub.dev/packages/font_awesome_flutter)
-- **Media**: [cached_network_image](https://pub.dev/packages/cached_network_image), [image_picker](https://pub.dev/packages/image_picker)
+| Category | Packages |
+|----------|----------|
+| **Framework** | Flutter (Material 3), Dart ^3.9.2 |
+| **Routing** | [go_router](https://pub.dev/packages/go_router) |
+| **State** | [flutter_bloc](https://pub.dev/packages/flutter_bloc), [equatable](https://pub.dev/packages/equatable) |
+| **DI** | [get_it](https://pub.dev/packages/get_it) |
+| **Networking** | [Dio](https://pub.dev/packages/dio) |
+| **Storage** | [shared_preferences](https://pub.dev/packages/shared_preferences), [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage), [Hive](https://pub.dev/packages/hive) |
+| **Localization** | [easy_localization](https://pub.dev/packages/easy_localization) |
+| **Auth** | [google_sign_in](https://pub.dev/packages/google_sign_in), [sign_in_with_apple](https://pub.dev/packages/sign_in_with_apple) |
+| **UI** | [Google Fonts](https://pub.dev/packages/google_fonts), [flutter_screenutil](https://pub.dev/packages/flutter_screenutil), [Skeletonizer](https://pub.dev/packages/skeletonizer), [Font Awesome](https://pub.dev/packages/font_awesome_flutter), [gap](https://pub.dev/packages/gap), [alert_banner](https://pub.dev/packages/alert_banner) |
+| **Media** | [cached_network_image](https://pub.dev/packages/cached_network_image), [image_picker](https://pub.dev/packages/image_picker) |
+| **Other** | [connectivity_plus](https://pub.dev/packages/connectivity_plus), [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications), [url_launcher](https://pub.dev/packages/url_launcher), [Sentry](https://pub.dev/packages/sentry_flutter) |
 
 ## Project Structure
 
+Folder skeleton only (no file names):
+
 ```
 lib/
-├── core/               # Shared utilities, network, constants
+├── core/
+│   ├── analytics/
+│   ├── animations/
+│   ├── auth/
+│   ├── cache/
 │   ├── components/
+│   ├── config/
 │   ├── constants/
+│   ├── di/
+│   ├── domain/
+│   ├── error/
+│   ├── hive/
+│   ├── interceptors/
+│   ├── logger/
 │   ├── network/
-│   └── utils/
+│   ├── notifications/
+│   ├── router/
+│   ├── storage/
+│   ├── theme/
+│   ├── utils/
+│   └── widgets/
 ├── features/
-│   ├── auth/           # Login, signup, authentication
-│   ├── cart/           # Shopping cart
-│   ├── checkout/       # Payment & order placement
-│   ├── home/           # Categories, products, favorites
-│   ├── orders/         # Order history
-│   ├── product/        # Product detail & customization
-│   ├── profile/        # User profile & settings
-│   └── splash/         # Splash screen
-└── main.dart
+│   ├── auth/
+│   │   ├── data/
+│   │   │   ├── datasources/
+│   │   │   ├── models/
+│   │   │   └── repositories/
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   ├── repositories/
+│   │   │   └── usecases/
+│   │   └── presentation/
+│   │       ├── cubit/
+│   │       ├── handlers/
+│   │       ├── listeners/
+│   │       ├── screens/
+│   │       ├── views/
+│   │       └── widgets/
+│   ├── cart/
+
+│   ├── home/
+
+│   ├── orders/
+│
+│   ├── product/
+│
+│   └── profile/
+│
+├── onboarding/
+│   └── presentation/
+│       └── screens/
+└── splash/
+    └── presentation/
+        ├── views/
+        └── widgets/
 ```
 
 ## Prerequisites
 
 - **Flutter SDK** ≥ 3.9.2
-- **Dart SDK** ≥ 3.9.2
+- **Dart SDK** ^3.9.2
 
 ## Getting Started
 
@@ -78,7 +128,13 @@ cd hungry
 flutter pub get
 ```
 
-### 3. Run the app
+### 3. Generate code (if needed)
+
+```bash
+flutter pub run build_runner build
+```
+
+### 4. Run the app
 
 ```bash
 # List available devices
@@ -103,7 +159,7 @@ flutter build ios --release
 
 ## Configuration
 
-The app connects to a backend API. The base URL defaults to the value in `lib/core/config/app_config.dart`. To override:
+The app connects to a backend API. The base URL is defined in `lib/core/config/app_config.dart` (default: `https://sonic-zdi0.onrender.com/api/`). To override at run or build time:
 
 ```bash
 flutter run --dart-define=API_BASE_URL=https://your-api.com/api/
