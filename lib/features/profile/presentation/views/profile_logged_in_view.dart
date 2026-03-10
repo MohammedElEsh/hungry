@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../cubit/profile_cubit.dart';
@@ -46,9 +45,10 @@ class ProfileLoggedInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return RefreshIndicator(
-      color: AppColors.white,
-      backgroundColor: AppColors.primary,
+      color: colorScheme.onPrimary,
+      backgroundColor: colorScheme.primary,
       onRefresh: () => context.read<ProfileCubit>().loadProfile(),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

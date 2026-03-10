@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../actions/orders_actions.dart';
 import '../cubit/orders_cubit.dart';
 import '../listener/orders_listener.dart';
@@ -31,7 +30,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       body: BlocConsumer<OrdersCubit, OrdersState>(
         listener: OrdersListener.listen,
         builder: (context, state) {

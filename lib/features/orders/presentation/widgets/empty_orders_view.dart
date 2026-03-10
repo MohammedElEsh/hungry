@@ -12,6 +12,7 @@ class EmptyOrdersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -23,13 +24,13 @@ class EmptyOrdersView extends StatelessWidget {
               height: 180.h,
               width: 180.w,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: colorScheme.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.shopping_bag_outlined,
                 size: 90.sp,
-                color: AppColors.primary,
+                color: colorScheme.primary,
               ),
             ),
             Gap(40.h),
@@ -40,7 +41,7 @@ class EmptyOrdersView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
-                color: AppColors.black,
+                color: colorScheme.onSurface,
               ),
             ),
             Gap(12.h),
@@ -51,7 +52,7 @@ class EmptyOrdersView extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15.sp,
-                color: AppColors.grey,
+                color: colorScheme.onSurfaceVariant,
                 height: 1.5,
               ),
             ),

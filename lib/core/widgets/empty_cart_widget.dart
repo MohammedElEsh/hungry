@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
 import 'package:hungry/core/components/custom_button.dart';
 
 class EmptyCartWidget extends StatelessWidget {
@@ -11,6 +10,7 @@ class EmptyCartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -20,7 +20,7 @@ class EmptyCartWidget extends StatelessWidget {
             Icon(
               Icons.shopping_cart_outlined,
               size: 80,
-              color: AppColors.grey.withOpacity(0.5),
+              color: colorScheme.onSurfaceVariant.withOpacity(0.5),
             ),
             const SizedBox(height: 24),
             Text(
@@ -32,7 +32,7 @@ class EmptyCartWidget extends StatelessWidget {
             Text(
               'cart_empty_hint'.tr(),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.grey,
+                    color: colorScheme.onSurfaceVariant,
                   ),
               textAlign: TextAlign.center,
             ),

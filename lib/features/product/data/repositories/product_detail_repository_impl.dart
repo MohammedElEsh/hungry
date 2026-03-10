@@ -1,5 +1,6 @@
 import '../../../../core/domain/result.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/logger/app_logger.dart';
 import '../../domain/entities/product_detail_entity.dart';
 import '../../domain/entities/side_option_entity.dart';
 import '../../domain/entities/topping_entity.dart';
@@ -22,13 +23,17 @@ class ProductDetailRepositoryImpl implements ProductDetailRepository {
       List<SideOptionsModel> sideOptions = [];
       try {
         toppings = await _remote.getToppings();
-      } catch (_) {}
+      } catch (e) {
+        AppLogger.w('Toppings fetch failed: $e');
+      }
       try {
         sideOptions = await _remote.getSideOptions(id);
-      } catch (_) {}
+      } catch (e) {
+        AppLogger.w('Side options fetch failed: $e');
+      }
       final entity = _toEntity(product, toppings, sideOptions);
       return Success(entity);
-    } catch (_) {
+    } catch (e) {
       try {
         final products = await _remote.getAllProducts();
         final idStr = id.toString();
@@ -43,7 +48,9 @@ class ProductDetailRepositoryImpl implements ProductDetailRepository {
           final entity = _toEntity(fallbackProduct, [], []);
           return Success(entity);
         }
-      } catch (_) {}
+      } catch (fallbackError) {
+        AppLogger.w('Product fallback failed: $fallbackError');
+      }
       return const FailureResult(ServerFailure('Product not found'));
     }
   }

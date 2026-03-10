@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/error/exceptions.dart';
+import '../../../../core/logger/app_logger.dart';
 import '../models/product_model.dart';
 import '../models/side_options_model.dart';
 import '../models/topping_model.dart';
@@ -90,7 +91,9 @@ class ProductDetailRemoteDataSourceImpl implements ProductDetailRemoteDataSource
         if (e is! Map) continue;
         try {
           results.add(ProductModel.fromJson(Map<String, dynamic>.from(e)));
-        } catch (_) {}
+        } catch (e) {
+          AppLogger.w('Product item parse failed: $e');
+        }
       }
       return results;
     } on DioException catch (_) {
@@ -117,7 +120,9 @@ class ProductDetailRemoteDataSourceImpl implements ProductDetailRemoteDataSource
         if (e is! Map) continue;
         try {
           results.add(ToppingModel.fromJson(Map<String, dynamic>.from(e)));
-        } catch (_) {}
+        } catch (e) {
+          AppLogger.w('Topping item parse failed: $e');
+        }
       }
       return results;
     } on DioException catch (e) {
@@ -157,7 +162,9 @@ class ProductDetailRemoteDataSourceImpl implements ProductDetailRemoteDataSource
         if (e is! Map) continue;
         try {
           results.add(SideOptionsModel.fromJson(Map<String, dynamic>.from(e)));
-        } catch (_) {}
+        } catch (e) {
+          AppLogger.w('Side option item parse failed: $e');
+        }
       }
       return results;
     } on DioException catch (e) {

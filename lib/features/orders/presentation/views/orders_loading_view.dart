@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/skeleton_loading.dart';
 import '../../domain/entities/order_entity.dart';
 import '../widgets/order_card.dart';
@@ -23,7 +22,6 @@ class OrdersLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       body: skeletonize(
         enabled: true,
         child: ListView.builder(

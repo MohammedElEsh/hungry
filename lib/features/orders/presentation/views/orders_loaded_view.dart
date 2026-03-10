@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../domain/entities/order_entity.dart';
 import '../actions/orders_actions.dart';
 import '../widgets/order_card.dart';
@@ -14,11 +13,11 @@ class OrdersLoadedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppColors.white,
       body: RefreshIndicator(
-        color: AppColors.white,
-        backgroundColor: AppColors.primary,
+        color: colorScheme.onPrimary,
+        backgroundColor: colorScheme.primary,
         onRefresh: () => OrdersActions.refresh(context),
         child: ListView.builder(
           padding: EdgeInsets.only(top: 45.w),

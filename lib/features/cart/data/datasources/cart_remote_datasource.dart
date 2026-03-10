@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/error/exceptions.dart';
+import '../../../../core/logger/app_logger.dart';
 import '../../domain/entities/cart_item_entity.dart';
 import '../models/cart_item_model.dart';
 
@@ -73,7 +74,9 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         if (e is! Map) continue;
         try {
           results.add(CartItemModel.fromJson(Map<String, dynamic>.from(e)));
-        } catch (_) {}
+        } catch (e) {
+          AppLogger.w('Cart item parse failed: $e');
+        }
       }
       return CartResponse(items: results, totalPrice: totalPrice);
     } on DioException catch (e) {

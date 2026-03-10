@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hungry/features/auth/presentation/views/login_loading_view.dart';
 
 import '../cubit/profile_cubit.dart';
 import '../handlers/profile_controllers.dart';
 import 'profile_error_view.dart';
 import 'profile_guest_view.dart';
 import 'profile_logged_in_view.dart';
-import 'profile_logging_out_view.dart';
 import 'profile_loading_view.dart';
 
 /// Returns the appropriate view for each Bloc state. No logic, only mapping.
@@ -33,7 +33,7 @@ class ProfileViewFactory {
       );
     }
     if (state is ProfileLoggingOut) {
-      return const ProfileLoggingOutView();
+      return const LoginLoadingView();
     }
     if (state is ProfileLoading) {
       return ProfileLoadingView(controllers: controllers);

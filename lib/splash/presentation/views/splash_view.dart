@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hungry/core/constants/app_colors.dart';
 import 'package:hungry/core/di/injection.dart';
 import 'package:hungry/core/storage/app_preferences.dart';
 import 'package:hungry/core/utils/app_router.dart';
@@ -11,8 +12,6 @@ import 'package:hungry/splash/presentation/widgets/fade_slide_in_text.dart';
 import 'package:hungry/splash/presentation/widgets/slide_in_image.dart';
 import 'package:hungry/splash/presentation/widgets/fade_slide_out_text.dart';
 import 'package:hungry/splash/presentation/widgets/slide_out_image.dart';
-
-import '../../../core/constants/app_colors.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -66,7 +65,6 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -88,7 +86,7 @@ class _SplashViewState extends State<SplashView> {
             child: !playOutAnimation
                 ? FadeSlideText(
                     text: "HUNGRY?",
-                    style: AppTextStyles.displayLarge,
+                    style: AppTextStyles.displayLarge.copyWith(color: AppColors.primary),
                   )
                 :                     FadeSlideOutText(
                     text: "HUNGRY?",

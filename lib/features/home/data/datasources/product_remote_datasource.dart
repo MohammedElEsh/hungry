@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/error/exceptions.dart';
+import '../../../../core/logger/app_logger.dart';
 import '../../../product/data/models/product_model.dart';
 
 abstract class ProductRemoteDataSource {
@@ -44,7 +45,9 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         if (e is! Map) continue;
         try {
           results.add(ProductModel.fromJson(Map<String, dynamic>.from(e)));
-        } catch (_) {}
+        } catch (e) {
+          AppLogger.w('Product item parse failed: $e');
+        }
       }
       return results;
     } on DioException catch (e) {

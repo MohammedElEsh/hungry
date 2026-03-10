@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../cubit/home_cubit.dart';
 import '../actions/home_actions.dart';
 import '../listener/home_listener.dart';
@@ -36,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: HomeListener.listen,
         builder: (context, state) {

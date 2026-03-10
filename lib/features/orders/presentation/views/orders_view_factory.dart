@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../cubit/orders_cubit.dart';
 import '../widgets/empty_orders_view.dart';
 import '../widgets/guest_orders_view.dart';
@@ -28,7 +27,6 @@ abstract final class OrdersViewFactory {
     if (state is OrdersLoaded) {
       if (state.orders.isEmpty) {
         return Scaffold(
-          backgroundColor: AppColors.white,
           body: EmptyOrdersView(onHomeTap: onHomeTap),
         );
       }

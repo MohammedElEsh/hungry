@@ -99,6 +99,7 @@
   "estimated_delivery_time": "Estimated delivery time:",
   "cash_on_delivery": "Cash on delivery",
   "debit_card": "Debit Card",
+  "save_card_checkbox": "Save this card for future payments",
   "create_account": "Create Account",
   "secure_checkout": "Secure Checkout",
   "fast_delivery": "Fast Delivery",

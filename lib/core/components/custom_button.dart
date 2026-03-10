@@ -1,8 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/styles.dart';
-import '../constants/app_colors.dart';
-
 /// Button variants: filled, outlined, or text only
 enum ButtonVariant { filled, outlined, text }
 
@@ -100,13 +99,14 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     // Determine if the button should be disabled
     final bool disabled = isDisabled || isLoading || onPressed == null;
 
     // Determine effective text color based on variant
     final Color effectiveTextColor =
         textColor ??
-        (variant == ButtonVariant.filled ? AppColors.white : AppColors.primary);
+        (variant == ButtonVariant.filled ? colorScheme.onPrimary : colorScheme.primary);
 
     // Determine gradient for filled variant only
     final Gradient? effectiveGradient = (variant == ButtonVariant.filled)
@@ -115,7 +115,7 @@ class CustomButton extends StatelessWidget {
 
     // Determine background color for filled variant
     final Color effectiveBackgroundColor = variant == ButtonVariant.filled
-        ? (backgroundColor ?? AppColors.primary)
+        ? (backgroundColor ?? colorScheme.primary)
         : Colors.transparent;
 
     return Semantics(
@@ -132,14 +132,14 @@ class CustomButton extends StatelessWidget {
           decoration: BoxDecoration(
             // Disabled button color
             color: disabled
-                ? AppColors.grey.withOpacity(0.3)
+                ? colorScheme.onSurfaceVariant.withOpacity(0.3)
                 : effectiveBackgroundColor,
             gradient: disabled ? null : effectiveGradient,
             borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
             border:
                 border ??
                 (variant == ButtonVariant.outlined
-                    ? Border.all(color: AppColors.primary, width: 1.5)
+                    ? Border.all(color: colorScheme.primary, width: 1.5)
                     : null),
             boxShadow: [
               if (!disabled && elevation > 0)
@@ -166,8 +166,8 @@ class CustomButton extends StatelessWidget {
                       ? SizedBox(
                           width: 24.w,
                           height: 24.w,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
+                          child: CupertinoActivityIndicator(
+                            radius: 12.r,
                             color: effectiveTextColor,
                           ),
                         )

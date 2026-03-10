@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/styles.dart';
 import '../../../profile/presentation/widgets/profile_image.dart';
 import 'bouncing_text.dart';
@@ -29,11 +28,13 @@ class HeaderSection extends StatelessWidget {
     this.onCartTap,
   });
 
-  Widget _iconWithBadge({
+  Widget _iconWithBadge(
+    BuildContext context, {
     required IconData icon,
     required int count,
     required VoidCallback? onTap,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: onTap,
       child: Stack(
@@ -42,10 +43,10 @@ class HeaderSection extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color: AppColors.grey.withOpacity(0.2),
+              color: colorScheme.onSurfaceVariant.withOpacity(0.2),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 22.sp, color: AppColors.primary),
+            child: Icon(icon, size: 22.sp, color: colorScheme.primary),
           ),
           if (count > 0)
             Positioned(
@@ -53,8 +54,8 @@ class HeaderSection extends StatelessWidget {
               right: -4.w,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                decoration: const BoxDecoration(
-                  color: AppColors.secondary,
+                decoration: BoxDecoration(
+                  color: colorScheme.secondary,
                   shape: BoxShape.circle,
                 ),
                 child: Text(
@@ -62,7 +63,7 @@ class HeaderSection extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: colorScheme.onSecondary,
                   ),
                 ),
               ),
@@ -74,6 +75,7 @@ class HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -84,9 +86,9 @@ class HeaderSection extends StatelessWidget {
             BouncingText(
               letters: ['F', 'OO', 'D'],
               colors: [
-                AppColors.primary,
-                AppColors.secondary,
-                AppColors.primary,
+                colorScheme.primary,
+                colorScheme.secondary,
+                colorScheme.primary,
               ],
               fontSize: 50,
             ),
@@ -94,7 +96,7 @@ class HeaderSection extends StatelessWidget {
             Text(
               "${'hello'.tr()}, ${userName ?? 'username'.tr()}",
               style: AppTextStyles.titleMedium.copyWith(
-                color: AppColors.primary,
+                color: colorScheme.onSurface,
               ),
             ),
           ],
@@ -106,12 +108,14 @@ class HeaderSection extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _iconWithBadge(
+                context,
                 icon: CupertinoIcons.heart_fill,
                 count: favoriteCount,
                 onTap: onFavoritesTap,
               ),
               Gap(12.w),
               _iconWithBadge(
+                context,
                 icon: Icons.shopping_cart_outlined,
                 count: cartItemCount,
                 onTap: onCartTap,

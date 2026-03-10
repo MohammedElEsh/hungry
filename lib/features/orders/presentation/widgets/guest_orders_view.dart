@@ -14,7 +14,6 @@ class GuestOrdersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(

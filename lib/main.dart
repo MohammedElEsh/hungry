@@ -95,7 +95,9 @@ Future<void> _migrateFromPrefHelper(AppPreferences appPrefs) async {
     }
     final guestMode = prefs.getBool('guest_mode');
     if (guestMode == true) await appPrefs.setGuestMode(true);
-  } catch (_) {}
+  } catch (e) {
+    AppLogger.w('Migration from prefs failed: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {

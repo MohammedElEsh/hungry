@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/error/exceptions.dart';
+import '../../../../core/logger/app_logger.dart';
 import '../models/category_model.dart';
 
 abstract class CategoryRemoteDataSource {
@@ -45,7 +46,9 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
         try {
           final model = CategoryModel.fromJson(Map<String, dynamic>.from(e));
           if (model.name.isNotEmpty) results.add(model);
-        } catch (_) {}
+        } catch (e) {
+          AppLogger.w('Category item parse failed: $e');
+        }
       }
       return results;
     } on DioException catch (e) {

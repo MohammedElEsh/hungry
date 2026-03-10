@@ -107,9 +107,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                 onTap: (index) => goToPage(index),
                 backgroundColor: Colors.transparent,
                 selectedItemColor: colorScheme.onPrimary,
-                unselectedItemColor: Colors.grey,
-                // unselectedItemColor: colorScheme.onSurfaceVariant,
-            showUnselectedLabels: true,
+                unselectedItemColor: colorScheme.onSurfaceVariant,
+                showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/skeleton_loading.dart';
 import '../../../product/data/models/product_model.dart';
 import '../widgets/categories_list.dart';
@@ -35,7 +34,6 @@ class HomeLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: skeletonize(

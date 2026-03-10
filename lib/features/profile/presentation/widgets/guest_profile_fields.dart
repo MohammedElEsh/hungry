@@ -2,13 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/constants/app_colors.dart';
-
 class GuestProfileFields extends StatelessWidget {
   const GuestProfileFields({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Column(
@@ -17,10 +16,10 @@ class GuestProfileFields extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.05),
+              color: colorScheme.primary.withOpacity(0.05),
               borderRadius: BorderRadius.circular(16.r),
               border: Border.all(
-                color: AppColors.primary.withOpacity(0.2),
+                color: colorScheme.primary.withOpacity(0.2),
                 width: 1.5,
               ),
             ),
@@ -31,7 +30,7 @@ class GuestProfileFields extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.info_outline_rounded,
-                      color: AppColors.primary,
+                      color: colorScheme.primary,
                       size: 24.sp,
                     ),
                     Gap(12.w),
@@ -40,7 +39,7 @@ class GuestProfileFields extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                        color: colorScheme.primary,
                       ),
                     ),
                   ],
@@ -50,20 +49,20 @@ class GuestProfileFields extends StatelessWidget {
                   'You are currently browsing as a guest. Create an account to unlock all features:',
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: AppColors.grey,
+                    color: colorScheme.onSurfaceVariant,
                     height: 1.5,
                   ),
                 ),
                 Gap(16.h),
-                _buildFeatureItem('guest_profile_feature_1'.tr()),
+                _buildFeatureItem(context, 'guest_profile_feature_1'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('guest_profile_feature_2'.tr()),
+                _buildFeatureItem(context, 'guest_profile_feature_2'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('guest_profile_feature_3'.tr()),
+                _buildFeatureItem(context, 'guest_profile_feature_3'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('guest_profile_feature_4'.tr()),
+                _buildFeatureItem(context, 'guest_profile_feature_4'.tr()),
                 Gap(8.h),
-                _buildFeatureItem('guest_profile_feature_5'.tr()),
+                _buildFeatureItem(context, 'guest_profile_feature_5'.tr()),
               ],
             ),
           ),
@@ -75,15 +74,16 @@ class GuestProfileFields extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(String text) {
+  Widget _buildFeatureItem(BuildContext context, String text) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       children: [
-        Icon(Icons.check_circle, color: AppColors.primary, size: 18.sp),
+        Icon(Icons.check_circle, color: colorScheme.primary, size: 18.sp),
         Gap(8.w),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(fontSize: 13.sp, color: AppColors.black),
+            style: TextStyle(fontSize: 13.sp, color: colorScheme.onSurface),
           ),
         ),
       ],
